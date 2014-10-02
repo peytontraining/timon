@@ -2,8 +2,7 @@ package vn.enclave.peyton.fusion.service;
 
 import javax.persistence.TypedQuery;
 
-import vn.enclave.peyton.fusion.common.AbstractService;
-import vn.enclave.peyton.fusion.common.JPAUtils;
+import vn.enclave.peyton.fusion.common.*;
 import vn.enclave.peyton.fusion.model.Version;
 
 public class VersionService extends AbstractService {

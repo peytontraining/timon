@@ -4,8 +4,7 @@ import java.util.List;
 
 import javax.persistence.TypedQuery;
 
-import vn.enclave.peyton.fusion.common.AbstractService;
-import vn.enclave.peyton.fusion.common.JPAUtils;
+import vn.enclave.peyton.fusion.common.*;
 
 public class DeviceService extends AbstractService {
 

@@ -1,18 +1,17 @@
 package vn.enclave.peyton.fusion;
 
-import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
-import org.eclipse.ui.application.WorkbenchAdvisor;
-import org.eclipse.ui.application.WorkbenchWindowAdvisor;
+import org.eclipse.ui.application.*;
 
 /**
- * This workbench advisor creates the window advisor, and specifies
- * the perspective id for the initial window.
+ * This workbench advisor creates the window advisor, and specifies the
+ * perspective id for the initial window.
  */
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
 	private static final String PERSPECTIVE_ID = "vn.enclave.peyton.fusion.perspective";
 
-	public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
+	public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(
+			IWorkbenchWindowConfigurer configurer) {
 		return new ApplicationWorkbenchWindowAdvisor(configurer);
 	}
 

@@ -2,8 +2,7 @@ package vn.enclave.peyton.fusion.view;
 
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.*;
 
 import vn.enclave.peyton.fusion.common.AbstractTableViewPart;
 

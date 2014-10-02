@@ -1,17 +1,8 @@
 package vn.enclave.peyton.fusion;
 
-import org.eclipse.ui.IFolderLayout;
-import org.eclipse.ui.IPageLayout;
-import org.eclipse.ui.IPerspectiveFactory;
+import org.eclipse.ui.*;
 
-import vn.enclave.peyton.fusion.view.AreaTreeViewPart;
-import vn.enclave.peyton.fusion.view.DeviceTableViewPart;
-import vn.enclave.peyton.fusion.view.DriverTreeViewPart;
-import vn.enclave.peyton.fusion.view.ProjectTreeViewPart;
-import vn.enclave.peyton.fusion.view.RuleTableViewPart;
-import vn.enclave.peyton.fusion.view.SceneTableViewPart;
-import vn.enclave.peyton.fusion.view.ServiceTableViewPart;
-import vn.enclave.peyton.fusion.view.VersionViewPart;
+import vn.enclave.peyton.fusion.view.*;
 
 /**
  * Configures the perspective layout. This class is contributed through the
@@ -28,7 +19,7 @@ public class Perspective implements IPerspectiveFactory {
 		String editorArea = layout.getEditorArea();
 		layout.setEditorAreaVisible(false);
 
-		topLeft = layout.createFolder("topLeft", IPageLayout.LEFT, 0.4f,
+		topLeft = layout.createFolder("topLeft", IPageLayout.LEFT, 0.35f,
 				IPageLayout.ID_EDITOR_AREA);
 		topLeft.addView(ProjectTreeViewPart.ID);
 		topLeft.addView(DriverTreeViewPart.ID);
@@ -51,9 +42,10 @@ public class Perspective implements IPerspectiveFactory {
 		bottomRight = layout.createFolder("bottomRight", IPageLayout.BOTTOM,
 				0.7f, "topRight");
 
-		layout.addStandaloneView(VersionViewPart.ID, false, IPageLayout.BOTTOM,
-				0.7f, "topLeft");
-		layout.getViewLayout(VersionViewPart.ID).setCloseable(false);
+		// layout.addStandaloneView(VersionViewPart.ID, false,
+		// IPageLayout.BOTTOM,
+		// 0.7f, "topLeft");
+		// layout.getViewLayout(VersionViewPart.ID).setCloseable(false);
 
 	}
 }

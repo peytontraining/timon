@@ -1,8 +1,7 @@
 package vn.enclave.peyton.fusion;
 
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
-import org.eclipse.ui.application.WorkbenchWindowAdvisor;
+import org.eclipse.ui.application.*;
 
 /**
  * Configures the initial size and appearance of a workbench window.

@@ -21,7 +21,7 @@ public class DeviceTableViewPart extends AbstractTableViewPart {
 	public static final String ID = "vn.enclave.peyton.fusion.view.deviceTableViewPart";
 
 	private static final String[] COLUMN_PROPERTIES = { "Name", "App Module",
-			"Device Type", "Physical Location", "Manufacturee" };
+			"Device Type", "Physical Location", "Manufacture" };
 
 	private Table table;
 	private Text filterText, findText;
