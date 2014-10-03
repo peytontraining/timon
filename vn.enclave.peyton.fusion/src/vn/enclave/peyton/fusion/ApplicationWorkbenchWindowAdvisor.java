@@ -1,6 +1,6 @@
 package vn.enclave.peyton.fusion;
 
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.swt.SWT;
 import org.eclipse.ui.application.*;
 
 /**
@@ -15,11 +15,12 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
 	@Override
 	public void preWindowOpen() {
+		getWindowConfigurer().setShellStyle(SWT.NO_TRIM);
+		getWindowConfigurer().setShowMenuBar(false);
 	}
 
 	@Override
 	public void postWindowOpen() {
-		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell()
-				.setFullScreen(true);
+		getWindowConfigurer().getWindow().getShell().setMaximized(true);
 	}
 }

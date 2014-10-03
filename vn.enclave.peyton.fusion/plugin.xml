@@ -36,9 +36,9 @@
       <view
             allowMultiple="true"
             category="vn.enclave.peyton.fusion.category.treeViewPart"
-            class="vn.enclave.peyton.fusion.view.ProjectTreeViewPart"
+            class="vn.enclave.peyton.fusion.view.NavigationViewPart"
             icon="icons/project.png"
-            id="vn.enclave.peyton.fusion.view.projectTreeViewPart"
+            id="vn.enclave.peyton.fusion.view.navigationViewPart"
             name="Projects"
             restorable="true">
       </view>
@@ -102,13 +102,6 @@
             icon="icons/rule.png"
             id="vn.enclave.peyton.fusion.view.ruleTableViewPart"
             name="Rules"
-            restorable="true">
-      </view>
-      <view
-            allowMultiple="true"
-            class="vn.enclave.peyton.fusion.view.VersionViewPart"
-            id="vn.enclave.peyton.fusion.view.versionViewPart"
-            name="Version"
             restorable="true">
       </view>
    </extension>

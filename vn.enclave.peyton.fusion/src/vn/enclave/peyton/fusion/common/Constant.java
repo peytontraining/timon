@@ -5,6 +5,8 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 public class Constant {
 
+	public static final String PERSISTENCE_UNIT_NAME = "vn.enclave.peyton.fusion";
+	
 	/* Node Level */
 	public static final int PLAN_NODE_LEVEL = 1;
 	public static final int PROJECT_NODE_LEVEL = 2;
