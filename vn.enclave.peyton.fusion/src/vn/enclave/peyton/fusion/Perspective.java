@@ -37,11 +37,11 @@ public class Perspective implements IPerspectiveFactory {
 				editorArea);
 		topRight.addView(DeviceTableViewPart.ID);
 		topRight.addView(ServiceTableViewPart.ID);
-//		topRight.addView(SceneTableViewPart.ID);
+		topRight.addView(SceneTableViewPart.ID);
 		topRight.addView(RuleTableViewPart.ID);
 		layout.getViewLayout(DeviceTableViewPart.ID).setCloseable(false);
 		layout.getViewLayout(ServiceTableViewPart.ID).setCloseable(false);
-//		layout.getViewLayout(SceneTableViewPart.ID).setCloseable(false);
+		layout.getViewLayout(SceneTableViewPart.ID).setCloseable(false);
 		layout.getViewLayout(RuleTableViewPart.ID).setCloseable(false);
 	}
 }

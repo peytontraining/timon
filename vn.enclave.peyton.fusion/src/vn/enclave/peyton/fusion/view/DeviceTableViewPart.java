@@ -16,7 +16,8 @@ import vn.enclave.peyton.fusion.common.*;
 import vn.enclave.peyton.fusion.common.AbstractTreeViewPart.TreeObject;
 import vn.enclave.peyton.fusion.service.DeviceService;
 
-public class DeviceTableViewPart extends AbstractTableViewPart {
+public class DeviceTableViewPart extends AbstractTableViewPart implements
+		IDoubleClickListener {
 
 	public static final String ID = "vn.enclave.peyton.fusion.view.deviceTableViewPart";
 
@@ -124,6 +125,7 @@ public class DeviceTableViewPart extends AbstractTableViewPart {
 			}
 		});
 
+		tableViewer.addDoubleClickListener(this);
 		createSelectionListener();
 	}
 
@@ -241,27 +243,6 @@ public class DeviceTableViewPart extends AbstractTableViewPart {
 
 					}
 				});
-
-		/*
-		 * This method is called when there is any row in device table is
-		 * clicked
-		 */
-		selectionService.addSelectionListener(ID, new ISelectionListener() {
-
-			@Override
-			public void selectionChanged(IWorkbenchPart part,
-					ISelection selection) {
-				IStructuredSelection sselection = (IStructuredSelection) selection;
-				Object firstElement = sselection.getFirstElement();
-				if (firstElement != null) {
-					Object[] row = (Object[]) firstElement;
-					IWorkbenchWindow window = PlatformUI.getWorkbench()
-							.getActiveWorkbenchWindow();
-					MessageDialog.openInformation(window.getShell(),
-							"Device Table", row[0].toString());
-				}
-			}
-		});
 	}
 
 	private class VLabelProvider extends ViewLabelProvider {
@@ -321,6 +302,22 @@ public class DeviceTableViewPart extends AbstractTableViewPart {
 			}
 
 			return false;
+		}
+	}
+
+	@Override
+	public void doubleClick(DoubleClickEvent event) {
+		IStructuredSelection sselection = (IStructuredSelection) event
+				.getSelection();
+		Object firstElement = sselection.getFirstElement();
+		if (firstElement != null) {
+			Object[] row = (Object[]) firstElement;
+			IWorkbenchWindow window = PlatformUI.getWorkbench()
+					.getActiveWorkbenchWindow();
+			StringBuilder message = new StringBuilder(
+					"You have double clicked on ").append(row[0].toString());
+			MessageDialog.openInformation(window.getShell(), "Device Table",
+					message.toString());
 		}
 	}
 }

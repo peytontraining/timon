@@ -192,23 +192,6 @@ public class NavigationViewPart extends AbstractTreeViewPart {
 												.getData());
 								fillInForm(version);
 								formComposite.setVisible(true);
-								if (PlatformUI.getWorkbench()
-										.getActiveWorkbenchWindow()
-										.getActivePage()
-										.findView(SceneTableViewPart.ID) == null) {
-									System.out.println("Null");
-									try {
-										PlatformUI.getWorkbench()
-												.getWorkbenchWindows()[1]
-												.getActivePage().showView(
-														SceneTableViewPart.ID);
-									} catch (PartInitException e) {
-										e.printStackTrace();
-									}
-								} else {
-									System.out.println("Not Null");
-								}
-
 							} else {
 								formComposite.setVisible(false);
 							}
