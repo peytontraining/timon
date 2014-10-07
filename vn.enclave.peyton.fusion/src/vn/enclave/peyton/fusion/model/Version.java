@@ -1,7 +1,9 @@
 package vn.enclave.peyton.fusion.model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.util.Date;
 import java.util.List;
 
@@ -10,104 +12,105 @@ import java.util.List;
  * 
  */
 @Entity
+@Cacheable(value = true)
 @Table(name = "versions")
 @NamedQuery(name = "Version.findAll", query = "SELECT v FROM Version v")
 public class Version implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	private String id;
+    @Id
+    private String id;
 
-	private String deploySource;
+    private String deploySource;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date deployTime;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deployTime;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date saveTime;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date saveTime;
 
-	private String targetVersion;
+    private String targetVersion;
 
-	// bi-directional many-to-one association to Device
-	@OneToMany(mappedBy = "version")
-	private List<Device> devices;
+    // bi-directional many-to-one association to Device
+    @OneToMany(mappedBy = "version")
+    private List<Device> devices;
 
-	// bi-directional many-to-one association to Project
-	@ManyToOne
-	@JoinColumn(name = "idProject")
-	private Project project;
+    // bi-directional many-to-one association to Project
+    @ManyToOne
+    @JoinColumn(name = "idProject")
+    private Project project;
 
-	public Version() {
-	}
+    public Version() {
+    }
 
-	public String getId() {
-		return this.id;
-	}
+    public String getId() {
+        return this.id;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public String getDeploySource() {
-		return this.deploySource;
-	}
+    public String getDeploySource() {
+        return this.deploySource;
+    }
 
-	public void setDeploySource(String deploySource) {
-		this.deploySource = deploySource;
-	}
+    public void setDeploySource(String deploySource) {
+        this.deploySource = deploySource;
+    }
 
-	public Date getDeployTime() {
-		return this.deployTime;
-	}
+    public Date getDeployTime() {
+        return this.deployTime;
+    }
 
-	public void setDeployTime(Date deployTime) {
-		this.deployTime = deployTime;
-	}
+    public void setDeployTime(Date deployTime) {
+        this.deployTime = deployTime;
+    }
 
-	public Date getSaveTime() {
-		return this.saveTime;
-	}
+    public Date getSaveTime() {
+        return this.saveTime;
+    }
 
-	public void setSaveTime(Date saveTime) {
-		this.saveTime = saveTime;
-	}
+    public void setSaveTime(Date saveTime) {
+        this.saveTime = saveTime;
+    }
 
-	public String getTargetVersion() {
-		return this.targetVersion;
-	}
+    public String getTargetVersion() {
+        return this.targetVersion;
+    }
 
-	public void setTargetVersion(String targetVersion) {
-		this.targetVersion = targetVersion;
-	}
+    public void setTargetVersion(String targetVersion) {
+        this.targetVersion = targetVersion;
+    }
 
-	public List<Device> getDevices() {
-		return this.devices;
-	}
+    public List<Device> getDevices() {
+        return this.devices;
+    }
 
-	public void setDevices(List<Device> devices) {
-		this.devices = devices;
-	}
+    public void setDevices(List<Device> devices) {
+        this.devices = devices;
+    }
 
-	public Device addDevice(Device device) {
-		getDevices().add(device);
-		device.setVersion(this);
+    public Device addDevice(Device device) {
+        getDevices().add(device);
+        device.setVersion(this);
 
-		return device;
-	}
+        return device;
+    }
 
-	public Device removeDevice(Device device) {
-		getDevices().remove(device);
-		device.setVersion(null);
+    public Device removeDevice(Device device) {
+        getDevices().remove(device);
+        device.setVersion(null);
 
-		return device;
-	}
+        return device;
+    }
 
-	public Project getProject() {
-		return this.project;
-	}
+    public Project getProject() {
+        return this.project;
+    }
 
-	public void setProject(Project project) {
-		this.project = project;
-	}
+    public void setProject(Project project) {
+        this.project = project;
+    }
 
 }

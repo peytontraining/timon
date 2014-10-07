@@ -1,7 +1,9 @@
 package vn.enclave.peyton.fusion.model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.util.List;
 
 /**
@@ -9,72 +11,73 @@ import java.util.List;
  * 
  */
 @Entity
+@Cacheable(value = false)
 @Table(name = "projects")
 @NamedQuery(name = "Project.findAll", query = "SELECT p FROM Project p")
 public class Project implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	private int id;
+    @Id
+    private int id;
 
-	private String name;
+    private String name;
 
-	// bi-directional many-to-one association to Plan
-	@ManyToOne
-	@JoinColumn(name = "idPlan")
-	private Plan plan;
+    // bi-directional many-to-one association to Plan
+    @ManyToOne
+    @JoinColumn(name = "idPlan")
+    private Plan plan;
 
-	// bi-directional many-to-one association to Version
-	@OneToMany(mappedBy = "project")
-	private List<Version> versions;
+    // bi-directional many-to-one association to Version
+    @OneToMany(mappedBy = "project")
+    private List<Version> versions;
 
-	public Project() {
-	}
+    public Project() {
+    }
 
-	public int getId() {
-		return this.id;
-	}
+    public int getId() {
+        return this.id;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public Plan getPlan() {
-		return this.plan;
-	}
+    public Plan getPlan() {
+        return this.plan;
+    }
 
-	public void setPlan(Plan plan) {
-		this.plan = plan;
-	}
+    public void setPlan(Plan plan) {
+        this.plan = plan;
+    }
 
-	public List<Version> getVersions() {
-		return this.versions;
-	}
+    public List<Version> getVersions() {
+        return this.versions;
+    }
 
-	public void setVersions(List<Version> versions) {
-		this.versions = versions;
-	}
+    public void setVersions(List<Version> versions) {
+        this.versions = versions;
+    }
 
-	public Version addVersion(Version version) {
-		getVersions().add(version);
-		version.setProject(this);
+    public Version addVersion(Version version) {
+        getVersions().add(version);
+        version.setProject(this);
 
-		return version;
-	}
+        return version;
+    }
 
-	public Version removeVersion(Version version) {
-		getVersions().remove(version);
-		version.setProject(null);
+    public Version removeVersion(Version version) {
+        getVersions().remove(version);
+        version.setProject(null);
 
-		return version;
-	}
+        return version;
+    }
 
 }

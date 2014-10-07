@@ -4,14 +4,15 @@ import javax.persistence.*;
 
 public class JPAUtils {
 
-	private static EntityManagerFactory factory;
+    private static EntityManagerFactory factory;
 
-	static {
-		factory = Persistence
-				.createEntityManagerFactory(Constant.PERSISTENCE_UNIT_NAME);
-	}
+    static {
+        factory = Persistence
+                .createEntityManagerFactory(Constant.PERSISTENCE_UNIT_NAME);
+//        factory.getCache().evictAll();
+    }
 
-	public static EntityManager getEntityManager() {
-		return factory.createEntityManager();
-	}
+    public static EntityManager getEntityManager() {
+        return factory.createEntityManager();
+    }
 }

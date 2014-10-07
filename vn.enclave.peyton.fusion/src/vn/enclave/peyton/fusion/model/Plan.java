@@ -9,6 +9,7 @@ import java.util.List;
  * 
  */
 @Entity
+@Cacheable(value = true)
 @Table(name = "plans")
 @NamedQuery(name = "Plan.findAll", query = "SELECT p FROM Plan p")
 public class Plan implements Serializable {

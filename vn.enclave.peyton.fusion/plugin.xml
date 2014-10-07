@@ -26,9 +26,34 @@
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            name="RAP Perspective"
-            class="vn.enclave.peyton.fusion.Perspective"
-            id="vn.enclave.peyton.fusion.perspective">
+            class="vn.enclave.peyton.fusion.ProjectPerspective"
+            icon="icons/project.png"
+            id="vn.enclave.peyton.fusion.projectPerspective"
+            name="Project">
+      </perspective>
+      <perspective
+            class="vn.enclave.peyton.fusion.TemplatePerspective"
+            icon="icons/template.png"
+            id="vn.enclave.peyton.fusion.templatePerspective"
+            name="Template">
+      </perspective>
+      <perspective
+            class="vn.enclave.peyton.fusion.SystemPerspective"
+            icon="icons/system.png"
+            id="vn.enclave.peyton.fusion.systemPerspective"
+            name="System">
+      </perspective>
+      <perspective
+            class="vn.enclave.peyton.fusion.UserPerspective"
+            icon="icons/group_users.png"
+            id="vn.enclave.peyton.fusion.userPerspective"
+            name="Users">
+      </perspective>
+      <perspective
+            class="vn.enclave.peyton.fusion.LogoutPerspective"
+            icon="icons/logout.png"
+            id="vn.enclave.peyton.fusion.logoutPerspective"
+            name="Logout">
       </perspective>
    </extension>
    <extension
@@ -133,32 +158,9 @@
       </command>
       <command
             categoryId="vn.enclave.peyton.fusion.category.rightToolbar"
-            defaultHandler="vn.enclave.peyton.fusion.handler.ProjectHandler"
-            id="vn.enclave.peyton.fusion.handler.project"
-            name="Project">
-      </command>
-      <command
-            categoryId="vn.enclave.peyton.fusion.category.rightToolbar"
-            defaultHandler="vn.enclave.peyton.fusion.handler.TemplateHandler"
-            id="vn.enclave.peyton.fusion.handler.template"
-            name="Template">
-      </command>
-      <command
-            categoryId="vn.enclave.peyton.fusion.category.rightToolbar"
             defaultHandler="vn.enclave.peyton.fusion.handler.SystemHandler"
             id="vn.enclave.peyton.fusion.handler.system"
             name="System">
-      </command>
-      <command
-            defaultHandler="vn.enclave.peyton.fusion.handler.UserHandler"
-            id="vn.enclave.peyton.fusion.handler.users"
-            name="Users">
-      </command>
-      <command
-            categoryId="vn.enclave.peyton.fusion.category.rightToolbar"
-            defaultHandler="vn.enclave.peyton.fusion.handler.LogoutHandler"
-            id="vn.enclave.peyton.fusion.handler.logout"
-            name="Logout">
       </command>
       <category
             id="vn.enclave.peyton.fusion.category.leftToolbar"
@@ -308,47 +310,6 @@
                   label="Help Links"
                   mode="FORCE_TEXT"
                   style="pulldown">
-            </command>
-         </toolbar>
-      </menuContribution>
-      <menuContribution
-            allPopups="false"
-            locationURI="toolbar:org.eclipse.ui.trim.command2">
-         <toolbar
-               id="vn.enclave.peyton.fusion.toolbarRight">
-            <command
-                  commandId="vn.enclave.peyton.fusion.handler.project"
-                  icon="icons/project.png"
-                  label="Project"
-                  mode="FORCE_TEXT"
-                  style="push">
-            </command>
-            <command
-                  commandId="vn.enclave.peyton.fusion.handler.template"
-                  icon="icons/template.png"
-                  label="Template"
-                  mode="FORCE_TEXT"
-                  style="push">
-            </command>
-            <command
-                  commandId="vn.enclave.peyton.fusion.handler.system"
-                  icon="icons/system.png"
-                  label="System"
-                  style="push">
-            </command>
-            <command
-                  commandId="vn.enclave.peyton.fusion.handler.users"
-                  icon="icons/group_users.png"
-                  label="Users"
-                  mode="FORCE_TEXT"
-                  style="push">
-            </command>
-            <command
-                  commandId="vn.enclave.peyton.fusion.handler.logout"
-                  icon="icons/logout.png"
-                  label="Logout"
-                  mode="FORCE_TEXT"
-                  style="push">
             </command>
          </toolbar>
       </menuContribution>
