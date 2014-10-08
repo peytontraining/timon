@@ -31,6 +31,8 @@ public class Version implements Serializable {
 
     private String targetVersion;
 
+    private boolean isEditable; 
+
     // bi-directional many-to-one association to Device
     @OneToMany(mappedBy = "version")
     private List<Device> devices;
@@ -81,6 +83,14 @@ public class Version implements Serializable {
 
     public void setTargetVersion(String targetVersion) {
         this.targetVersion = targetVersion;
+    }
+
+    public boolean isEditable() {
+        return isEditable;
+    }
+
+    public void setEditable(boolean isEditable) {
+        this.isEditable = isEditable;
     }
 
     public List<Device> getDevices() {

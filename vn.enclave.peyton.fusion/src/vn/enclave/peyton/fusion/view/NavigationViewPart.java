@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
@@ -28,6 +30,8 @@ public class NavigationViewPart extends AbstractTreeViewPart {
     private Text deploySource;
     private Text saveTimeText;
     private Text targetVersionText;
+    private ScrolledForm form;
+    private ToolItem saveItem;
 
     @Override
     public void createPartControl(Composite parent) {
@@ -40,11 +44,11 @@ public class NavigationViewPart extends AbstractTreeViewPart {
         treeComposite.setLayout(new GridLayout(1, false));
 
         PatternFilter filter = new PatternFilter();
-        FilteredTree filteredTree = new FilteredTree(treeComposite, SWT.MULTI
-                | SWT.H_SCROLL | SWT.V_SCROLL, filter, true);
-        filteredTree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
-                1, 1));
-
+        FilteredTree filteredTree = new FilteredTree(treeComposite,
+            SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL, filter, true);
+        filteredTree.setLayoutData(
+            new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+        
         treeViewer = filteredTree.getViewer();
         treeViewer.setContentProvider(new ViewContentProvider());
         treeViewer.setLabelProvider(new ViewLabelProvider());
@@ -58,16 +62,32 @@ public class NavigationViewPart extends AbstractTreeViewPart {
         formComposite.setVisible(false);
 
         Section section = toolkit.createSection(formComposite,
-                Section.TITLE_BAR);
+            Section.TITLE_BAR);
         section.setLayout(new FillLayout());
         section.setText("Version Properties");
-        section.setForeground(parent.getDisplay().getSystemColor(
-                SWT.COLOR_BLACK));
+        section.setForeground(parent.getDisplay()
+            .getSystemColor(SWT.COLOR_BLACK));
 
-        ScrolledForm form = toolkit.createScrolledForm(section);
+        ToolBar toolBar = new ToolBar(section, SWT.FLAT | SWT.HORIZONTAL);
+        saveItem = new ToolItem(toolBar, SWT.PUSH);
+        saveItem.setImage(Constant.SAVE_IMAGE);
+        saveItem.setEnabled(false);
+        saveItem.addSelectionListener(new SelectionAdapter() {
+
+            private static final long serialVersionUID = 6559095611240490844L;
+            
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                System.out.println(versionText.getText());
+            }
+        });
+        
+        section.setTextClient(toolBar);
+
+        form = toolkit.createScrolledForm(section);
         form.getBody().setLayout(new GridLayout(2, false));
-        GridData textGridData = new GridData(SWT.FILL, SWT.NONE, true, false,
-                1, 1);
+        GridData textGridData = 
+            new GridData(SWT.FILL, SWT.NONE, true, false, 1, 1);
 
         /* Create labels and texts for form */
         Color gray = parent.getDisplay().getSystemColor(SWT.COLOR_GRAY);
@@ -92,7 +112,7 @@ public class NavigationViewPart extends AbstractTreeViewPart {
         saveTimeText.setBackground(gray);
         toolkit.createLabel(form.getBody(), "Target Version");
         targetVersionText = toolkit.createText(form.getBody(), "",
-                SWT.READ_ONLY);
+            SWT.READ_ONLY);
         targetVersionText.setLayoutData(textGridData);
         targetVersionText.setBackground(gray);
 
@@ -145,7 +165,7 @@ public class NavigationViewPart extends AbstractTreeViewPart {
                 if (0 != projects.size()) {
                     for (Project project : projects) {
                         TreeParent projectNode = new TreeParent(
-                                project.getName());
+                            project.getName());
                         projectNode.setLevel(PROJECT_NODE_LEVEL);
                         planNode.addChild(projectNode);
 
@@ -157,7 +177,7 @@ public class NavigationViewPart extends AbstractTreeViewPart {
                             for (int i = size - 1; i >= 0; i--) {
                                 Version version = versions.get(i);
                                 TreeObject versionNode = new TreeObject(
-                                        version.getId());
+                                    version.getId());
                                 versionNode.setLevel(VERSION_NODE_LEVEL);
                                 versionNode.setData(version.getId());
                                 projectNode.addChild(versionNode);
@@ -173,31 +193,34 @@ public class NavigationViewPart extends AbstractTreeViewPart {
 
     private void createSelectionListener(final Composite formComposite) {
         IWorkbenchWindow window = PlatformUI.getWorkbench()
-                .getActiveWorkbenchWindow();
+            .getActiveWorkbenchWindow();
         ISelectionService selectionService = window.getSelectionService();
         selectionService.addSelectionListener(NavigationViewPart.ID,
-                new ISelectionListener() {
+            new ISelectionListener() {
 
-                    @Override
-                    public void selectionChanged(IWorkbenchPart part,
-                            ISelection selection) {
-                        IStructuredSelection sselection = (IStructuredSelection) selection;
-                        Object firstElement = sselection.getFirstElement();
-                        if (firstElement != null) {
-                            if (Constant.VERSION_NODE_LEVEL == ((TreeObject) firstElement)
-                                    .getLevel()) {
-                                VersionService versionService = new VersionService();
-                                Version version = versionService
-                                        .findByVersionID((String) ((TreeObject) firstElement)
-                                                .getData());
-                                fillInForm(version);
-                                formComposite.setVisible(true);
-                            } else {
-                                formComposite.setVisible(false);
-                            }
+                @Override
+                public void selectionChanged(IWorkbenchPart part,
+                    ISelection selection) {
+                    IStructuredSelection sselection = (IStructuredSelection) selection;
+                    Object firstElement = sselection.getFirstElement();
+                    if (firstElement != null) {
+                        if (Constant.VERSION_NODE_LEVEL == 
+                                ((TreeObject) firstElement).getLevel()) {
+                            VersionService versionService = new VersionService();
+                            Version version = 
+                                versionService.findByVersionID(
+                                    (String) ((TreeObject) firstElement)
+                                    .getData());
+                            fillInForm(version);
+                            setLockForm(version.isEditable());
+                            setLockToolBar(version.isEditable());
+                            formComposite.setVisible(true);
+                        } else {
+                            formComposite.setVisible(false);
                         }
                     }
-                });
+                }
+            });
     }
 
     private void fillInForm(Version version) {
@@ -208,5 +231,21 @@ public class NavigationViewPart extends AbstractTreeViewPart {
         deploySource.setText(version.getDeploySource());
         saveTimeText.setText(format.format(version.getSaveTime()));
         targetVersionText.setText(version.getTargetVersion());
+    }
+
+    private void setLockForm(boolean isEditable) {
+        Control[] controls = form.getBody().getChildren();
+        Color gray = form.getDisplay().getSystemColor(SWT.COLOR_GRAY);
+        for (int i = 5; i < controls.length; i += 2) {
+            ((Text) controls[i]).setEditable(isEditable);
+        }
+        
+        for (int i = 3; i < controls.length; i += 2) {
+            ((Text) controls[i]).setBackground(isEditable == true ? null : gray);
+        }
+    }
+    
+    private void setLockToolBar(boolean isEditable) {
+        saveItem.setEnabled(isEditable);
     }
 }

@@ -10,6 +10,8 @@ import org.eclipse.ui.application.*;
  */
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
+    private static final String DELIMITER = ",";
+
     public ApplicationWorkbenchWindowAdvisor(
             IWorkbenchWindowConfigurer configurer) {
         super(configurer);
@@ -22,8 +24,11 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
         getWindowConfigurer().setShowPerspectiveBar(true);
         PlatformUI.getPreferenceStore().
             setValue(IWorkbenchPreferenceConstants.PERSPECTIVE_BAR_EXTRAS,
-                ProjectPerspective.ID + ", " + TemplatePerspective.ID + ", " 
-                + SystemPerspective.ID + ", " + UserPerspective.ID + ", " + LogoutPerspective.ID);
+                ProjectPerspective.ID.concat(DELIMITER)
+                .concat(TemplatePerspective.ID).concat(DELIMITER)
+                .concat(SystemPerspective.ID).concat(DELIMITER)
+                .concat(UserPerspective.ID).concat(DELIMITER)
+                .concat(LogoutPerspective.ID));
         PlatformUI.getPreferenceStore().
             setValue(IWorkbenchPreferenceConstants.SHOW_OPEN_ON_PERSPECTIVE_BAR,
                 false);
