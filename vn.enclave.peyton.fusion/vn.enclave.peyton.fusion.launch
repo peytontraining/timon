@@ -37,5 +37,5 @@
 <booleanAttribute key="tracing" value="false"/>
 <booleanAttribute key="useCustomFeatures" value="false"/>
 <booleanAttribute key="useDefaultConfigArea" value="true"/>
-<stringAttribute key="workspace_bundles" value="vn.enclave.peyton.fusion@default:default"/>
+<stringAttribute key="workspace_bundles" value="vn.enclave.peyton.fusion.db@default:default,vn.enclave.peyton.fusion@default:default"/>
 </launchConfiguration>

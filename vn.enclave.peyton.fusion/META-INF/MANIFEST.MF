@@ -7,8 +7,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.eclipse.rap.ui;bundle-version="[2.0.0,3.0.0)",
  org.eclipse.rap.ui.forms,
  org.eclipse.core.runtime,
- org.eclipse.rap.ui.workbench
-Bundle-ClassPath: lib/eclipselink-2.5.2.jar,
- lib/javax.persistence-2.0.3.jar,
- lib/mysql-connector-java-5.1.32-bin.jar,
- .
+ org.eclipse.rap.ui.workbench,
+ vn.enclave.peyton.fusion.db;bundle-version="1.0.0"

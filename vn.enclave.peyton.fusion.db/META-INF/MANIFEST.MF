@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Db
+Bundle-SymbolicName: vn.enclave.peyton.fusion.db
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: vn.enclave.peyton.fusion.db.Activator
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Import-Package: org.osgi.framework;version="1.3.0"
+Export-Package: vn.enclave.peyton.fusion.entity,
+ vn.enclave.peyton.fusion.service.impl
+Bundle-ClassPath: lib/eclipselink-2.5.2.jar,
+ lib/javax.persistence-2.0.3.jar,
+ lib/mysql-connector-java-5.1.32-bin.jar,
+ .

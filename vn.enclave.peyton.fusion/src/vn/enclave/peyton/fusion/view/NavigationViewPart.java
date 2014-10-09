@@ -17,8 +17,11 @@ import org.eclipse.ui.dialogs.*;
 import org.eclipse.ui.forms.widgets.*;
 
 import vn.enclave.peyton.fusion.common.*;
-import vn.enclave.peyton.fusion.model.*;
-import vn.enclave.peyton.fusion.service.*;
+import vn.enclave.peyton.fusion.entity.Plan;
+import vn.enclave.peyton.fusion.entity.Project;
+import vn.enclave.peyton.fusion.entity.Version;
+import vn.enclave.peyton.fusion.service.impl.PlanService;
+import vn.enclave.peyton.fusion.service.impl.VersionService;
 
 public class NavigationViewPart extends AbstractTreeViewPart {
 
@@ -151,7 +154,7 @@ public class NavigationViewPart extends AbstractTreeViewPart {
         TreeParent root = new TreeParent("");
 
         PlanService planService = new PlanService();
-        List<Plan> plans = planService.findAll();
+        List<Plan> plans = planService.getAll();
 
         /* Create plan nodes */
         if (0 != plans.size()) {

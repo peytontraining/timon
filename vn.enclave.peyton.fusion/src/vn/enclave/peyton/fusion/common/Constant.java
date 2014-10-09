@@ -41,6 +41,9 @@ public class Constant {
     public static final Image SAVE_IMAGE = AbstractUIPlugin
             .imageDescriptorFromPlugin("vn.enclave.peyton.fusion",
                 "/icons/save_as.png").createImage();
+    public static final Image EDIT_IMAGE = AbstractUIPlugin
+            .imageDescriptorFromPlugin("vn.enclave.peyton.fusion",
+                "/icons/edit.png").createImage();
     
     /* Device Type */
     public static final String DVR_NVR = "DVR/NVR";
