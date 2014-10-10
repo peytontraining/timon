@@ -13,16 +13,6 @@ public class DeviceService implements IService<Device> {
 
     private EntityManager em;
 
-    public List<Device> findAllByID(String versionID) {
-        em = JPAUtil.getEntityManager();
-        TypedQuery<Device> query = 
-            em.createNamedQuery("Device.findAllByID", Device.class);
-        query.setParameter("versionID", versionID);
-        List<Device> devices = query.getResultList();
-        em.close();
-        return devices;
-    }
-
     @Override
     public List<Device> getAll() {
         em = JPAUtil.getEntityManager();

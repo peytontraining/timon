@@ -8,10 +8,10 @@ import org.eclipse.ui.*;
  */
 public class LogoutPerspective implements IPerspectiveFactory {
 
-    public static final String ID = "vn.enclave.peyton.fusion.logoutPerspective";
+    public static final String
+        ID = "vn.enclave.peyton.fusion.logoutPerspective";
 
     public void createInitialLayout(IPageLayout layout) {
-       
     }
 
 }

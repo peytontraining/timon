@@ -8,7 +8,8 @@ import org.eclipse.ui.*;
  */
 public class UserPerspective implements IPerspectiveFactory {
 
-    public static final String ID = "vn.enclave.peyton.fusion.userPerspective";
+    public static final String
+        ID = "vn.enclave.peyton.fusion.userPerspective";
 
     @SuppressWarnings("unused")
     private IFolderLayout topLeft;

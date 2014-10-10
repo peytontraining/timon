@@ -26,6 +26,8 @@ public class Version implements Serializable {
 
     private boolean isEditable;
 
+    private String name;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date saveTime;
 
@@ -33,6 +35,7 @@ public class Version implements Serializable {
 
     //bi-directional many-to-one association to Device
     @OneToMany(mappedBy="version")
+    @OrderBy(value = "id DESC")
     private List<Device> devices;
 
     //bi-directional many-to-one association to Project
@@ -73,6 +76,14 @@ public class Version implements Serializable {
 
     public void setEditable(boolean isEditable) {
         this.isEditable = isEditable;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Date getSaveTime() {

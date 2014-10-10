@@ -6,19 +6,19 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class DeviceChangedHandler extends AbstractHandler {
-	private boolean enabled = true;
+    private boolean enabled = true;
 
-	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		IWorkbenchWindow window = HandlerUtil
-				.getActiveWorkbenchWindowChecked(event);
-		MessageDialog.openInformation(window.getShell(), "Device Changed Dialog",
-				"Device Changed");
-		return null;
-	}
+    @Override
+    public Object execute(ExecutionEvent event) throws ExecutionException {
+        IWorkbenchWindow window = HandlerUtil
+            .getActiveWorkbenchWindowChecked(event);
+        MessageDialog.openInformation(window.getShell(),
+            "Device Changed Dialog", "Device Changed");
+        return null;
+    }
 
-	@Override
-	public boolean isEnabled() {
-		return enabled;
-	}
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
 }

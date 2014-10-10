@@ -22,15 +22,4 @@ public class VersionService implements IService<Version> {
         em.close();
         return version;
     }
-
-    public Version findByVersionID(String idVersion) {
-        em = JPAUtil.getEntityManager();
-        TypedQuery<Version> query =
-            em.createNamedQuery("Version.findByVersionID", Version.class);
-        query.setParameter("idVersion", idVersion);
-        Version version = query.getSingleResult();
-        em.close();
-        return version;
-    }
-
 }

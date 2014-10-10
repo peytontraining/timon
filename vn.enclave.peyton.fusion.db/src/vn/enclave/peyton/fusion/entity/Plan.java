@@ -13,56 +13,57 @@ import java.util.List;
 @Table(name="plans")
 @NamedQuery(name="Plan.findAll", query="SELECT p FROM Plan p")
 public class Plan implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	private int id;
+    @Id
+    private int id;
 
-	private String name;
+    private String name;
 
-	//bi-directional many-to-one association to Project
-	@OneToMany(mappedBy="plan")
-	private List<Project> projects;
+    //bi-directional many-to-one association to Project
+    @OneToMany(mappedBy="plan")
+    @OrderBy(value = "id DESC")
+    private List<Project> projects;
 
-	public Plan() {
-	}
+    public Plan() {
+    }
 
-	public int getId() {
-		return this.id;
-	}
+    public int getId() {
+        return this.id;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public List<Project> getProjects() {
-		return this.projects;
-	}
+    public List<Project> getProjects() {
+        return this.projects;
+    }
 
-	public void setProjects(List<Project> projects) {
-		this.projects = projects;
-	}
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
+    }
 
-	public Project addProject(Project project) {
-		getProjects().add(project);
-		project.setPlan(this);
+    public Project addProject(Project project) {
+        getProjects().add(project);
+        project.setPlan(this);
 
-		return project;
-	}
+        return project;
+    }
 
-	public Project removeProject(Project project) {
-		getProjects().remove(project);
-		project.setPlan(null);
+    public Project removeProject(Project project) {
+        getProjects().remove(project);
+        project.setPlan(null);
 
-		return project;
-	}
+        return project;
+    }
 
 }

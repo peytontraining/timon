@@ -8,12 +8,12 @@ import org.eclipse.ui.application.*;
  */
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
-	public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(
-			IWorkbenchWindowConfigurer configurer) {
-		return new ApplicationWorkbenchWindowAdvisor(configurer);
-	}
+    public WorkbenchWindowAdvisor
+        createWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
+        return new ApplicationWorkbenchWindowAdvisor(configurer);
+    }
 
-	public String getInitialWindowPerspectiveId() {
-		return ProjectPerspective.ID;
-	}
+    public String getInitialWindowPerspectiveId() {
+        return ProjectPerspective.ID;
+    }
 }

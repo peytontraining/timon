@@ -327,8 +327,7 @@
          </toolbar>
       </menuContribution>
       <menuContribution
-            allPopups="true"
-            locationURI="toolbar:vn.enclave.peyton.fusion.view.projectTreeViewPart">
+            locationURI="toolbar:vn.enclave.peyton.fusion.view.navigationViewPart">
          <command
                commandId="vn.enclave.peyton.fusion.handler.refresh"
                icon="icons/refresh.png"
@@ -451,8 +450,7 @@
          </command>
          <command
                commandId="vn.enclave.peyton.fusion.handler.requestOnlineStatus"
-               icon="icons/request_online_status.png"
-               style="pulldown">
+               icon="icons/request_online_status.png">
          </command>
       </menuContribution>
    </extension>

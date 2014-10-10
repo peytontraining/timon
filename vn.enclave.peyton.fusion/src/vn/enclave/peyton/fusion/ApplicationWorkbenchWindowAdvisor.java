@@ -13,7 +13,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
     private static final String DELIMITER = ",";
 
     public ApplicationWorkbenchWindowAdvisor(
-            IWorkbenchWindowConfigurer configurer) {
+        IWorkbenchWindowConfigurer configurer) {
         super(configurer);
     }
 

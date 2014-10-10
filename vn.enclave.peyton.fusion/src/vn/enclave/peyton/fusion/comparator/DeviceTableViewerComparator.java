@@ -8,7 +8,6 @@ import org.eclipse.swt.SWT;
 
 import vn.enclave.peyton.fusion.entity.Device;
 
-
 public class DeviceTableViewerComparator extends ViewerComparator {
 
     private static final long serialVersionUID = 6467573382782190246L;

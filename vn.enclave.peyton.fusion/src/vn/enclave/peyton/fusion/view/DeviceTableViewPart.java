@@ -36,11 +36,10 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import vn.enclave.peyton.fusion.common.Constant;
-import vn.enclave.peyton.fusion.common.AbstractTreeViewPart.TreeObject;
 import vn.enclave.peyton.fusion.comparator.DeviceTableViewerComparator;
 import vn.enclave.peyton.fusion.entity.Device;
+import vn.enclave.peyton.fusion.entity.Version;
 import vn.enclave.peyton.fusion.filter.DeviceFilter;
-import vn.enclave.peyton.fusion.service.impl.DeviceService;
 
 public class DeviceTableViewPart extends ViewPart {
 
@@ -267,7 +266,7 @@ public class DeviceTableViewPart extends ViewPart {
         viewer.setContentProvider(ArrayContentProvider.getInstance());
 
         // Make lines and make header visible.
-        final Table table = viewer.getTable();
+        Table table = viewer.getTable();
         table.setHeaderVisible(true);
         table.setLinesVisible(true);
 
@@ -427,13 +426,8 @@ public class DeviceTableViewPart extends ViewPart {
     }
 
     private void fillDataToTable(Object firstElement) {
-        TreeObject node = (TreeObject) firstElement;
-
-        if (node != null
-            && Constant.VERSION_NODE_LEVEL == node.getLevel()) {
-            DeviceService deviceService = new DeviceService();
-            String versionID = (String) node.getData();
-            List<Device> devices = deviceService.findAllByID(versionID);
+        if (firstElement != null && firstElement instanceof Version) {
+            List<Device> devices = ((Version) firstElement).getDevices();
 
             // Set the content for the Viewer,
             // setInput will call getElements in the ContentProvider.
