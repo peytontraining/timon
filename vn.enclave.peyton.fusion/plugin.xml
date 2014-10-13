@@ -6,9 +6,9 @@
          id="mailapp.entrypoints"
          point="org.eclipse.rap.ui.entrypoint">
       <entrypoint
-            path="/fusion"
             applicationId="vn.enclave.peyton.fusion.mailapp"
-            id="mailapp.entrypoint">
+            id="mailapp.entrypoint"
+            path="/fusion">
       </entrypoint>
    </extension>
    <extension

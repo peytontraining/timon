@@ -37,8 +37,11 @@ import vn.enclave.peyton.fusion.filter.PlanFilter;
 import vn.enclave.peyton.fusion.provider.PlanTreeContentProvider;
 import vn.enclave.peyton.fusion.provider.PlanTreeLableProvider;
 import vn.enclave.peyton.fusion.service.impl.PlanService;
+import vn.enclave.peyton.fusion.service.impl.VersionService;
 
 public class NavigationViewPart extends ViewPart {
+
+    private static final String VERSION_ID_KEY = "versionID";
 
     public static final String
         ID = "vn.enclave.peyton.fusion.view.navigationViewPart";
@@ -46,6 +49,7 @@ public class NavigationViewPart extends ViewPart {
     private Composite treeComposite;
     private Composite formComposite;
     private TreeViewer viewer;
+    private List<Plan> plans;
     private Color gray, white;
     private ToolItem saveItem;
     private Text versionText;
@@ -54,6 +58,8 @@ public class NavigationViewPart extends ViewPart {
     private Text deploySourceText;
     private Text saveTimeText;
     private Text targetVersionText;
+    private PlanService planService = new PlanService();
+    private VersionService versionService = new VersionService();
 
     @Override
     public void createPartControl(Composite parent) {
@@ -86,10 +92,10 @@ public class NavigationViewPart extends ViewPart {
         PatternFilter filter = new PatternFilter();
 
         // Create and layout the FilteredTree.
-        GridData layoutData = 
+        GridData layoutData =
             new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
         int style = SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL;
-        FilteredTree filteredTree = 
+        FilteredTree filteredTree =
             new PlanFilter(treeComposite, style, filter, true);
         filteredTree.setLayoutData(layoutData);
 
@@ -104,14 +110,12 @@ public class NavigationViewPart extends ViewPart {
 
         // Set the content for the Viewer,
         // setInput will call getElements in the ContentProvider.
-        PlanService service = new PlanService();
-        List<Plan> plans = service.getAll();
+        plans = planService.getAll();
         viewer.setInput(plans);
 
         // Make the selection available to other Views.
         getSite().setSelectionProvider(viewer);
     }
-
 
     private void createForm(Composite parent) {
         // Create and layout a composite.
@@ -126,7 +130,7 @@ public class NavigationViewPart extends ViewPart {
         createSection(formComposite);
 
         // Create a SelectionListener for form.
-        createSelectionForm(formComposite);
+        createSelectionForm();
     }
 
     private void createSection(Composite parent) {
@@ -135,8 +139,7 @@ public class NavigationViewPart extends ViewPart {
         FormToolkit toolkit = new FormToolkit(display);
 
         // Create and layout a Section.
-        Section section = toolkit
-            .createSection(parent, Section.TITLE_BAR);
+        Section section = toolkit.createSection(parent, Section.TITLE_BAR);
         section.setLayout(new FillLayout());
 
         // Set text and fore color for title.
@@ -161,18 +164,29 @@ public class NavigationViewPart extends ViewPart {
         saveItem.setEnabled(false);
 
         // Add a SelectionListener to the ToolItem.
-        saveItem.addSelectionListener(new SelectionAdapter() {
+        saveItem.addSelectionListener(createSelectionListener());
+
+        // Set TextClient to section.
+        section.setTextClient(toolBar);
+    }
+
+    private SelectionAdapter createSelectionListener() {
+        return new SelectionAdapter() {
 
             private static final long serialVersionUID = -5483634617709186172L;
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                System.out.println("Save ToolItem");
-            }
-        });
+                String id = (String) formComposite.getData(VERSION_ID_KEY);
+                String name = versionText.getText();
 
-        // Set TextClient to section.
-        section.setTextClient(toolBar);
+                // Update name.
+                versionService.updateName(id, name);
+
+                // Reset the Viewer.
+                viewer.setInput(planService.getAll());
+            }
+        };
     }
 
     private void createForm(FormToolkit toolkit, Section section) {
@@ -222,30 +236,37 @@ public class NavigationViewPart extends ViewPart {
         return text;
     }
 
-    private void createSelectionForm(Composite formComposite2) {
+    private void createSelectionForm() {
         // Create a ISelectionService.
-        IWorkbenchWindow window = PlatformUI
-            .getWorkbench().getActiveWorkbenchWindow();
+        IWorkbenchWindow window =
+            PlatformUI.getWorkbench().getActiveWorkbenchWindow();
         ISelectionService service = window.getSelectionService();
 
         // Add a SelectionListener.
-        service.addSelectionListener(ID, createSelectionService() );
+        service.addSelectionListener(ID, createSelectionService());
     }
 
     private ISelectionListener createSelectionService() {
         return new ISelectionListener() {
 
             @Override
-            public void 
-                selectionChanged(IWorkbenchPart part, ISelection selection) {
-                IStructuredSelection sselection = 
+            public void selectionChanged(
+                IWorkbenchPart part, ISelection selection) {
+                IStructuredSelection sselection =
                     (IStructuredSelection) selection;
                 Object firstElement = sselection.getFirstElement();
                 if (firstElement != null && firstElement instanceof Version) {
                     setDataForm((Version) firstElement);
                     formComposite.setVisible(true);
+
+                    // Set versionID to use when click Save button in toolbar.
+                    String versionID = ((Version) firstElement).getId();
+                    formComposite.setData(VERSION_ID_KEY, versionID);
                 } else {
                     formComposite.setVisible(false);
+
+                    // Remove versionID.
+                    formComposite.setData(VERSION_ID_KEY, null);
                 }
             }
         };
@@ -264,10 +285,6 @@ public class NavigationViewPart extends ViewPart {
         // Set editable for version Textbox.
         boolean editable = version.isEditable();
         versionText.setEditable(editable);
-        targetVersionText.setEditable(editable);
-
-        // Change background color of Target Version Textbox.
-        targetVersionText.setBackground(editable ? white : gray);
 
         // Set enable for the ToolItem.
         saveItem.setEnabled(editable);

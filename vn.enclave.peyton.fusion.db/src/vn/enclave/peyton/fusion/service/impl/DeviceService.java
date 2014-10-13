@@ -22,4 +22,5 @@ public class DeviceService implements IService<Device> {
         em.close();
         return devices;
     }
+
 }

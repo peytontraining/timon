@@ -22,4 +22,14 @@ public class VersionService implements IService<Version> {
         em.close();
         return version;
     }
+
+    public void updateName(String id, String name) {
+        em = JPAUtil.getEntityManager();
+        Version version = em.find(Version.class, id);
+        em.getTransaction().begin();
+        version.setName(name);
+        em.getTransaction().commit();
+        em.close();
+    }
+
 }
