@@ -15,11 +15,11 @@ public class PlanTreeLableProvider extends LabelProvider {
     @Override
     public Image getImage(Object element) {
         if (element instanceof Plan) {
-            return Constant.PLAN_IMAGE;
+            return Constant.IMAGE_PLAN;
         } else if (element instanceof Project) {
-            return Constant.PROJECT_IMAGE;
+            return Constant.IMAGE_PROJECT;
         } else if (element instanceof Version) {
-            return Constant.VERSION_IMAGE;
+            return Constant.IMAGE_VERSION;
         }
         return null;
     }

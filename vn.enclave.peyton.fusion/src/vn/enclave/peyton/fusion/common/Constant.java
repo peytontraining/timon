@@ -8,42 +8,43 @@ public class Constant {
     public static final String 
         PERSISTENCE_UNIT_NAME = "vn.enclave.peyton.fusion";
 
-    /* Node Level */
-    public static final int PLAN_NODE_LEVEL = 1;
-    public static final int PROJECT_NODE_LEVEL = 2;
-    public static final int VERSION_NODE_LEVEL = 3;
-
     /* Image */
-    public static final Image PLAN_IMAGE = AbstractUIPlugin
+    public static final Image IMAGE_PLAN = AbstractUIPlugin
         .imageDescriptorFromPlugin("vn.enclave.peyton.fusion",
             "/icons/company_group.png").createImage();
-    public static final Image PROJECT_IMAGE = AbstractUIPlugin
+    public static final Image IMAGE_PROJECT = AbstractUIPlugin
         .imageDescriptorFromPlugin("vn.enclave.peyton.fusion",
             "/icons/project.png").createImage();
-    public static final Image VERSION_IMAGE = AbstractUIPlugin
+    public static final Image IMAGE_VERSION = AbstractUIPlugin
         .imageDescriptorFromPlugin("vn.enclave.peyton.fusion",
             "/icons/version.png").createImage();
-    public static final Image CAMERA_IMAGE = AbstractUIPlugin
+    public static final Image IMAGE_CAMERA = AbstractUIPlugin
         .imageDescriptorFromPlugin("vn.enclave.peyton.fusion",
             "/icons/camera.png").createImage();
-    public static final Image DVR_NVR_IMAGE = AbstractUIPlugin
+    public static final Image IMAGE_DVR_NVR = AbstractUIPlugin
         .imageDescriptorFromPlugin("vn.enclave.peyton.fusion",
             "/icons/cctv.png").createImage();
-    public static final Image FIREPLACE_CONTROLLER_IMAGE = AbstractUIPlugin
+    public static final Image IMAGE_FIREPLACE_CONTROLLER = AbstractUIPlugin
         .imageDescriptorFromPlugin("vn.enclave.peyton.fusion",
             "/icons/fireplace-controller.png").createImage();
-    public static final Image ARROW_UP_IMAGE = AbstractUIPlugin
+    public static final Image IMAGE_ARROW_UP = AbstractUIPlugin
         .imageDescriptorFromPlugin("vn.enclave.peyton.fusion",
             "/icons/arrow_up.png").createImage();
-    public static final Image ARROW_DOWN_IMAGE = AbstractUIPlugin
+    public static final Image IMAGE_ARROW_DOWN = AbstractUIPlugin
         .imageDescriptorFromPlugin("vn.enclave.peyton.fusion",
             "/icons/arrow_down.png").createImage();
-    public static final Image SAVE_IMAGE = AbstractUIPlugin
+    public static final Image IMAGE_SAVE = AbstractUIPlugin
             .imageDescriptorFromPlugin("vn.enclave.peyton.fusion",
                 "/icons/save_as.png").createImage();
-    public static final Image EDIT_IMAGE = AbstractUIPlugin
+    public static final Image IMAGE_EDIT = AbstractUIPlugin
             .imageDescriptorFromPlugin("vn.enclave.peyton.fusion",
                 "/icons/edit.png").createImage();
+    public static final Image IMAGE_ADD_FOLDER = AbstractUIPlugin
+            .imageDescriptorFromPlugin("vn.enclave.peyton.fusion",
+                "/icons/add_folder.png").createImage();
+    public static final Image IMAGE_DELETE = AbstractUIPlugin
+            .imageDescriptorFromPlugin("vn.enclave.peyton.fusion",
+                "/icons/delete.png").createImage();
     
     /* Device Type */
     public static final String DVR_NVR = "DVR/NVR";

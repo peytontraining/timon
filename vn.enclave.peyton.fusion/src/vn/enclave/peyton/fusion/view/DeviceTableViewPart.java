@@ -120,7 +120,7 @@ public class DeviceTableViewPart extends ViewPart {
 
         // Create clear button
         clear = new Button(parent, SWT.NONE);
-        clear.setImage(Constant.EDIT_IMAGE);
+        clear.setImage(Constant.IMAGE_EDIT);
         clear.setEnabled(false);
         clear.addSelectionListener(new SelectionAdapter() {
 
@@ -170,7 +170,7 @@ public class DeviceTableViewPart extends ViewPart {
 
         // Create up button
         up = new Button(parent, SWT.NONE);
-        up.setImage(Constant.ARROW_UP_IMAGE);
+        up.setImage(Constant.IMAGE_ARROW_UP);
         up.addSelectionListener(new SelectionAdapter() {
             
             private static final long serialVersionUID = -5886805186732591167L;
@@ -183,7 +183,7 @@ public class DeviceTableViewPart extends ViewPart {
 
         // Create down button
         down = new Button(parent, SWT.NONE);
-        down.setImage(Constant.ARROW_DOWN_IMAGE);
+        down.setImage(Constant.IMAGE_ARROW_DOWN);
         down.addSelectionListener(new SelectionAdapter() {
 
             private static final long serialVersionUID = -3866766296386752019L;
@@ -389,15 +389,15 @@ public class DeviceTableViewPart extends ViewPart {
         Image image = null;
         switch (deviceType) {
         case Constant.IP_CAMERAS:
-            image = Constant.CAMERA_IMAGE;
+            image = Constant.IMAGE_CAMERA;
             break;
 
         case Constant.DVR_NVR:
-            image = Constant.DVR_NVR_IMAGE;
+            image = Constant.IMAGE_DVR_NVR;
             break;
 
         case Constant.FIREPLACE_CONTROLLER:
-            image = Constant.FIREPLACE_CONTROLLER_IMAGE;
+            image = Constant.IMAGE_FIREPLACE_CONTROLLER;
             break;
         }
         return image;
