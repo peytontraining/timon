@@ -16,6 +16,7 @@ public class Project implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	private String name;
@@ -27,7 +28,7 @@ public class Project implements Serializable {
 
 	//bi-directional many-to-one association to Version
 	@OneToMany(mappedBy="project")
-	@OrderBy(value = "id DESC")
+	@OrderBy(value = "name DESC")
 	private List<Version> versions;
 
 	public Project() {

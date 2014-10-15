@@ -15,6 +15,7 @@ public class Device implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	private String appModule;
@@ -28,7 +29,7 @@ public class Device implements Serializable {
 	private String physicalLocation;
 
 	//bi-directional many-to-one association to Version
-	@ManyToOne
+	@ManyToOne(cascade={CascadeType.PERSIST})
 	@JoinColumn(name="idVersion")
 	private Version version;
 

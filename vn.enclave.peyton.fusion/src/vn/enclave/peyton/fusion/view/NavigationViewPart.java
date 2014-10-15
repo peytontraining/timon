@@ -1,12 +1,15 @@
 package vn.enclave.peyton.fusion.view;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.ModifyEvent;
@@ -21,6 +24,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
@@ -38,11 +42,13 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.ViewPart;
 
 import vn.enclave.peyton.fusion.common.Constant;
+import vn.enclave.peyton.fusion.entity.Project;
 import vn.enclave.peyton.fusion.entity.Version;
 import vn.enclave.peyton.fusion.filter.PlanFilter;
 import vn.enclave.peyton.fusion.provider.PlanTreeContentProvider;
 import vn.enclave.peyton.fusion.provider.PlanTreeLableProvider;
 import vn.enclave.peyton.fusion.service.impl.PlanService;
+import vn.enclave.peyton.fusion.service.impl.ProjectService;
 import vn.enclave.peyton.fusion.service.impl.VersionService;
 
 public class NavigationViewPart extends ViewPart {
@@ -68,6 +74,7 @@ public class NavigationViewPart extends ViewPart {
     private Text targetVersionText;
     private ControlDecoration versionDecoration;
     private PlanService planService = new PlanService();
+    private ProjectService projectService = new ProjectService();
     private VersionService versionService = new VersionService();
 
     @Override
@@ -178,23 +185,164 @@ public class NavigationViewPart extends ViewPart {
         MenuItem item = new MenuItem(menu, SWT.NONE);
         item.setText("New Project");
         item.setImage(Constant.IMAGE_ADD_FOLDER);
+        item.addSelectionListener(createSelectionAdapter4NewProject());
 
         item = new MenuItem(menu, SWT.SEPARATOR);
 
         item = new MenuItem(menu, SWT.NONE);
         item.setText("New Version");
         item.setImage(Constant.IMAGE_VERSION);
+        item.addSelectionListener(createSelectionAdapter4NewVersion());
 
         item = new MenuItem(menu, SWT.NONE);
         item.setText("Save As");
         item.setImage(Constant.IMAGE_SAVE);
+        item.addSelectionListener(new SelectionAdapter() {
+
+            private static final long serialVersionUID = 6559095611240490844L;
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                Shell shell = e.display.getActiveShell();
+
+                SaveAsDialog dialog = new SaveAsDialog(shell);
+                int open = dialog.open();
+                System.out.println("Open code: " + open);
+                if (open == Window.OK) {
+                    System.out.println(dialog.getVersionName());
+                }
+            }
+        });
 
         item = new MenuItem(menu, SWT.SEPARATOR);
 
         item = new MenuItem(menu, SWT.NONE);
         item.setText("Delete");
         item.setImage(Constant.IMAGE_DELETE);
+        item.addSelectionListener(createSelectionAdapter4Delete());
+
         return menu;
+    }
+
+    /*
+     * Create SelectionAdapter for New Project MenuItem in Menu.
+     */
+    private SelectionAdapter createSelectionAdapter4NewProject() {
+        return new SelectionAdapter() {
+
+            private static final long serialVersionUID = 6559095611240490844L;
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+                Object firstElement = selection.getFirstElement();
+                if (firstElement instanceof Version) {
+
+                    Project newProject = new Project();
+                    newProject.setName("UNKNOWN");
+                    newProject.setPlan(((Version) firstElement).getProject().getPlan());
+
+                    Version newVersion = createNewVersion(newProject, "1.0.0");
+                    List<Version> versions = new ArrayList<>();
+                    versions.add(newVersion);
+                    newProject.setVersions(versions);
+
+                    /*
+                     * After add() method run, the return variable newVersion
+                     * has a new Project pointer.
+                     */
+                    newProject = projectService.add(newProject);
+
+                    // Set current Plan pointer for the new Project Node.
+                    newProject.setPlan(((Version) firstElement).getProject().getPlan());
+
+                    // Add new version to project pointer.
+                    ((Version) firstElement).getProject().getPlan().getProjects().add(0, newProject);
+
+                    viewer.refresh();
+                }
+            }
+        };
+    }
+
+    /*
+     * Create SelectionAdapter for New Version MenuItem in Menu.
+     */
+    private SelectionAdapter createSelectionAdapter4NewVersion() {
+        return new SelectionAdapter() {
+
+            private static final long serialVersionUID = 6559095611240490844L;
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+                Object firstElement = selection.getFirstElement();
+                if (firstElement instanceof Version) {
+                    // Create new name to new Version.
+                    String newName = getNewVersionName((Version) firstElement);
+
+                    // Create new version.
+                    Version newVersion =
+                        createNewVersion(
+                            ((Version) firstElement).getProject(), newName);
+
+                    /*
+                     * After add() method run, the return variable newVersion
+                     * has a new Project pointer.
+                     */
+                    newVersion = versionService.add(newVersion);
+
+                    // Set current Project pointer for the new Version Node.
+                    newVersion.setProject(((Version) firstElement).getProject());
+
+                    // Add new version to project pointer.
+                    ((Version) firstElement).getProject().getVersions().add(0, newVersion);
+                    
+                    viewer.refresh();
+                }
+            }
+        };
+    }
+
+    /*
+     * Create SelectionAdapter for Delete MenuItem in Menu.
+     */
+    private SelectionAdapter createSelectionAdapter4Delete() {
+        return new SelectionAdapter() {
+
+            private static final long serialVersionUID = 6559095611240490844L;
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+                Object firstElement = selection.getFirstElement();
+                if (firstElement instanceof Version) {
+                    versionService.remove((Version) firstElement);
+                    ((Version) firstElement).getProject().removeVersion((Version) firstElement);
+                    viewer.refresh();
+                }
+            }
+        };
+    }
+
+    /*
+     * Create the new name for the new Version with format 1.0.x
+     */
+    private String getNewVersionName(Version version) {
+        // Get the latest version.
+        Version latestVersion = version.getProject().getVersions().get(0);
+
+        // Get the last number in version name. For example: 1.0.13, then
+        // tailName = 13
+        String tailName = latestVersion.getName().split("\\.")[2];
+
+        // Convert tailName to int.
+        int number = Integer.valueOf(tailName);
+
+        // Increase number by one, then convert to String.
+        tailName = String.valueOf(++number);
+
+        return "1.0.".concat(tailName);
     }
 
     /*
@@ -425,12 +573,12 @@ public class NavigationViewPart extends ViewPart {
             return;
         }
 
-        String id = ((Version) firstElement).getId().intern();
+        int id = ((Version) firstElement).getId();
         List<Version> versions =
             ((Version) firstElement).getProject().getVersions();
         for (Version version : versions) {
-            if (version.getName().intern() == name
-                && version.getId().intern() != id) {
+            if (version.getName().intern() == name 
+                && version.getId() != id) {
                 versionDecoration.setDescriptionText(VERSION_DULICATE_ERROR);
                 versionDecoration.show();
                 saveItem.setEnabled(false);
@@ -455,14 +603,11 @@ public class NavigationViewPart extends ViewPart {
                     (IStructuredSelection) viewer.getSelection();
                 Object firstElement = selection.getFirstElement();
                 if (firstElement instanceof Version) {
-                    String id = ((Version) firstElement).getId();
                     String name = versionText.getText();
+                    ((Version) firstElement).setName(name);
 
                     // Update name to database.
-                    versionService.updateName(id, name);
-
-                    // Update name to Version node.
-                    ((Version) firstElement).setName(name);
+                    versionService.update((Version) firstElement);
 
                     // Make save ToolItem is enable.
                     saveItem.setEnabled(false);
@@ -472,6 +617,23 @@ public class NavigationViewPart extends ViewPart {
                 }
             }
         };
+    }
+
+
+    /*
+     * Initial new version. Set project data for new Version.
+     */
+    private Version createNewVersion(Project project, String newName) {
+        Version newVersion = new Version();
+        newVersion.setDeploySource("");
+        newVersion.setDeployTime(new Date()); //Current datetime.
+        newVersion.setDevices(null);
+        newVersion.setEditable(true);
+        newVersion.setName(newName);
+        newVersion.setProject(project);
+        newVersion.setSaveTime(new Date()); //Current datetime.
+        newVersion.setTargetVersion("2.x");
+        return newVersion;
     }
 
 }

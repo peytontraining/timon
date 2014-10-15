@@ -23,13 +23,38 @@ public class VersionService implements IService<Version> {
         return version;
     }
 
-    public void updateName(String id, String name) {
+    // public void updateName(String id, String name) {
+    // em = JPAUtil.getEntityManager();
+    // Version version = em.find(Version.class, id);
+    // em.getTransaction().begin();
+    // version.setName(name);
+    // em.getTransaction().commit();
+    // em.close();
+    // }
+
+    public void update(Version version) {
         em = JPAUtil.getEntityManager();
-        Version version = em.find(Version.class, id);
         em.getTransaction().begin();
-        version.setName(name);
+        em.merge(version);
         em.getTransaction().commit();
         em.close();
     }
 
+    public void remove(Version version) {
+        em = JPAUtil.getEntityManager();
+        em.getTransaction().begin();
+        version = em.getReference(Version.class, version.getId());
+        em.remove(version);
+        em.getTransaction().commit();
+        em.close();
+    }
+
+    public Version add(Version version) {
+        em = JPAUtil.getEntityManager();
+        em.getTransaction().begin();
+        version = em.merge(version);
+        em.getTransaction().commit();
+        em.close();
+        return version;
+    }
 }
