@@ -25,10 +25,10 @@ public class ProjectPerspective implements IPerspectiveFactory {
         topLeft = layout
             .createFolder("topLeft", IPageLayout.LEFT,
                 0.35f, IPageLayout.ID_EDITOR_AREA);
-        topLeft.addView(NavigationViewPart.ID);
+        topLeft.addView(NavigationViewPart2.ID);
         topLeft.addView(DriverTreeViewPart.ID);
         topLeft.addView(AreaTreeViewPart.ID);
-        layout.getViewLayout(NavigationViewPart.ID).setCloseable(false);
+        layout.getViewLayout(NavigationViewPart2.ID).setCloseable(false);
         layout.getViewLayout(DriverTreeViewPart.ID).setCloseable(false);
         layout.getViewLayout(AreaTreeViewPart.ID).setCloseable(false);
 

@@ -1,7 +1,9 @@
 package vn.enclave.peyton.fusion.entity;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.util.Date;
 import java.util.List;
 
@@ -36,10 +38,11 @@ public class Version implements Serializable {
 
 	//bi-directional many-to-one association to Device
 	@OneToMany(mappedBy="version", cascade={CascadeType.PERSIST})
+	@OrderBy(value = "name DESC")
 	private List<Device> devices;
 
 	//bi-directional many-to-one association to Project
-	@ManyToOne
+	@ManyToOne(cascade={CascadeType.PERSIST})
 	@JoinColumn(name="idProject")
 	private Project project;
 

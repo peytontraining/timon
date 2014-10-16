@@ -38,7 +38,6 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.ViewPart;
 
 import vn.enclave.peyton.fusion.common.Constant;
-import vn.enclave.peyton.fusion.entity.Project;
 import vn.enclave.peyton.fusion.entity.Version;
 import vn.enclave.peyton.fusion.filter.PlanFilter;
 import vn.enclave.peyton.fusion.provider.PlanTreeContentProvider;
@@ -121,11 +120,8 @@ public class NavigationViewPart extends ViewPart {
         // Make the section is invisible.
         versionSection.setVisible(false);
 
-        Section projectSection = createProjectSection(bottomComposite);
-        projectSection.setVisible(false);
-
         // Create a SelectionListener for Form.
-        createSelectionService4BottomComposite(versionSection, projectSection);
+        createSelectionService4BottomComposite(versionSection);
 
         // Make the selection available to other Views.
         getSite().setSelectionProvider(viewer);
@@ -218,25 +214,6 @@ public class NavigationViewPart extends ViewPart {
         return section;
     }
 
-    private Section createProjectSection(Composite parent) {
-        Display display = parent.getDisplay();
-        // Create a FormToolKit.
-        FormToolkit toolkit = new FormToolkit(display);
-
-        // Create and layout a Section.
-        Section section = toolkit.createSection(parent, Section.TITLE_BAR);
-        section.setLayout(new FillLayout());
-
-        // Set text and fore color for title.
-        section.setText("Project Properties");
-        section.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
-
-        // CreateToolbar for the Section.
-        createProjectToolbar(section);
-
-        return section;
-    }
-
     /*
      * Create Toolbar on Section.
      */
@@ -252,23 +229,6 @@ public class NavigationViewPart extends ViewPart {
 
         // Add a SelectionListener to the ToolItem.
         saveItem.addSelectionListener(getSelectionAdapter4SaveVersion());
-
-        // Set TextClient to section.
-        section.setTextClient(toolBar);
-    }
-
-    private void createProjectToolbar(Section section) {
-        // Create and layout a Toolbar.
-        int style = SWT.FLAT | SWT.HORIZONTAL;
-        ToolBar toolBar = new ToolBar(section, style);
-
-        // Create a ToolItem.
-        saveItem = new ToolItem(toolBar, SWT.PUSH);
-        saveItem.setImage(Constant.IMAGE_SAVE);
-        saveItem.setEnabled(false);
-
-        // Add a SelectionListener to the ToolItem.
-//        saveItem.addSelectionListener(getSelectionAdapter4SaveProject());
 
         // Set TextClient to section.
         section.setTextClient(toolBar);
@@ -355,20 +315,20 @@ public class NavigationViewPart extends ViewPart {
      * formComposite is set visible. If another node is clicked, the
      * formComposite will be set invisible.
      */
-    private void createSelectionService4BottomComposite(Section versionSection, Section projectSection) {
+    private void createSelectionService4BottomComposite(Section versionSection) {
         // Create a ISelectionService.
         IWorkbenchWindow window =
             PlatformUI.getWorkbench().getActiveWorkbenchWindow();
         ISelectionService service = window.getSelectionService();
 
         // Add a SelectionListener.
-        service.addSelectionListener(ID, getSelectionService(versionSection, projectSection));
+        service.addSelectionListener(ID, getSelectionService(versionSection));
     }
 
     /*
      * Get ISelectionListener.
      */
-    private ISelectionListener getSelectionService(final Section versionSection, final Section projectSection) {
+    private ISelectionListener getSelectionService(final Section versionSection) {
         return new ISelectionListener() {
 
             @Override
@@ -380,15 +340,8 @@ public class NavigationViewPart extends ViewPart {
                 if (firstElement != null && firstElement instanceof Version) {
                     setDataFormVersion((Version) firstElement);
                     versionSection.setVisible(true);
-                    projectSection.setVisible(false);
-                    versionSection.getParent().layout(true);
-                } else if(firstElement instanceof Project) {
-                    versionSection.setVisible(false);
-                    projectSection.setVisible(true);
-                    projectSection.getParent().layout(true);
                 } else {
                     versionSection.setVisible(false);
-                    projectSection.setVisible(false);
                 }
             }
         };
