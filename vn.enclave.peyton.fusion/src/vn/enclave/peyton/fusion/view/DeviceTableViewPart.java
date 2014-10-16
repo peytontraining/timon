@@ -112,7 +112,7 @@ public class DeviceTableViewPart extends ViewPart {
             public void modifyText(ModifyEvent event) {
                 filter.setFilterString(filterText.getText());
                 viewer.refresh();
-                boolean enabled = filterText.getText() != null ||
+                boolean enabled = filterText.getText() != null &
                     filterText.getText().length() != 0;
                 clear.setEnabled(enabled);
             }

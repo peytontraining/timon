@@ -1,15 +1,13 @@
 package vn.enclave.peyton.fusion.view;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.ModifyEvent;
@@ -23,8 +21,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
@@ -48,7 +44,6 @@ import vn.enclave.peyton.fusion.filter.PlanFilter;
 import vn.enclave.peyton.fusion.provider.PlanTreeContentProvider;
 import vn.enclave.peyton.fusion.provider.PlanTreeLableProvider;
 import vn.enclave.peyton.fusion.service.impl.PlanService;
-import vn.enclave.peyton.fusion.service.impl.ProjectService;
 import vn.enclave.peyton.fusion.service.impl.VersionService;
 
 public class NavigationViewPart extends ViewPart {
@@ -74,8 +69,11 @@ public class NavigationViewPart extends ViewPart {
     private Text targetVersionText;
     private ControlDecoration versionDecoration;
     private PlanService planService = new PlanService();
-    private ProjectService projectService = new ProjectService();
     private VersionService versionService = new VersionService();
+
+    public TreeViewer getViewer() {
+        return viewer;
+    }
 
     @Override
     public void createPartControl(Composite parent) {
@@ -97,8 +95,15 @@ public class NavigationViewPart extends ViewPart {
         viewer = createTreeViewer(topComposite);
 
         // Set menu for the Viewer.
-        Menu menu = getMenu(viewer);
+        MenuManager menuManager = new MenuManager();
+        menuManager.setRemoveAllWhenShown(true);
+        Menu menu = menuManager.createContextMenu(viewer.getTree());
+
+        // Set the menu to the viewer.
         viewer.getTree().setMenu(menu);
+
+        // Register context menu.
+        getSite().registerContextMenu(menuManager, viewer);
 
         // Set the content for the Viewer,
         // setInput will call getElements in the ContentProvider.
@@ -108,16 +113,19 @@ public class NavigationViewPart extends ViewPart {
         Composite bottomComposite = createBottomComposite(sashForm);
 
         // Create Section inside bottomComposite.
-        Section section = createSection(bottomComposite);
+        Section versionSection = createVersionSection(bottomComposite);
 
         // Create a ScrooledForm inside section.
-        createForm(section);
+        createForm(versionSection);
 
         // Make the section is invisible.
-        section.setVisible(false);
+        versionSection.setVisible(false);
+
+        Section projectSection = createProjectSection(bottomComposite);
+        projectSection.setVisible(false);
 
         // Create a SelectionListener for Form.
-        createSelectionService4Form(section);
+        createSelectionService4BottomComposite(versionSection, projectSection);
 
         // Make the selection available to other Views.
         getSite().setSelectionProvider(viewer);
@@ -161,7 +169,7 @@ public class NavigationViewPart extends ViewPart {
         // Create and layout the FilteredTree.
         GridData layoutData =
             new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-        int style = SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL;
+        int style = SWT.H_SCROLL | SWT.V_SCROLL;
         FilteredTree filteredTree = new PlanFilter(parent, style, filter, true);
         filteredTree.setLayoutData(layoutData);
 
@@ -178,174 +186,6 @@ public class NavigationViewPart extends ViewPart {
     }
 
     /*
-     * Create Menu for TreeViewer.
-     */
-    private Menu getMenu(TreeViewer treeViewer) {
-        Menu menu = new Menu(treeViewer.getTree());
-        MenuItem item = new MenuItem(menu, SWT.NONE);
-        item.setText("New Project");
-        item.setImage(Constant.IMAGE_ADD_FOLDER);
-        item.addSelectionListener(createSelectionAdapter4NewProject());
-
-        item = new MenuItem(menu, SWT.SEPARATOR);
-
-        item = new MenuItem(menu, SWT.NONE);
-        item.setText("New Version");
-        item.setImage(Constant.IMAGE_VERSION);
-        item.addSelectionListener(createSelectionAdapter4NewVersion());
-
-        item = new MenuItem(menu, SWT.NONE);
-        item.setText("Save As");
-        item.setImage(Constant.IMAGE_SAVE);
-        item.addSelectionListener(new SelectionAdapter() {
-
-            private static final long serialVersionUID = 6559095611240490844L;
-
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                Shell shell = e.display.getActiveShell();
-
-                SaveAsDialog dialog = new SaveAsDialog(shell);
-                int open = dialog.open();
-                System.out.println("Open code: " + open);
-                if (open == Window.OK) {
-                    System.out.println(dialog.getVersionName());
-                }
-            }
-        });
-
-        item = new MenuItem(menu, SWT.SEPARATOR);
-
-        item = new MenuItem(menu, SWT.NONE);
-        item.setText("Delete");
-        item.setImage(Constant.IMAGE_DELETE);
-        item.addSelectionListener(createSelectionAdapter4Delete());
-
-        return menu;
-    }
-
-    /*
-     * Create SelectionAdapter for New Project MenuItem in Menu.
-     */
-    private SelectionAdapter createSelectionAdapter4NewProject() {
-        return new SelectionAdapter() {
-
-            private static final long serialVersionUID = 6559095611240490844L;
-
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
-                Object firstElement = selection.getFirstElement();
-                if (firstElement instanceof Version) {
-
-                    Project newProject = new Project();
-                    newProject.setName("UNKNOWN");
-                    newProject.setPlan(((Version) firstElement).getProject().getPlan());
-
-                    Version newVersion = createNewVersion(newProject, "1.0.0");
-                    List<Version> versions = new ArrayList<>();
-                    versions.add(newVersion);
-                    newProject.setVersions(versions);
-
-                    /*
-                     * After add() method run, the return variable newVersion
-                     * has a new Project pointer.
-                     */
-                    newProject = projectService.add(newProject);
-
-                    // Set current Plan pointer for the new Project Node.
-                    newProject.setPlan(((Version) firstElement).getProject().getPlan());
-
-                    // Add new version to project pointer.
-                    ((Version) firstElement).getProject().getPlan().getProjects().add(0, newProject);
-
-                    viewer.refresh();
-                }
-            }
-        };
-    }
-
-    /*
-     * Create SelectionAdapter for New Version MenuItem in Menu.
-     */
-    private SelectionAdapter createSelectionAdapter4NewVersion() {
-        return new SelectionAdapter() {
-
-            private static final long serialVersionUID = 6559095611240490844L;
-
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
-                Object firstElement = selection.getFirstElement();
-                if (firstElement instanceof Version) {
-                    // Create new name to new Version.
-                    String newName = getNewVersionName((Version) firstElement);
-
-                    // Create new version.
-                    Version newVersion =
-                        createNewVersion(
-                            ((Version) firstElement).getProject(), newName);
-
-                    /*
-                     * After add() method run, the return variable newVersion
-                     * has a new Project pointer.
-                     */
-                    newVersion = versionService.add(newVersion);
-
-                    // Set current Project pointer for the new Version Node.
-                    newVersion.setProject(((Version) firstElement).getProject());
-
-                    // Add new version to project pointer.
-                    ((Version) firstElement).getProject().getVersions().add(0, newVersion);
-                    
-                    viewer.refresh();
-                }
-            }
-        };
-    }
-
-    /*
-     * Create SelectionAdapter for Delete MenuItem in Menu.
-     */
-    private SelectionAdapter createSelectionAdapter4Delete() {
-        return new SelectionAdapter() {
-
-            private static final long serialVersionUID = 6559095611240490844L;
-
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
-                Object firstElement = selection.getFirstElement();
-                if (firstElement instanceof Version) {
-                    versionService.remove((Version) firstElement);
-                    ((Version) firstElement).getProject().removeVersion((Version) firstElement);
-                    viewer.refresh();
-                }
-            }
-        };
-    }
-
-    /*
-     * Create the new name for the new Version with format 1.0.x
-     */
-    private String getNewVersionName(Version version) {
-        // Get the latest version.
-        Version latestVersion = version.getProject().getVersions().get(0);
-
-        // Get the last number in version name. For example: 1.0.13, then
-        // tailName = 13
-        String tailName = latestVersion.getName().split("\\.")[2];
-
-        // Convert tailName to int.
-        int number = Integer.valueOf(tailName);
-
-        // Increase number by one, then convert to String.
-        tailName = String.valueOf(++number);
-
-        return "1.0.".concat(tailName);
-    }
-
-    /*
      * Create Composite to store Section.
      */
     private Composite createBottomComposite(Composite parent) {
@@ -359,7 +199,7 @@ public class NavigationViewPart extends ViewPart {
     /*
      * Create Section to store Form.
      */
-    private Section createSection(Composite parent) {
+    private Section createVersionSection(Composite parent) {
         Display display = parent.getDisplay();
         // Create a FormToolKit.
         FormToolkit toolkit = new FormToolkit(display);
@@ -373,7 +213,26 @@ public class NavigationViewPart extends ViewPart {
         section.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
 
         // CreateToolbar for the Section.
-        createToolbar(section);
+        createVersionToolbar(section);
+
+        return section;
+    }
+
+    private Section createProjectSection(Composite parent) {
+        Display display = parent.getDisplay();
+        // Create a FormToolKit.
+        FormToolkit toolkit = new FormToolkit(display);
+
+        // Create and layout a Section.
+        Section section = toolkit.createSection(parent, Section.TITLE_BAR);
+        section.setLayout(new FillLayout());
+
+        // Set text and fore color for title.
+        section.setText("Project Properties");
+        section.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
+
+        // CreateToolbar for the Section.
+        createProjectToolbar(section);
 
         return section;
     }
@@ -381,7 +240,7 @@ public class NavigationViewPart extends ViewPart {
     /*
      * Create Toolbar on Section.
      */
-    private void createToolbar(Section section) {
+    private void createVersionToolbar(Section section) {
         // Create and layout a Toolbar.
         int style = SWT.FLAT | SWT.HORIZONTAL;
         ToolBar toolBar = new ToolBar(section, style);
@@ -392,7 +251,24 @@ public class NavigationViewPart extends ViewPart {
         saveItem.setEnabled(false);
 
         // Add a SelectionListener to the ToolItem.
-        saveItem.addSelectionListener(getSelectionAdapter4SaveItem());
+        saveItem.addSelectionListener(getSelectionAdapter4SaveVersion());
+
+        // Set TextClient to section.
+        section.setTextClient(toolBar);
+    }
+
+    private void createProjectToolbar(Section section) {
+        // Create and layout a Toolbar.
+        int style = SWT.FLAT | SWT.HORIZONTAL;
+        ToolBar toolBar = new ToolBar(section, style);
+
+        // Create a ToolItem.
+        saveItem = new ToolItem(toolBar, SWT.PUSH);
+        saveItem.setImage(Constant.IMAGE_SAVE);
+        saveItem.setEnabled(false);
+
+        // Add a SelectionListener to the ToolItem.
+//        saveItem.addSelectionListener(getSelectionAdapter4SaveProject());
 
         // Set TextClient to section.
         section.setTextClient(toolBar);
@@ -415,7 +291,7 @@ public class NavigationViewPart extends ViewPart {
         versionText = createText(toolkit, body, white, "");
 
         // Add ControlDecoration to versionText.
-        versionDecoration = getControlDecoration();
+        versionDecoration = createControlDecoration();
 
         // Add ModifyListener to versionText.
         versionText.addModifyListener(getModifyListener4VersionText());
@@ -464,7 +340,7 @@ public class NavigationViewPart extends ViewPart {
     /*
      * Create ControlDecoration for versionText.
      */
-    private ControlDecoration getControlDecoration() {
+    private ControlDecoration createControlDecoration() {
         ControlDecoration decoration =
             new ControlDecoration(versionText, SWT.TOP | SWT.LEFT);
         decoration.setImage(PlatformUI
@@ -479,20 +355,20 @@ public class NavigationViewPart extends ViewPart {
      * formComposite is set visible. If another node is clicked, the
      * formComposite will be set invisible.
      */
-    private void createSelectionService4Form(Section section) {
+    private void createSelectionService4BottomComposite(Section versionSection, Section projectSection) {
         // Create a ISelectionService.
         IWorkbenchWindow window =
             PlatformUI.getWorkbench().getActiveWorkbenchWindow();
         ISelectionService service = window.getSelectionService();
 
         // Add a SelectionListener.
-        service.addSelectionListener(ID, getSelectionService(section));
+        service.addSelectionListener(ID, getSelectionService(versionSection, projectSection));
     }
 
     /*
      * Get ISelectionListener.
      */
-    private ISelectionListener getSelectionService(final Section section) {
+    private ISelectionListener getSelectionService(final Section versionSection, final Section projectSection) {
         return new ISelectionListener() {
 
             @Override
@@ -502,10 +378,17 @@ public class NavigationViewPart extends ViewPart {
                     (IStructuredSelection) selection;
                 Object firstElement = sselection.getFirstElement();
                 if (firstElement != null && firstElement instanceof Version) {
-                    setDataForm((Version) firstElement);
-                    section.setVisible(true);
+                    setDataFormVersion((Version) firstElement);
+                    versionSection.setVisible(true);
+                    projectSection.setVisible(false);
+                    versionSection.getParent().layout(true);
+                } else if(firstElement instanceof Project) {
+                    versionSection.setVisible(false);
+                    projectSection.setVisible(true);
+                    projectSection.getParent().layout(true);
                 } else {
-                    section.setVisible(false);
+                    versionSection.setVisible(false);
+                    projectSection.setVisible(false);
                 }
             }
         };
@@ -515,12 +398,16 @@ public class NavigationViewPart extends ViewPart {
      * Fill in all Textbox in Version Properties View. If version is allowed to
      * edit, versionText is set editable.
      */
-    private void setDataForm(Version version) {
+    private void setDataFormVersion(Version version) {
         // Set data to all Textboxes in the Form.
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         versionText.setText(version.getName());
         projectText.setText(version.getProject().getName());
-        deployTimeText.setText(format.format(version.getDeployTime()));
+        if (version.getDeployTime() != null) {
+            deployTimeText.setText(format.format(version.getDeployTime()));
+        } else {
+            deployTimeText.setText("");
+        }
         deploySourceText.setText(version.getDeploySource());
         saveTimeText.setText(format.format(version.getSaveTime()));
         targetVersionText.setText(version.getTargetVersion());
@@ -577,8 +464,7 @@ public class NavigationViewPart extends ViewPart {
         List<Version> versions =
             ((Version) firstElement).getProject().getVersions();
         for (Version version : versions) {
-            if (version.getName().intern() == name 
-                && version.getId() != id) {
+            if (version.getName().intern() == name && version.getId() != id) {
                 versionDecoration.setDescriptionText(VERSION_DULICATE_ERROR);
                 versionDecoration.show();
                 saveItem.setEnabled(false);
@@ -592,7 +478,7 @@ public class NavigationViewPart extends ViewPart {
     /*
      * Create SelectionAdapter for Save Toolbar Item in Toolbar.
      */
-    private SelectionAdapter getSelectionAdapter4SaveItem() {
+    private SelectionAdapter getSelectionAdapter4SaveVersion() {
         return new SelectionAdapter() {
 
             private static final long serialVersionUID = -5483634617709186172L;
@@ -618,22 +504,4 @@ public class NavigationViewPart extends ViewPart {
             }
         };
     }
-
-
-    /*
-     * Initial new version. Set project data for new Version.
-     */
-    private Version createNewVersion(Project project, String newName) {
-        Version newVersion = new Version();
-        newVersion.setDeploySource("");
-        newVersion.setDeployTime(new Date()); //Current datetime.
-        newVersion.setDevices(null);
-        newVersion.setEditable(true);
-        newVersion.setName(newName);
-        newVersion.setProject(project);
-        newVersion.setSaveTime(new Date()); //Current datetime.
-        newVersion.setTargetVersion("2.x");
-        return newVersion;
-    }
-
 }

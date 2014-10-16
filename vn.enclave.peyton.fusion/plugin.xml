@@ -134,32 +134,27 @@
          point="org.eclipse.ui.commands">
       <command
             categoryId="vn.enclave.peyton.fusion.category.leftToolbar"
-            defaultHandler="vn.enclave.peyton.fusion.handler.ExportHandler"
-            id="vn.enclave.peyton.fusion.handler.export"
+            id="vn.enclave.peyton.fusion.command.export"
             name="Export">
       </command>
       <command
             categoryId="vn.enclave.peyton.fusion.category.leftToolbar"
-            defaultHandler="vn.enclave.peyton.fusion.handler.DeployHandler"
-            id="vn.enclave.peyton.fusion.handler.deploy"
+            id="vn.enclave.peyton.fusion.command.deploy"
             name="Deploy">
       </command>
       <command
             categoryId="vn.enclave.peyton.fusion.category.leftToolbar"
-            defaultHandler="vn.enclave.peyton.fusion.handler.ReportHandler"
-            id="vn.enclave.peyton.fusion.handler.report"
+            id="vn.enclave.peyton.fusion.command.report"
             name="Report">
       </command>
       <command
             categoryId="vn.enclave.peyton.fusion.category.leftToolbar"
-            defaultHandler="vn.enclave.peyton.fusion.handler.HelpLinkHandler"
-            id="vn.enclave.peyton.fusion.handler.helpLinks"
+            id="vn.enclave.peyton.fusion.command.helpLinks"
             name="Help Links">
       </command>
       <command
             categoryId="vn.enclave.peyton.fusion.category.rightToolbar"
-            defaultHandler="vn.enclave.peyton.fusion.handler.SystemHandler"
-            id="vn.enclave.peyton.fusion.handler.system"
+            id="vn.enclave.peyton.fusion.command.system"
             name="System">
       </command>
       <category
@@ -171,14 +166,12 @@
             name="Right Toolbar">
       </category>
       <command
-            defaultHandler="vn.enclave.peyton.fusion.handler.StatusHandler"
-            id="vn.enclave.peyton.fusion.handler.status"
+            id="vn.enclave.peyton.fusion.command.status"
             name="Status">
       </command>
       <command
             categoryId="vn.enclave.peyton.fusion.category.projectTree"
-            defaultHandler="vn.enclave.peyton.fusion.handler.RefreshHandler"
-            id="vn.enclave.peyton.fusion.handler.refresh"
+            id="vn.enclave.peyton.fusion.command.refresh"
             name="Refresh">
       </command>
       <category
@@ -186,90 +179,105 @@
             name="Project Tree">
       </category>
       <command
-            categoryId="vn.enclave.peyton.fusion.category.projectTree"
-            id="vn.enclave.peyton.fusion.handler.showDevice"
+            id="vn.enclave.peyton.fusion.command.showDevice"
             name="Show Devices">
       </command>
       <command
             categoryId="vn.enclave.peyton.fusion.category.projectTree"
-            defaultHandler="vn.enclave.peyton.fusion.handler.AddFolderHandler"
-            id="vn.enclave.peyton.fusion.handler.addFolder"
+            id="vn.enclave.peyton.fusion.command.addFolder"
             name="Add Folder">
       </command>
       <command
             categoryId="vn.enclave.peyton.fusion.category.projectTree"
-            defaultHandler="vn.enclave.peyton.fusion.handler.CloneVersionHandler"
-            id="vn.enclave.peyton.fusion.handler.cloneVersion"
+            id="vn.enclave.peyton.fusion.command.cloneVersion"
             name="Clone Version">
       </command>
       <command
             categoryId="vn.enclave.peyton.fusion.category.projectTree"
-            defaultHandler="vn.enclave.peyton.fusion.handler.SaveAsHandler"
-            id="vn.enclave.peyton.fusion.handler.saveAs"
+            id="vn.enclave.peyton.fusion.command.saveAs"
             name="Save As">
       </command>
       <command
             categoryId="vn.enclave.peyton.fusion.category.projectTree"
-            defaultHandler="vn.enclave.peyton.fusion.handler.DeleteHandler"
-            id="vn.enclave.peyton.fusion.handler.delete"
+            id="vn.enclave.peyton.fusion.command.delete"
             name="Delete">
       </command>
       <command
             categoryId="vn.enclave.peyton.fusion.category.deviceTable"
-            defaultHandler="vn.enclave.peyton.fusion.handler.AddHandler"
-            id="vn.enclave.peyton.fusion.handler.add"
+            id="vn.enclave.peyton.fusion.command.add"
             name="Add">
+      </command>
+      <command
+            categoryId="vn.enclave.peyton.fusion.category.deviceTable"
+            id="vn.enclave.peyton.fusion.command.copy"
+            name="Copy">
+      </command>
+      <command
+            categoryId="vn.enclave.peyton.fusion.category.deviceTable"
+            id="vn.enclave.peyton.fusion.command.importDevice"
+            name="Import Devices">
+      </command>
+      <command
+            categoryId="vn.enclave.peyton.fusion.category.deviceTable"
+            id="vn.enclave.peyton.fusion.command.importZWave"
+            name="Import ZWave">
+      </command>
+      <command
+            categoryId="vn.enclave.peyton.fusion.category.deviceTable"
+            id="vn.enclave.peyton.fusion.command.templateChild"
+            name="Template Child">
+      </command>
+      <command
+            categoryId="vn.enclave.peyton.fusion.category.deviceTable"
+            id="vn.enclave.peyton.fusion.command.expand"
+            name="Expand">
+      </command>
+      <command
+            categoryId="vn.enclave.peyton.fusion.category.deviceTable"
+            id="vn.enclave.peyton.fusion.command.collapse"
+            name="Collapse">
+      </command>
+      <command
+            categoryId="vn.enclave.peyton.fusion.category.deviceTable"
+            id="vn.enclave.peyton.fusion.command.deviceChanged"
+            name="Device Changed">
+      </command>
+      <command
+            categoryId="vn.enclave.peyton.fusion.category.deviceTable"
+            id="vn.enclave.peyton.fusion.command.requestOnlineStatus"
+            name="Request Online Status">
       </command>
       <category
             id="vn.enclave.peyton.fusion.category.deviceTable"
             name="Device Table">
       </category>
+      <category
+            id="vn.enclave.peyton.fusion.category.popup.planTreeViewer"
+            name="Popup Plan TreeViewer">
+      </category>
       <command
-            categoryId="vn.enclave.peyton.fusion.category.deviceTable"
-            defaultHandler="vn.enclave.peyton.fusion.handler.CopyHandler"
-            id="vn.enclave.peyton.fusion.handler.copy"
-            name="Copy">
+            categoryId="vn.enclave.peyton.fusion.category.popup.planTreeViewer"
+            defaultHandler="vn.enclave.peyton.fusion.command.DeleteVersionHandler"
+            id="vn.enclave.peyton.fusion.command.popup.deleteVersionHandler"
+            name="Popup.DeleteVersion">
       </command>
       <command
-            categoryId="vn.enclave.peyton.fusion.category.deviceTable"
-            defaultHandler="vn.enclave.peyton.fusion.handler.ImportDeviceHandler"
-            id="vn.enclave.peyton.fusion.handler.importDevice"
-            name="Import Devices">
+            categoryId="vn.enclave.peyton.fusion.category.popup.planTreeViewer"
+            defaultHandler="vn.enclave.peyton.fusion.command.NewProjectHandler"
+            id="vn.enclave.peyton.fusion.command.popup.newProjectHandler"
+            name="Popup.New Project">
       </command>
       <command
-            categoryId="vn.enclave.peyton.fusion.category.deviceTable"
-            defaultHandler="vn.enclave.peyton.fusion.handler.ImportZWaveHandler"
-            id="vn.enclave.peyton.fusion.handler.importZWave"
-            name="Import ZWave">
+            categoryId="vn.enclave.peyton.fusion.category.popup.planTreeViewer"
+            defaultHandler="vn.enclave.peyton.fusion.command.NewVersionHandler"
+            id="vn.enclave.peyton.fusion.command.popup.newVersionHandler"
+            name="Popup.NewVersion">
       </command>
       <command
-            categoryId="vn.enclave.peyton.fusion.category.deviceTable"
-            id="vn.enclave.peyton.fusion.handler.templateChild"
-            name="Template Child">
-      </command>
-      <command
-            categoryId="vn.enclave.peyton.fusion.category.deviceTable"
-            defaultHandler="vn.enclave.peyton.fusion.handler.ExpandHandler"
-            id="vn.enclave.peyton.fusion.handler.expand"
-            name="Expand">
-      </command>
-      <command
-            categoryId="vn.enclave.peyton.fusion.category.deviceTable"
-            defaultHandler="vn.enclave.peyton.fusion.handler.CollapseHandler"
-            id="vn.enclave.peyton.fusion.handler.collapse"
-            name="Collapse">
-      </command>
-      <command
-            categoryId="vn.enclave.peyton.fusion.category.deviceTable"
-            defaultHandler="vn.enclave.peyton.fusion.handler.DeviceChangedHandler"
-            id="vn.enclave.peyton.fusion.handler.deviceChanged"
-            name="Device Changed">
-      </command>
-      <command
-            categoryId="vn.enclave.peyton.fusion.category.deviceTable"
-            defaultHandler="vn.enclave.peyton.fusion.handler.RequestOnlineStatusHandler"
-            id="vn.enclave.peyton.fusion.handler.requestOnlineStatus"
-            name="Request Online Status">
+            categoryId="vn.enclave.peyton.fusion.category.popup.planTreeViewer"
+            defaultHandler="vn.enclave.peyton.fusion.command.SaveAsHandler"
+            id="vn.enclave.peyton.fusion.command.popup.saveAsHandler"
+            name="Popup.SaveAs">
       </command>
    </extension>
    <extension
@@ -280,21 +288,21 @@
          <toolbar
                id="vn.enclave.peyton.fusion.toolbarLeft">
             <command
-                  commandId="vn.enclave.peyton.fusion.handler.export"
+                  commandId="vn.enclave.peyton.fusion.command.export"
                   icon="icons/export.png"
                   label="Export"
                   mode="FORCE_TEXT"
                   style="push">
             </command>
             <command
-                  commandId="vn.enclave.peyton.fusion.handler.deploy"
+                  commandId="vn.enclave.peyton.fusion.command.deploy"
                   icon="icons/deployunit_project.png"
                   label="Deploy"
                   mode="FORCE_TEXT"
                   style="push">
             </command>
             <command
-                  commandId="vn.enclave.peyton.fusion.handler.report"
+                  commandId="vn.enclave.peyton.fusion.command.report"
                   icon="icons/report.png"
                   label="Report"
                   mode="FORCE_TEXT"
@@ -305,7 +313,7 @@
                   visible="true">
             </separator>
             <command
-                  commandId="vn.enclave.peyton.fusion.handler.helpLinks"
+                  commandId="vn.enclave.peyton.fusion.command.helpLinks"
                   icon="icons/help.png"
                   label="Help Links"
                   mode="FORCE_TEXT"
@@ -319,7 +327,7 @@
          <toolbar
                id="vn.enclave.peyton.fusion.toolbarStatus">
             <command
-                  commandId="vn.enclave.peyton.fusion.handler.status"
+                  commandId="vn.enclave.peyton.fusion.command.status"
                   icon="icons/status-info.png"
                   label="Status"
                   style="push">
@@ -329,7 +337,7 @@
       <menuContribution
             locationURI="toolbar:vn.enclave.peyton.fusion.view.navigationViewPart">
          <command
-               commandId="vn.enclave.peyton.fusion.handler.refresh"
+               commandId="vn.enclave.peyton.fusion.command.refresh"
                icon="icons/refresh.png"
                style="push">
          </command>
@@ -338,7 +346,7 @@
                visible="true">
          </separator>
          <command
-               commandId="vn.enclave.peyton.fusion.handler.showDevice"
+               commandId="vn.enclave.peyton.fusion.command.showDevice"
                icon="icons/show_devices.png"
                style="push">
          </command>
@@ -347,7 +355,7 @@
                visible="true">
          </separator>
          <command
-               commandId="vn.enclave.peyton.fusion.handler.addFolder"
+               commandId="vn.enclave.peyton.fusion.command.addFolder"
                icon="icons/add_folder.png"
                style="push">
          </command>
@@ -356,17 +364,17 @@
                visible="true">
          </separator>
          <command
-               commandId="vn.enclave.peyton.fusion.handler.cloneVersion"
+               commandId="vn.enclave.peyton.fusion.command.cloneVersion"
                icon="icons/clone_version.png"
                style="push">
          </command>
          <command
-               commandId="vn.enclave.peyton.fusion.handler.saveAs"
+               commandId="vn.enclave.peyton.fusion.command.saveAs"
                icon="icons/save_as.png"
                style="push">
          </command>
          <command
-               commandId="vn.enclave.peyton.fusion.handler.delete"
+               commandId="vn.enclave.peyton.fusion.command.delete"
                icon="icons/delete.png"
                style="push">
          </command>
@@ -374,7 +382,7 @@
       <menuContribution
             locationURI="toolbar:vn.enclave.peyton.fusion.view.deviceTableViewPart">
          <command
-               commandId="vn.enclave.peyton.fusion.handler.refresh"
+               commandId="vn.enclave.peyton.fusion.command.refresh"
                icon="icons/refresh.png"
                style="push">
          </command>
@@ -383,16 +391,16 @@
                visible="true">
          </separator>
          <command
-               commandId="vn.enclave.peyton.fusion.handler.add"
+               commandId="vn.enclave.peyton.fusion.command.add"
                icon="icons/add.png"
                style="push">
          </command>
          <command
-               commandId="vn.enclave.peyton.fusion.handler.copy"
+               commandId="vn.enclave.peyton.fusion.command.copy"
                icon="icons/copy.png">
          </command>
          <command
-               commandId="vn.enclave.peyton.fusion.handler.delete"
+               commandId="vn.enclave.peyton.fusion.command.delete"
                icon="icons/delete.png"
                style="push">
          </command>
@@ -401,22 +409,22 @@
                visible="true">
          </separator>
          <command
-               commandId="vn.enclave.peyton.fusion.handler.importDevice"
+               commandId="vn.enclave.peyton.fusion.command.importDevice"
                icon="icons/import-devices.png"
                style="push">
          </command>
          <command
-               commandId="vn.enclave.peyton.fusion.handler.importZWave"
+               commandId="vn.enclave.peyton.fusion.command.importZWave"
                icon="icons/import_zwave.png"
                style="push">
          </command>
          <command
-               commandId="vn.enclave.peyton.fusion.handler.templateChild"
+               commandId="vn.enclave.peyton.fusion.command.templateChild"
                icon="icons/template_child.png"
                style="push">
          </command>
          <command
-               commandId="vn.enclave.peyton.fusion.handler.export"
+               commandId="vn.enclave.peyton.fusion.command.export"
                icon="icons/export.png"
                style="push">
          </command>
@@ -425,17 +433,17 @@
                visible="true">
          </separator>
          <command
-               commandId="vn.enclave.peyton.fusion.handler.system"
+               commandId="vn.enclave.peyton.fusion.command.system"
                icon="icons/system.png"
                style="push">
          </command>
          <command
-               commandId="vn.enclave.peyton.fusion.handler.expand"
+               commandId="vn.enclave.peyton.fusion.command.expand"
                icon="icons/expand.png"
                style="push">
          </command>
          <command
-               commandId="vn.enclave.peyton.fusion.handler.collapse"
+               commandId="vn.enclave.peyton.fusion.command.collapse"
                icon="icons/collapse.png"
                style="push">
          </command>
@@ -444,13 +452,83 @@
                visible="true">
          </separator>
          <command
-               commandId="vn.enclave.peyton.fusion.handler.deviceChanged"
+               commandId="vn.enclave.peyton.fusion.command.deviceChanged"
                icon="icons/device_changed.png"
                style="push">
          </command>
          <command
-               commandId="vn.enclave.peyton.fusion.handler.requestOnlineStatus"
+               commandId="vn.enclave.peyton.fusion.command.requestOnlineStatus"
                icon="icons/request_online_status.png">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:vn.enclave.peyton.fusion.view.navigationViewPart?after=additions">
+         <command
+               commandId="vn.enclave.peyton.fusion.command.popup.newProjectHandler"
+               icon="icons/add_folder.png"
+               label="New Project"
+               mode="FORCE_TEXT"
+               style="push"
+               tooltip="New Project">
+            <visibleWhen>
+               <iterate>
+                  <adapt
+                        type="vn.enclave.peyton.fusion.entity.Version">
+                  </adapt>
+               </iterate>
+            </visibleWhen>
+         </command>
+         <separator
+               name="vn.enclave.peyton.fusion.command.popup.separator01"
+               visible="true">
+         </separator>
+         <command
+               commandId="vn.enclave.peyton.fusion.command.popup.newVersionHandler"
+               icon="icons/version.png"
+               label="New Version"
+               mode="FORCE_TEXT"
+               style="push"
+               tooltip="New Version">
+            <visibleWhen>
+               <iterate>
+                  <adapt
+                        type="vn.enclave.peyton.fusion.entity.Version">
+                  </adapt></iterate>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="vn.enclave.peyton.fusion.command.popup.saveAsHandler"
+               icon="icons/save_as.png"
+               label="Save As"
+               mode="FORCE_TEXT"
+               style="push"
+               tooltip="New Project">
+            <visibleWhen>
+               <iterate>
+                  <adapt
+                        type="vn.enclave.peyton.fusion.entity.Version">
+                  </adapt>
+               </iterate>
+            </visibleWhen>
+         </command>
+         <separator
+               name="vn.enclave.peyton.fusion.command.popup.separator02"
+               visible="true">
+         </separator>
+         <command
+               commandId="vn.enclave.peyton.fusion.command.popup.deleteVersionHandler"
+               icon="icons/delete.png"
+               label="Delete"
+               mode="FORCE_TEXT"
+               style="push"
+               tooltip="Delete">
+            <visibleWhen>
+               <iterate>
+                  <adapt
+                        type="vn.enclave.peyton.fusion.entity.Version">
+                  </adapt></iterate>
+            </visibleWhen>
          </command>
       </menuContribution>
    </extension>
