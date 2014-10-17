@@ -130,7 +130,7 @@
             restorable="true">
       </view>
       <view
-            class="vn.enclave.peyton.fusion.view.NavigationViewPart2"
+            class="vn.enclave.peyton.fusion.view.NavigationViewPart"
             icon="icons/area_template.png"
             id="vn.enclave.peyton.fusion.view.navigationViewPart2"
             name="name"

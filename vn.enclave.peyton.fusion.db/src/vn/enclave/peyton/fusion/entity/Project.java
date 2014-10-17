@@ -14,123 +14,154 @@ import java.util.List;
 @Table(name = "projects")
 @NamedQuery(name = "Project.findAll", query = "SELECT p FROM Project p")
 public class Project implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    
+
     // If true, gateway uses UUID.
     // If false, gatewate uses Host/Port.
     private boolean gateway;
-    
+
     private String host;
-    
+
     private String name;
-    
+
     private String note;
-    
-    private String port;
-    
+
+    private int port;
+
     private String uuid;
-    
+
+    private String license;
+
+    private boolean deploymentLocked;
+
+    private boolean isEditable;
+
     // bi-directional many-to-one association to Plan
-    @ManyToOne(cascade={CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "idPlan")
     private Plan plan;
-    
+
     // bi-directional many-to-one association to Version
-    @OneToMany(mappedBy = "project", cascade={CascadeType.PERSIST})
+    @OneToMany(mappedBy = "project", cascade = {CascadeType.PERSIST})
     @OrderBy(value = "name DESC")
     private List<Version> versions;
-    
+
     public Project() {
     }
-    
+
     public int getId() {
         return this.id;
     }
-    
+
     public void setId(int id) {
         this.id = id;
     }
-    
+
     public boolean getGateway() {
         return this.gateway;
     }
-    
+
     public void setGateway(boolean gateway) {
         this.gateway = gateway;
     }
-    
+
     public String getHost() {
         return this.host;
     }
-    
+
     public void setHost(String host) {
         this.host = host;
     }
-    
+
     public String getName() {
         return this.name;
     }
-    
+
     public void setName(String name) {
         this.name = name;
     }
-    
+
     public String getNote() {
         return this.note;
     }
-    
+
     public void setNote(String note) {
         this.note = note;
     }
-    
-    public String getPort() {
+
+    public int getPort() {
         return this.port;
     }
-    
-    public void setPort(String port) {
+
+    public void setPort(int port) {
         this.port = port;
     }
-    
+
     public String getUuid() {
         return this.uuid;
     }
-    
+
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
-    
+
+    public String getLicense() {
+        return license;
+    }
+
+    public void setLicense(String license) {
+        this.license = license;
+    }
+
+    public boolean isDeploymentLocked() {
+        return deploymentLocked;
+    }
+
+    public void setDeploymentLocked(boolean deploymentLocked) {
+        this.deploymentLocked = deploymentLocked;
+    }
+
+    public boolean isEditable() {
+        return isEditable;
+    }
+
+    public void setEditable(boolean isEditable) {
+        this.isEditable = isEditable;
+    }
+
     public Plan getPlan() {
         return this.plan;
     }
-    
+
     public void setPlan(Plan plan) {
         this.plan = plan;
     }
-    
+
     public List<Version> getVersions() {
         return this.versions;
     }
-    
+
     public void setVersions(List<Version> versions) {
         this.versions = versions;
     }
-    
+
     public Version addVersion(Version version) {
         getVersions().add(version);
         version.setProject(this);
-        
+
         return version;
     }
-    
+
     public Version removeVersion(Version version) {
         getVersions().remove(version);
         version.setProject(null);
-        
+
         return version;
     }
-    
+
 }

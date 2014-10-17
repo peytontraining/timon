@@ -31,4 +31,12 @@ public class ProjectService implements IService<Project> {
         em.close();
         return project;
     }
+
+    public void update(Project project) {
+        em = JPAUtil.getEntityManager();
+        em.getTransaction().begin();
+        em.merge(project);
+        em.getTransaction().commit();
+        em.close();
+    }
 }

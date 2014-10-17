@@ -1,23 +1,19 @@
 package vn.enclave.peyton.fusion.command;
-import java.util.Date;
-
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import vn.enclave.peyton.fusion.common.Constant;
 import vn.enclave.peyton.fusion.entity.Project;
 import vn.enclave.peyton.fusion.entity.Version;
-import vn.enclave.peyton.fusion.service.impl.VersionService;
 import vn.enclave.peyton.fusion.view.NavigationViewPart;
 
-
 public class NewVersionHandler extends AbstractHandler implements IHandler {
-
-    private VersionService versionService = new VersionService();
 
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -36,24 +32,20 @@ public class NewVersionHandler extends AbstractHandler implements IHandler {
 
             // Create new version.
             Version newVersion =
-                createNewVersion(
-                    ((Version) firstElement).getProject(), newName);
-
-            /*
-             * After add() method run, the return variable newVersion
-             * has a new Project pointer.
-             */
-            newVersion = versionService.add(newVersion);
-
-            // Set current Project pointer for the new Version Node.
-            newVersion.setProject(((Version) firstElement).getProject());
+                createNewVersion(((Version) firstElement).getProject(), newName);
 
             // Add new version to project pointer.
-            ((Version) firstElement).getProject().getVersions().add(0, newVersion);
-            
+            ((Version) firstElement)
+                .getProject().getVersions().add(0, newVersion);
+
             // Refresh the tree after adding new version.
             ((NavigationViewPart) HandlerUtil.getActivePart(event))
                 .getViewer().refresh();
+
+            // Focus on the new added verion.
+            ((NavigationViewPart) HandlerUtil.getActivePart(event))
+                .getViewer().setSelection(
+                    new StructuredSelection(newVersion), true);
         }
         return null;
     }
@@ -75,7 +67,7 @@ public class NewVersionHandler extends AbstractHandler implements IHandler {
         // Increase number by one, then convert to String.
         tailName = String.valueOf(++number);
 
-        return "1.0.".concat(tailName);
+        return "1.0.".concat(tailName).concat(" *");
     }
 
     /*
@@ -83,14 +75,12 @@ public class NewVersionHandler extends AbstractHandler implements IHandler {
      */
     private Version createNewVersion(Project project, String newName) {
         Version newVersion = new Version();
+        newVersion.setId(Constant.DEFAULT_VERSION_ID);
         newVersion.setDeploySource("");
-        newVersion.setDeployTime(new Date()); //Current datetime.
-        newVersion.setDevices(null);
         newVersion.setEditable(true);
         newVersion.setName(newName);
         newVersion.setProject(project);
-        newVersion.setSaveTime(new Date()); //Current datetime.
-        newVersion.setTargetVersion("2.x");
+        newVersion.setTargetVersion("");
         return newVersion;
     }
 }
