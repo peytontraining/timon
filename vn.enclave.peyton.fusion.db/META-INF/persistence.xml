@@ -14,6 +14,9 @@
         <class>vn.enclave.peyton.fusion.entity.Plan</class>
         <class>vn.enclave.peyton.fusion.entity.Project</class>
         <class>vn.enclave.peyton.fusion.entity.Version</class>
+        <class>vn.enclave.peyton.fusion.entity.DeviceTemplate</class>
+        <class>vn.enclave.peyton.fusion.entity.DeviceType</class>
+        <class>vn.enclave.peyton.fusion.entity.Module</class>
         <shared-cache-mode>NONE</shared-cache-mode>
         <properties>
         	<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/fusion?zeroDateTimeBehavior=convertToNull"/>

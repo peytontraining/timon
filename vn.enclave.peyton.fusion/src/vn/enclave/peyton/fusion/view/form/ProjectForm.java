@@ -1,4 +1,4 @@
-package vn.enclave.peyton.fusion.view;
+package vn.enclave.peyton.fusion.view.form;
 
 import java.util.List;
 
@@ -27,7 +27,12 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import vn.enclave.peyton.fusion.common.Constant;
 import vn.enclave.peyton.fusion.entity.Project;
+import vn.enclave.peyton.fusion.view.NavigationViewPart;
 
+/**
+ * This class is used in NavigationViewPart class to create a form, which shows
+ * all information of project properties.
+ */
 public class ProjectForm {
 
     private static final String PROJECT_DULICATE_ERROR =
@@ -373,6 +378,13 @@ public class ProjectForm {
 
                     // Validate modified text on version text box.
                     validateModifiedText((Project) firstObject);
+
+                    // Add a star on ViewPart title.
+                    if (!((NavigationViewPart) part)
+                        .getViewer().getTree().isFocusControl()) {
+                        ((NavigationViewPart) part).setPartName("* "
+                            .concat("Project"));
+                    }
                 }
             }
         };
@@ -385,7 +397,7 @@ public class ProjectForm {
         boolean editable = project.isEditable();
 
         /*
-         * If project.getId() == -1, that means the selected project just
+         * If project.getId() == 0, that means the selected project just
          * created but isn't been saved, isSaved = false. Otherwise, isSaved =
          * true.
          */

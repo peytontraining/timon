@@ -9,6 +9,7 @@ public class Constant {
         "vn.enclave.peyton.fusion";
 
     public static final int DEFAULT_VERSION_ID = -1;
+
     public static final int DEFAULT_PROJECT_ID = -1;
 
     /* Image */
@@ -30,6 +31,10 @@ public class Constant {
             "vn.enclave.peyton.fusion", "/icons/camera.png").createImage();
 
     public static final Image IMAGE_DVR_NVR = AbstractUIPlugin
+        .imageDescriptorFromPlugin(
+            "vn.enclave.peyton.fusion", "/icons/cctv.png").createImage();
+
+    public static final Image IMAGE_CCTV = AbstractUIPlugin
         .imageDescriptorFromPlugin(
             "vn.enclave.peyton.fusion", "/icons/cctv.png").createImage();
 
@@ -68,4 +73,7 @@ public class Constant {
     public static final String FIREPLACE_CONTROLLER = "Fireplace Controller";
 
     public static final String IP_CAMERAS = "IP Cameras";
+
+    /* Module Type */
+    public static final String CCTV = "CCTV";
 }

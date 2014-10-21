@@ -13,7 +13,7 @@ public class ProjectPerspective implements IPerspectiveFactory {
     public static final String
         ID = "vn.enclave.peyton.fusion.projectPerspective";
 
-    private IFolderLayout topLeft;
+    private IFolderLayout left;
     private IFolderLayout topRight;
     @SuppressWarnings("unused")
     private IFolderLayout bottomRight;
@@ -22,12 +22,12 @@ public class ProjectPerspective implements IPerspectiveFactory {
         String editorArea = layout.getEditorArea();
         layout.setEditorAreaVisible(false);
 
-        topLeft = layout
-            .createFolder("topLeft", IPageLayout.LEFT,
+        left = layout
+            .createFolder("left", IPageLayout.LEFT,
                 0.35f, IPageLayout.ID_EDITOR_AREA);
-        topLeft.addView(NavigationViewPart.ID);
-        topLeft.addView(DriverTreeViewPart.ID);
-        topLeft.addView(AreaTreeViewPart.ID);
+        left.addView(NavigationViewPart.ID);
+        left.addView(DriverTreeViewPart.ID);
+        left.addView(AreaTreeViewPart.ID);
         layout.getViewLayout(NavigationViewPart.ID).setCloseable(false);
         layout.getViewLayout(DriverTreeViewPart.ID).setCloseable(false);
         layout.getViewLayout(AreaTreeViewPart.ID).setCloseable(false);

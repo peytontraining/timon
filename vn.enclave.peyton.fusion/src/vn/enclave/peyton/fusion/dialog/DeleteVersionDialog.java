@@ -18,7 +18,7 @@ public class DeleteVersionDialog extends Dialog {
     }
 
     @Override
-    protected Control createContents(Composite parent) {
+    protected Control createDialogArea(Composite parent) {
         // Create and layout Composite.
         Composite container = (Composite) super.createDialogArea(parent);
         GridLayout layout = new GridLayout(1, false);
@@ -26,7 +26,7 @@ public class DeleteVersionDialog extends Dialog {
 
         // Create Label.
         Label label = new Label(container, SWT.NONE);
-        label.setText("Are you sure to delete this verion?");
+        label.setText("Are you sure you want to delete this verion?");
 
         return container;
     }
@@ -39,7 +39,7 @@ public class DeleteVersionDialog extends Dialog {
 
     @Override
     protected void createButtonsForButtonBar(Composite parent) {
-        createButton(parent, IDialogConstants.OK_ID, "OK", true);
+        createButton(parent, IDialogConstants.OK_ID, "OK", false);
         createButton(parent, IDialogConstants.CANCEL_ID, "Cancel", false);
     }
 }

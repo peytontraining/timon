@@ -46,6 +46,10 @@ public class NewVersionHandler extends AbstractHandler implements IHandler {
             ((NavigationViewPart) HandlerUtil.getActivePart(event))
                 .getViewer().setSelection(
                     new StructuredSelection(newVersion), true);
+
+            // Add a star on ViewPart title.
+            ((NavigationViewPart) HandlerUtil.getActivePart(event))
+                .setPartName("* Project");
         }
         return null;
     }

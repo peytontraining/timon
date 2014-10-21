@@ -40,6 +40,8 @@ import vn.enclave.peyton.fusion.provider.PlanTreeLableProvider;
 import vn.enclave.peyton.fusion.service.impl.PlanService;
 import vn.enclave.peyton.fusion.service.impl.ProjectService;
 import vn.enclave.peyton.fusion.service.impl.VersionService;
+import vn.enclave.peyton.fusion.view.form.ProjectForm;
+import vn.enclave.peyton.fusion.view.form.VersionForm;
 
 public class NavigationViewPart extends ViewPart {
 
@@ -86,6 +88,10 @@ public class NavigationViewPart extends ViewPart {
 
     public TreeViewer getViewer() {
         return viewer;
+    }
+
+    public void setPartName(String partName) {
+        super.setPartName(partName);
     }
 
     @Override
@@ -292,10 +298,8 @@ public class NavigationViewPart extends ViewPart {
                         // Remove the temp object in treeview and add the new
                         // object that got from add query.
                         ((Version) firstElement)
-                            .getProject().getVersions().remove(0);
-                        ((Version) firstElement)
                             .getProject().getVersions()
-                            .add(0, (Version) firstElement);
+                            .set(0, (Version) firstElement);
                     } else {
                         ((Version) firstElement).setName(name);
 
@@ -308,6 +312,9 @@ public class NavigationViewPart extends ViewPart {
 
                     // Refresh the Viewer.
                     viewer.refresh();
+
+                    // Remove the star on ViewPart title.
+                    setPartName("Project");
                 }
             }
         };
@@ -345,7 +352,7 @@ public class NavigationViewPart extends ViewPart {
                         ((Project) firstElement)
                             .getVersions().get(0).setName("1.0.0");
                         ((Project) firstElement)
-                        .getVersions().get(0).setSaveTime(new Date());
+                            .getVersions().get(0).setSaveTime(new Date());
                         // Get the current plan.
                         Plan currentPlan = ((Project) firstElement).getPlan();
 
@@ -362,10 +369,8 @@ public class NavigationViewPart extends ViewPart {
                         // Remove the temp object in treeview and add the new
                         // object that got from add query.
                         ((Project) firstElement)
-                            .getPlan().getProjects().remove(0);
-                        ((Project) firstElement)
                             .getPlan().getProjects()
-                            .add(0, (Project) firstElement);
+                            .set(0, (Project) firstElement);
                     } else {
                         ((Project) firstElement).setName(name);
 
@@ -378,6 +383,9 @@ public class NavigationViewPart extends ViewPart {
 
                     // Refresh the Viewer.
                     viewer.refresh();
+
+                    // Remove the star on ViewPart title.
+                    setPartName("Project");
                 }
             }
         };

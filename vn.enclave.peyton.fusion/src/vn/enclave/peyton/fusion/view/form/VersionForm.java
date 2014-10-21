@@ -1,6 +1,5 @@
-package vn.enclave.peyton.fusion.view;
+package vn.enclave.peyton.fusion.view.form;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.eclipse.jface.fieldassist.ControlDecoration;
@@ -24,8 +23,14 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 
 import vn.enclave.peyton.fusion.common.Constant;
+import vn.enclave.peyton.fusion.common.Utils;
 import vn.enclave.peyton.fusion.entity.Version;
+import vn.enclave.peyton.fusion.view.NavigationViewPart;
 
+/**
+ * This class is used in NavigationViewPart class to create a form, which shows
+ * all information of version properties.
+ */
 public class VersionForm {
 
     private static final String VERSION_PATTERN = "[0-9]++\\.[0-9]++\\.[0-9]++";
@@ -195,7 +200,6 @@ public class VersionForm {
      * setEnable(false).
      */
     public void setDisplayedData(Version version) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         if (version.getId() == Constant.DEFAULT_VERSION_ID) {
             int endIndex = version.getName().lastIndexOf(" *");
             versionText.setText(version.getName().substring(0, endIndex));
@@ -212,13 +216,15 @@ public class VersionForm {
         }
         projectText.setText(version.getProject().getName());
         if (version.getDeployTime() != null) {
-            deployTimeText.setText(format.format(version.getDeployTime()));
+            deployTimeText.setText(Utils.convertDate2String(version
+                .getDeployTime()));
         } else {
             deployTimeText.setText("");
         }
         deploySourceText.setText(version.getDeploySource());
         if (version.getSaveTime() != null) {
-            saveTimeText.setText(format.format(version.getSaveTime()));
+            saveTimeText
+                .setText(Utils.convertDate2String(version.getSaveTime()));
         } else {
             saveTimeText.setText("");
         }
@@ -253,6 +259,13 @@ public class VersionForm {
 
                     // Validate modified text on version text box.
                     validateModifiedText((Version) firstObject);
+
+                    // Add a star on ViewPart title.
+                    if (!((NavigationViewPart) part)
+                        .getViewer().getTree().isFocusControl()) {
+                        ((NavigationViewPart) part).setPartName("* "
+                            .concat("Project"));
+                    }
                 }
             }
         };
@@ -265,9 +278,8 @@ public class VersionForm {
             ((NavigationViewPart) part).getViewer().getTree().isFocusControl();
         boolean editable = version.isEditable();
         /*
-         * If version.getId() == -1, that means the selected version just
-         * created but isn't been saved, isSaved = false. Otherwise, isSaved =
-         * true.
+         * If version.getId() == 0, that means the selected version just created
+         * but isn't been saved, isSaved = false. Otherwise, isSaved = true.
          */
         boolean isSaved = version.getId() != Constant.DEFAULT_VERSION_ID;
 

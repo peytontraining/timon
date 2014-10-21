@@ -9,6 +9,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -86,6 +87,11 @@ public class SaveAsHandler extends AbstractHandler implements IHandler {
                 // Refresh the tree after adding new version.
                 ((NavigationViewPart) HandlerUtil.getActivePart(event))
                     .getViewer().refresh();
+                
+                // Focus on the new added verion.
+                ((NavigationViewPart) HandlerUtil.getActivePart(event))
+                    .getViewer().setSelection(
+                        new StructuredSelection(newVersion), true);
             }
         }
         return null;
