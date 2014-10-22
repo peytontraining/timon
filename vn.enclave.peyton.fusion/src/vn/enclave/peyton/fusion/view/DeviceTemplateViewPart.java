@@ -1,5 +1,11 @@
 package vn.enclave.peyton.fusion.view;
 
+import java.util.Date;
+
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -14,15 +20,20 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
 import vn.enclave.peyton.fusion.common.Constant;
+import vn.enclave.peyton.fusion.entity.DeviceTemplate;
 import vn.enclave.peyton.fusion.filter.TemplateFilter;
 import vn.enclave.peyton.fusion.provider.TemplateTreeContentProvider;
 import vn.enclave.peyton.fusion.provider.TemplateTreeLabelProvider;
 import vn.enclave.peyton.fusion.service.impl.ModuleService;
 
-public class DeviceTemplateViewPart extends ViewPart {
+public class DeviceTemplateViewPart extends ViewPart
+    implements IDoubleClickListener {
 
     public static final String ID =
         "vn.enclave.peyton.fusion.view.deviceTemplatesViewPart";
@@ -81,6 +92,10 @@ public class DeviceTemplateViewPart extends ViewPart {
         // Create and set filter for treeViewer.
         filter = new TemplateFilter();
         treeViewer.addFilter(filter);
+
+        treeViewer.addDoubleClickListener(this);
+
+        getSite().setSelectionProvider(treeViewer);
     }
 
     @Override
@@ -163,5 +178,23 @@ public class DeviceTemplateViewPart extends ViewPart {
         TreeColumn column = new TreeColumn(parent, SWT.NONE);
         column.setText(title);
         column.setWidth(DEFAULT_WIDTH);
+    }
+
+    @Override
+    public void doubleClick(DoubleClickEvent event) {
+        IWorkbenchWindow window = getSite().getWorkbenchWindow();
+        ISelection selection = event.getSelection();
+        IStructuredSelection sselection = (IStructuredSelection) selection;
+        Object firstElement = sselection.getFirstElement();
+        if (firstElement instanceof DeviceTemplate) {
+            try {
+                window.getActivePage().showView(
+                    DeviceTemplateDetailViewPart.ID,
+                    String.valueOf((new Date()).getTime()),
+                    IWorkbenchPage.VIEW_ACTIVATE);
+            } catch (PartInitException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
