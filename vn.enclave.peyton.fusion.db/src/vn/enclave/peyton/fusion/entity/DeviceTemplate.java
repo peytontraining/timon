@@ -4,124 +4,138 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
 
-
 /**
  * The persistent class for the device_templates database table.
  * 
  */
 @Entity
-@Table(name="device_templates")
-@NamedQuery(name="DeviceTemplate.findAll", query="SELECT d FROM DeviceTemplate d")
+@Table(name = "device_templates")
+@NamedQuery(
+    name = "DeviceTemplate.findAll", query = "SELECT d FROM DeviceTemplate d")
 public class DeviceTemplate implements Serializable {
-	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
+    private static final long serialVersionUID = 1L;
 
-	private boolean certified;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-	private String deviceDriver;
+    private boolean certified;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date lastModified;
+    private String deviceDriver;
 
-	private String manufacture;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastModified;
 
-	private String modelNumber;
+    private String manufacturer;
 
-	private String name;
+    private String modelNumber;
 
-	private String notes;
+    private String name;
 
-	private String version;
+    private String notes;
 
-	//bi-directional many-to-one association to DeviceType
-	@ManyToOne(cascade={CascadeType.PERSIST})
-	@JoinColumn(name="idType")
-	private DeviceType deviceType;
+    private String version;
 
-	public DeviceTemplate() {
-	}
+    // bi-directional many-to-one association to DeviceType
+    @ManyToOne
+    @JoinColumn(name = "idType")
+    private DeviceType deviceType;
 
-	public int getId() {
-		return this.id;
-	}
+    // uni-directional many-to-one association to Icon
+    @ManyToOne
+    @JoinColumn(name = "idIcon")
+    private Icon icon;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public DeviceTemplate() {
+    }
 
-	public boolean getCertified() {
-		return this.certified;
-	}
+    public int getId() {
+        return this.id;
+    }
 
-	public void setCertified(boolean certified) {
-		this.certified = certified;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public String getDeviceDriver() {
-		return this.deviceDriver;
-	}
+    public boolean getCertified() {
+        return this.certified;
+    }
 
-	public void setDeviceDriver(String deviceDriver) {
-		this.deviceDriver = deviceDriver;
-	}
+    public void setCertified(boolean certified) {
+        this.certified = certified;
+    }
 
-	public Date getLastModified() {
-		return this.lastModified;
-	}
+    public String getDeviceDriver() {
+        return this.deviceDriver;
+    }
 
-	public void setLastModified(Date lastModified) {
-		this.lastModified = lastModified;
-	}
+    public void setDeviceDriver(String deviceDriver) {
+        this.deviceDriver = deviceDriver;
+    }
 
-	public String getManufacture() {
-		return this.manufacture;
-	}
+    public Date getLastModified() {
+        return this.lastModified;
+    }
 
-	public void setManufacture(String manufacture) {
-		this.manufacture = manufacture;
-	}
+    public void setLastModified(Date lastModified) {
+        this.lastModified = lastModified;
+    }
 
-	public String getModelNumber() {
-		return this.modelNumber;
-	}
+    public String getManufacturer() {
+        return this.manufacturer;
+    }
 
-	public void setModelNumber(String modelNumber) {
-		this.modelNumber = modelNumber;
-	}
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public String getModelNumber() {
+        return this.modelNumber;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setModelNumber(String modelNumber) {
+        this.modelNumber = modelNumber;
+    }
 
-	public String getNotes() {
-		return this.notes;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public void setNotes(String notes) {
-		this.notes = notes;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getVersion() {
-		return this.version;
-	}
+    public String getNotes() {
+        return this.notes;
+    }
 
-	public void setVersion(String version) {
-		this.version = version;
-	}
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
 
-	public DeviceType getDeviceType() {
-		return this.deviceType;
-	}
+    public String getVersion() {
+        return this.version;
+    }
 
-	public void setDeviceType(DeviceType deviceType) {
-		this.deviceType = deviceType;
-	}
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public DeviceType getDeviceType() {
+        return this.deviceType;
+    }
+
+    public void setDeviceType(DeviceType deviceType) {
+        this.deviceType = deviceType;
+    }
+
+    public Icon getIcon() {
+        return this.icon;
+    }
+
+    public void setIcon(Icon icon) {
+        this.icon = icon;
+    }
 
 }

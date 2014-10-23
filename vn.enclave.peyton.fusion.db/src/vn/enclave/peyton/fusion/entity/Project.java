@@ -21,11 +21,15 @@ public class Project implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    // If true, gateway uses UUID.
-    // If false, gatewate uses Host/Port.
+    private boolean deploymentLocked;
+
     private boolean gateway;
 
     private String host;
+
+    private boolean isEditable;
+
+    private String license;
 
     private String name;
 
@@ -35,19 +39,13 @@ public class Project implements Serializable {
 
     private String uuid;
 
-    private String license;
-
-    private boolean deploymentLocked;
-
-    private boolean isEditable;
-
     // bi-directional many-to-one association to Plan
-    @ManyToOne(cascade = {CascadeType.PERSIST})
+    @ManyToOne
     @JoinColumn(name = "idPlan")
     private Plan plan;
 
     // bi-directional many-to-one association to Version
-    @OneToMany(mappedBy = "project", cascade = {CascadeType.PERSIST})
+    @OneToMany(mappedBy = "project")
     @OrderBy(value = "name DESC")
     private List<Version> versions;
 
@@ -60,6 +58,14 @@ public class Project implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public boolean isDeploymentLocked() {
+        return this.deploymentLocked;
+    }
+
+    public void setDeploymentLocked(boolean deploymentLocked) {
+        this.deploymentLocked = deploymentLocked;
     }
 
     public boolean getGateway() {
@@ -76,6 +82,22 @@ public class Project implements Serializable {
 
     public void setHost(String host) {
         this.host = host;
+    }
+
+    public boolean isEditable() {
+        return this.isEditable;
+    }
+
+    public void setEditable(boolean isEditable) {
+        this.isEditable = isEditable;
+    }
+
+    public String getLicense() {
+        return this.license;
+    }
+
+    public void setLicense(String license) {
+        this.license = license;
     }
 
     public String getName() {
@@ -108,30 +130,6 @@ public class Project implements Serializable {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
-    }
-
-    public String getLicense() {
-        return license;
-    }
-
-    public void setLicense(String license) {
-        this.license = license;
-    }
-
-    public boolean isDeploymentLocked() {
-        return deploymentLocked;
-    }
-
-    public void setDeploymentLocked(boolean deploymentLocked) {
-        this.deploymentLocked = deploymentLocked;
-    }
-
-    public boolean isEditable() {
-        return isEditable;
-    }
-
-    public void setEditable(boolean isEditable) {
-        this.isEditable = isEditable;
     }
 
     public Plan getPlan() {

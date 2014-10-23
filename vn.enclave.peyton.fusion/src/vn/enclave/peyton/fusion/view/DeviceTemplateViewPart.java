@@ -41,7 +41,7 @@ public class DeviceTemplateViewPart extends ViewPart
     private static final String[] TITLES = {
         "Name", "Last Modified", "Manufacture", "Model Number", "Version"};
 
-    private static final int DEFAULT_WIDTH = 100;
+    private static final int DEFAULT_WIDTH = 120;
 
     private TreeViewer treeViewer;
 

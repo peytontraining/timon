@@ -26,32 +26,70 @@ public class NewVersionHandler extends AbstractHandler implements IHandler {
                 NavigationViewPart.ID);
         Object firstElement = selection.getFirstElement();
 
+        // If selected node is instance of Project.
+        if (firstElement instanceof Project) {
+            createNewVersionFromProject(event, (Project) firstElement);
+            return null;
+        }
+
+        // If selected node is instance of Version.
         if (firstElement instanceof Version) {
-            // Create new name to new Version.
-            String newName = getNewVersionName((Version) firstElement);
-
-            // Create new version.
-            Version newVersion =
-                createNewVersion(((Version) firstElement).getProject(), newName);
-
-            // Add new version to project pointer.
-            ((Version) firstElement)
-                .getProject().getVersions().add(0, newVersion);
-
-            // Refresh the tree after adding new version.
-            ((NavigationViewPart) HandlerUtil.getActivePart(event))
-                .getViewer().refresh();
-
-            // Focus on the new added verion.
-            ((NavigationViewPart) HandlerUtil.getActivePart(event))
-                .getViewer().setSelection(
-                    new StructuredSelection(newVersion), true);
-
-            // Add a star on ViewPart title.
-            ((NavigationViewPart) HandlerUtil.getActivePart(event))
-                .setPartName("* Project");
+            createNewVersionFromVersion(event, (Version) firstElement);
+            return null;
         }
         return null;
+    }
+
+    private void createNewVersionFromVersion(
+        ExecutionEvent event, Version selectedVersion) {
+        // Create new name to new Version.
+        String newName = getNewVersionName(selectedVersion);
+
+        // Create new version.
+        Version newVersion =
+            createNewVersion(selectedVersion.getProject(), newName);
+
+        // Add new version to project pointer.
+        selectedVersion.getProject().getVersions().add(0, newVersion);
+
+        // Refresh the tree after adding new version.
+        ((NavigationViewPart) HandlerUtil.getActivePart(event))
+            .getViewer().refresh();
+
+        // Focus on the new added verion.
+        ((NavigationViewPart) HandlerUtil.getActivePart(event))
+            .getViewer()
+            .setSelection(new StructuredSelection(newVersion), true);
+
+        // Add a star on ViewPart title.
+        ((NavigationViewPart) HandlerUtil.getActivePart(event))
+            .setPartName("* Project");
+    }
+
+    private void createNewVersionFromProject(
+        ExecutionEvent event, Project selectedProject) {
+        // Create new name to new Version.
+        Version version = selectedProject.getVersions().get(0);
+        String newName = getNewVersionName(version);
+
+        // Create new version.
+        Version newVersion = createNewVersion(selectedProject, newName);
+
+        // Add new version to project pointer.
+        selectedProject.getVersions().add(0, newVersion);
+
+        // Refresh the tree after adding new version.
+        ((NavigationViewPart) HandlerUtil.getActivePart(event))
+            .getViewer().refresh();
+
+        // Focus on the new added verion.
+        ((NavigationViewPart) HandlerUtil.getActivePart(event))
+            .getViewer()
+            .setSelection(new StructuredSelection(newVersion), true);
+
+        // Add a star on ViewPart title.
+        ((NavigationViewPart) HandlerUtil.getActivePart(event))
+            .setPartName("* Project");
     }
 
     /*

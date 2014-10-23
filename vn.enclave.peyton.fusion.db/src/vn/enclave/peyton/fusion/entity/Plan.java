@@ -1,9 +1,7 @@
 package vn.enclave.peyton.fusion.entity;
 
 import java.io.Serializable;
-
 import javax.persistence.*;
-
 import java.util.List;
 
 
@@ -24,7 +22,7 @@ public class Plan implements Serializable {
 	private String name;
 
 	//bi-directional many-to-one association to Project
-	@OneToMany(mappedBy="plan", cascade={CascadeType.PERSIST})
+	@OneToMany(mappedBy="plan")
 	@OrderBy(value = "name DESC")
 	private List<Project> projects;
 

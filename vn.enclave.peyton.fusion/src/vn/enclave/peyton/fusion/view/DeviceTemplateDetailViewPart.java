@@ -7,6 +7,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
@@ -14,6 +15,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.part.ViewPart;
 
+import vn.enclave.peyton.fusion.common.Utils;
 import vn.enclave.peyton.fusion.entity.DeviceTemplate;
 
 public class DeviceTemplateDetailViewPart extends ViewPart {
@@ -23,9 +25,13 @@ public class DeviceTemplateDetailViewPart extends ViewPart {
 
     private Button certifiedCheck;
 
-    private Button set;
+    private Button setButton;
 
-    private Button remove;
+    private Button removeButton;
+
+    private Button editTypesButton;
+
+    private Button selectDriverButton;
 
     private Text nameText;
 
@@ -33,11 +39,13 @@ public class DeviceTemplateDetailViewPart extends ViewPart {
 
     private Text modelNumberText;
 
-    private Text typesText;
+    private Label typesText;
 
-    private Text deviceDriverText;
+    private Label deviceDriverText;
 
     private Text notesText;
+
+    private Label icon;
 
     @Override
     public void createPartControl(Composite parent) {
@@ -50,7 +58,7 @@ public class DeviceTemplateDetailViewPart extends ViewPart {
         // Create the Configure TabItem.
         createConfigureTab(parent, folder);
 
-        // Change the name of ViewPart.
+        // Change the name and icon of ViewPart, set data for form.
         setData();
     }
 
@@ -67,7 +75,7 @@ public class DeviceTemplateDetailViewPart extends ViewPart {
 
         // Create the ScrolledForm and set layout for it.
         ScrolledForm form = toolkit.createScrolledForm(folder);
-        form.getBody().setLayout(new GridLayout(3, false));
+        form.getBody().setLayout(new GridLayout(4, false));
 
         // Create content for the form.
         createDetailsFormContent(toolkit, form);
@@ -83,19 +91,20 @@ public class DeviceTemplateDetailViewPart extends ViewPart {
         void createDetailsFormContent(FormToolkit toolkit, ScrolledForm form) {
         GridData layoutData;
 
-        layoutData = new GridData(SWT.LEFT, SWT.NONE, true, false, 2, 1);
+        layoutData = new GridData(SWT.LEFT, SWT.NONE, true, false, 3, 1);
         toolkit.createLabel(form.getBody(), "Certified:");
         certifiedCheck = toolkit.createButton(form.getBody(), "", SWT.CHECK);
         certifiedCheck.setLayoutData(layoutData);
 
         layoutData = new GridData(SWT.LEFT, SWT.NONE, false, false, 1, 1);
         toolkit.createLabel(form.getBody(), "Icon:");
-        set = toolkit.createButton(form.getBody(), "Set...", SWT.PUSH);
-        set.setLayoutData(layoutData);
-        remove = toolkit.createButton(form.getBody(), "Remove", SWT.PUSH);
-        remove.setLayoutData(layoutData);
+        icon = toolkit.createLabel(form.getBody(), "");
+        setButton = toolkit.createButton(form.getBody(), "Set...", SWT.PUSH);
+        setButton.setLayoutData(layoutData);
+        removeButton = toolkit.createButton(form.getBody(), "Remove", SWT.NONE);
+        removeButton.setLayoutData(layoutData);
 
-        layoutData = new GridData(SWT.FILL, SWT.NONE, true, false, 2, 1);
+        layoutData = new GridData(SWT.FILL, SWT.NONE, true, false, 3, 1);
         toolkit.createLabel(form.getBody(), "Name:");
         nameText = toolkit.createText(form.getBody(), "");
         nameText.setLayoutData(layoutData);
@@ -109,14 +118,33 @@ public class DeviceTemplateDetailViewPart extends ViewPart {
         modelNumberText.setLayoutData(layoutData);
 
         toolkit.createLabel(form.getBody(), "Types:");
-        typesText = toolkit.createText(form.getBody(), "");
-        typesText.setLayoutData(layoutData);
+        Composite typesComposite =
+            toolkit.createComposite(form.getBody(), SWT.BORDER);
+        typesComposite.setLayoutData(new GridData(
+            SWT.FILL, SWT.NONE, true, false, 3, 1));
+        typesComposite.setLayout(new GridLayout(2, false));
+        typesText = toolkit.createLabel(typesComposite, "");
+        typesText.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
+        editTypesButton =
+            toolkit.createButton(typesComposite, "Edit Types", SWT.PUSH);
+        editTypesButton.setLayoutData(new GridData(
+            SWT.RIGHT, SWT.NONE, true, false));
 
         toolkit.createLabel(form.getBody(), "Device Driver:");
-        deviceDriverText = toolkit.createText(form.getBody(), "");
-        deviceDriverText.setLayoutData(layoutData);
+        Composite driverComposite =
+            toolkit.createComposite(form.getBody(), SWT.BORDER);
+        driverComposite.setLayoutData(new GridData(
+            SWT.FILL, SWT.NONE, true, false, 3, 1));
+        driverComposite.setLayout(new GridLayout(2, false));
+        deviceDriverText = toolkit.createLabel(driverComposite, "");
+        deviceDriverText.setLayoutData(new GridData(
+            SWT.FILL, SWT.NONE, true, false));
+        selectDriverButton =
+            toolkit.createButton(driverComposite, "Select Driver", SWT.PUSH);
+        selectDriverButton.setLayoutData(new GridData(
+            SWT.RIGHT, SWT.NONE, true, false));
 
-        layoutData = new GridData(SWT.FILL, SWT.NONE, true, false, 2, 1);
+        layoutData = new GridData(SWT.FILL, SWT.NONE, true, false, 3, 1);
         toolkit.createLabel(form.getBody(), "Notes:");
         notesText = toolkit.createText(form.getBody(), "", SWT.MULTI);
         layoutData.heightHint = notesText.getLineHeight() * 5;
@@ -147,14 +175,18 @@ public class DeviceTemplateDetailViewPart extends ViewPart {
             DeviceTemplate template = (DeviceTemplate) firstElement;
             boolean certified = template.getCertified();
             String name = template.getName();
-            String manufacturer = template.getManufacture();
+            String manufacturer = template.getManufacturer();
             String modelNumber = template.getModelNumber();
             String types = template.getDeviceType().getName();
             String deviceDriver = template.getDeviceDriver();
             String notes = template.getNotes();
+            String pluginId = template.getIcon().getPluginId();
+            String imageFilePath = template.getIcon().getImageFilePath();
 
             // Change the viewpart name.
             setPartName(((DeviceTemplate) firstElement).getName());
+
+            setTitleImage(Utils.createImage(pluginId, imageFilePath));
 
             // Set data to form.
             certifiedCheck.setSelection(certified);
@@ -164,6 +196,7 @@ public class DeviceTemplateDetailViewPart extends ViewPart {
             typesText.setText(types);
             deviceDriverText.setText(deviceDriver);
             notesText.setText(notes);
+            icon.setImage(Utils.createImage(pluginId, imageFilePath));
         }
     }
 

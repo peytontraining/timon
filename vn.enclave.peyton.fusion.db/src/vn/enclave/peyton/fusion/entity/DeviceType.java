@@ -4,79 +4,92 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
 
-
 /**
  * The persistent class for the device_types database table.
  * 
  */
 @Entity
-@Table(name="device_types")
-@NamedQuery(name="DeviceType.findAll", query="SELECT d FROM DeviceType d")
+@Table(name = "device_types")
+@NamedQuery(name = "DeviceType.findAll", query = "SELECT d FROM DeviceType d")
 public class DeviceType implements Serializable {
-	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
+    private static final long serialVersionUID = 1L;
 
-	private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-	//bi-directional many-to-one association to DeviceTemplate
-	@OneToMany(mappedBy="deviceType", cascade={CascadeType.PERSIST})
-	private List<DeviceTemplate> deviceTemplates;
+    private String name;
 
-	//bi-directional many-to-one association to Module
-	@ManyToOne
-	@JoinColumn(name="idModule")
-	private Module module;
+    // bi-directional many-to-one association to DeviceTemplate
+    @OneToMany(mappedBy = "deviceType")
+    private List<DeviceTemplate> deviceTemplates;
 
-	public DeviceType() {
-	}
+    // bi-directional many-to-one association to Module
+    @ManyToOne
+    @JoinColumn(name = "idModule")
+    private Module module;
 
-	public int getId() {
-		return this.id;
-	}
+    // uni-directional many-to-one association to Icon
+    @ManyToOne
+    @JoinColumn(name = "idIcon")
+    private Icon icon;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public DeviceType() {
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public int getId() {
+        return this.id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public List<DeviceTemplate> getDeviceTemplates() {
-		return this.deviceTemplates;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public void setDeviceTemplates(List<DeviceTemplate> deviceTemplates) {
-		this.deviceTemplates = deviceTemplates;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public DeviceTemplate addDeviceTemplate(DeviceTemplate deviceTemplate) {
-		getDeviceTemplates().add(deviceTemplate);
-		deviceTemplate.setDeviceType(this);
+    public List<DeviceTemplate> getDeviceTemplates() {
+        return this.deviceTemplates;
+    }
 
-		return deviceTemplate;
-	}
+    public void setDeviceTemplates(List<DeviceTemplate> deviceTemplates) {
+        this.deviceTemplates = deviceTemplates;
+    }
 
-	public DeviceTemplate removeDeviceTemplate(DeviceTemplate deviceTemplate) {
-		getDeviceTemplates().remove(deviceTemplate);
-		deviceTemplate.setDeviceType(null);
+    public DeviceTemplate addDeviceTemplate(DeviceTemplate deviceTemplate) {
+        getDeviceTemplates().add(deviceTemplate);
+        deviceTemplate.setDeviceType(this);
 
-		return deviceTemplate;
-	}
+        return deviceTemplate;
+    }
 
-	public Module getModule() {
-		return this.module;
-	}
+    public DeviceTemplate removeDeviceTemplate(DeviceTemplate deviceTemplate) {
+        getDeviceTemplates().remove(deviceTemplate);
+        deviceTemplate.setDeviceType(null);
 
-	public void setModule(Module module) {
-		this.module = module;
-	}
+        return deviceTemplate;
+    }
+
+    public Module getModule() {
+        return this.module;
+    }
+
+    public void setModule(Module module) {
+        this.module = module;
+    }
+
+    public Icon getIcon() {
+        return this.icon;
+    }
+
+    public void setIcon(Icon icon) {
+        this.icon = icon;
+    }
 
 }

@@ -7,132 +7,132 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * The persistent class for the versions database table.
  * 
  */
 @Entity
-@Table(name="versions")
-@NamedQuery(name="Version.findAll", query="SELECT v FROM Version v")
+@Table(name = "versions")
+@NamedQuery(name = "Version.findAll", query = "SELECT v FROM Version v")
 public class Version implements Serializable {
-	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
+    private static final long serialVersionUID = 1L;
 
-	private String deploySource;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date deployTime;
+    private String deploySource;
 
-	private boolean isEditable;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deployTime;
 
-	private String name;
+    private boolean isEditable;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date saveTime;
+    private String name;
 
-	private String targetVersion;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date saveTime;
 
-	//bi-directional many-to-one association to Device
-	@OneToMany(mappedBy="version", cascade={CascadeType.PERSIST})
-	@OrderBy(value = "name DESC")
-	private List<Device> devices;
+    private String targetVersion;
 
-	//bi-directional many-to-one association to Project
-	@ManyToOne(cascade={CascadeType.PERSIST})
-	@JoinColumn(name="idProject")
-	private Project project;
+    // bi-directional many-to-one association to Device
+    @OneToMany(mappedBy = "version", cascade = {CascadeType.PERSIST})
+    @OrderBy(value = "name DESC")
+    private List<Device> devices;
 
-	public Version() {
-	}
+    // bi-directional many-to-one association to Project
+    @ManyToOne
+    @JoinColumn(name = "idProject")
+    private Project project;
 
-	public int getId() {
-		return this.id;
-	}
+    public Version() {
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public int getId() {
+        return this.id;
+    }
 
-	public String getDeploySource() {
-		return this.deploySource;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public void setDeploySource(String deploySource) {
-		this.deploySource = deploySource;
-	}
+    public String getDeploySource() {
+        return this.deploySource;
+    }
 
-	public Date getDeployTime() {
-		return this.deployTime;
-	}
+    public void setDeploySource(String deploySource) {
+        this.deploySource = deploySource;
+    }
 
-	public void setDeployTime(Date deployTime) {
-		this.deployTime = deployTime;
-	}
+    public Date getDeployTime() {
+        return this.deployTime;
+    }
 
-	public boolean isEditable() {
-		return this.isEditable;
-	}
+    public void setDeployTime(Date deployTime) {
+        this.deployTime = deployTime;
+    }
 
-	public void setEditable(boolean isEditable) {
-		this.isEditable = isEditable;
-	}
+    public boolean isEditable() {
+        return this.isEditable;
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public void setEditable(boolean isEditable) {
+        this.isEditable = isEditable;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public Date getSaveTime() {
-		return this.saveTime;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setSaveTime(Date saveTime) {
-		this.saveTime = saveTime;
-	}
+    public Date getSaveTime() {
+        return this.saveTime;
+    }
 
-	public String getTargetVersion() {
-		return this.targetVersion;
-	}
+    public void setSaveTime(Date saveTime) {
+        this.saveTime = saveTime;
+    }
 
-	public void setTargetVersion(String targetVersion) {
-		this.targetVersion = targetVersion;
-	}
+    public String getTargetVersion() {
+        return this.targetVersion;
+    }
 
-	public List<Device> getDevices() {
-		return this.devices;
-	}
+    public void setTargetVersion(String targetVersion) {
+        this.targetVersion = targetVersion;
+    }
 
-	public void setDevices(List<Device> devices) {
-		this.devices = devices;
-	}
+    public List<Device> getDevices() {
+        return this.devices;
+    }
 
-	public Device addDevice(Device device) {
-		getDevices().add(device);
-		device.setVersion(this);
+    public void setDevices(List<Device> devices) {
+        this.devices = devices;
+    }
 
-		return device;
-	}
+    public Device addDevice(Device device) {
+        getDevices().add(device);
+        device.setVersion(this);
 
-	public Device removeDevice(Device device) {
-		getDevices().remove(device);
-		device.setVersion(null);
+        return device;
+    }
 
-		return device;
-	}
+    public Device removeDevice(Device device) {
+        getDevices().remove(device);
+        device.setVersion(null);
 
-	public Project getProject() {
-		return this.project;
-	}
+        return device;
+    }
 
-	public void setProject(Project project) {
-		this.project = project;
-	}
+    public Project getProject() {
+        return this.project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
 
 }

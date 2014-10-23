@@ -4,7 +4,6 @@ import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-import vn.enclave.peyton.fusion.common.Constant;
 import vn.enclave.peyton.fusion.common.Utils;
 import vn.enclave.peyton.fusion.entity.DeviceTemplate;
 import vn.enclave.peyton.fusion.entity.DeviceType;
@@ -44,21 +43,24 @@ public class TemplateTreeLabelProvider implements ITableLabelProvider {
     @Override
     public Image getColumnImage(Object element, int columnIndex) {
         if (columnIndex == NAME_COLUMN) {
+            String pluginId = null;
+            String imageFilePath = null;
             if (element instanceof Module) {
-                if (((Module) element).getName().intern() == Constant.CCTV) {
-                    return Constant.IMAGE_CCTV;
-                }
+                pluginId = ((Module) element).getIcon().getPluginId();
+                imageFilePath = ((Module) element).getIcon().getImageFilePath();
             }
             if (element instanceof DeviceType) {
-                if (((DeviceType) element).getModule().getName().intern() == Constant.CCTV) {
-                    return Constant.IMAGE_CCTV;
-                }
+                pluginId = ((DeviceType) element).getIcon().getPluginId();
+                imageFilePath =
+                    ((DeviceType) element).getIcon().getImageFilePath();
             }
             if (element instanceof DeviceTemplate) {
-                if (((DeviceTemplate) element)
-                    .getDeviceType().getModule().getName().intern() == Constant.CCTV) {
-                    return Constant.IMAGE_CCTV;
-                }
+                pluginId = ((DeviceTemplate) element).getIcon().getPluginId();
+                imageFilePath =
+                    ((DeviceTemplate) element).getIcon().getImageFilePath();
+            }
+            if (pluginId != null && imageFilePath != null) {
+                return Utils.createImage(pluginId, imageFilePath);
             }
         }
         return null;
@@ -86,7 +88,7 @@ public class TemplateTreeLabelProvider implements ITableLabelProvider {
 
             case MANUFACTURE_COLUMN :
                 if (element instanceof DeviceTemplate) {
-                    return ((DeviceTemplate) element).getManufacture();
+                    return ((DeviceTemplate) element).getManufacturer();
                 }
 
             case MODEL_NUMBER_COLUMN :

@@ -62,7 +62,7 @@ public class TemplateFilter extends ViewerFilter {
                 Utils.convertDate2String(
                     ((DeviceTemplate) element).getLastModified()).toLowerCase();
             String manufature =
-                ((DeviceTemplate) element).getManufacture().toLowerCase();
+                ((DeviceTemplate) element).getManufacturer().toLowerCase();
             String modelNumber =
                 ((DeviceTemplate) element).getModelNumber().toLowerCase();
             String version =

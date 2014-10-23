@@ -898,9 +898,17 @@
             commandId="project.command.popup.newProjectHandler">
          <enabledWhen>
             <iterate>
-               <adapt
-                     type="vn.enclave.peyton.fusion.entity.Version">
-               </adapt>
+               <or>
+                  <adapt
+                        type="vn.enclave.peyton.fusion.entity.Project">
+                  </adapt>
+                  <adapt
+                        type="vn.enclave.peyton.fusion.entity.Plan">
+                  </adapt>
+                  <adapt
+                        type="vn.enclave.peyton.fusion.entity.Version">
+                  </adapt>
+               </or>
             </iterate>
          </enabledWhen>
       </handler>
@@ -909,9 +917,14 @@
             commandId="project.command.popup.newVersionHandler">
          <enabledWhen>
             <iterate>
-               <adapt
-                     type="vn.enclave.peyton.fusion.entity.Version">
-               </adapt>
+               <or>
+                  <adapt
+                        type="vn.enclave.peyton.fusion.entity.Project">
+                  </adapt>
+                  <adapt
+                        type="vn.enclave.peyton.fusion.entity.Version">
+                  </adapt>
+               </or>
             </iterate>
          </enabledWhen>
       </handler>
@@ -938,5 +951,4 @@
          </enabledWhen>
       </handler>
    </extension>
-
 </plugin>

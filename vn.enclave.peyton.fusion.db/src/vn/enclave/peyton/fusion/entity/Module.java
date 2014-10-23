@@ -25,6 +25,11 @@ public class Module implements Serializable {
 	@OneToMany(mappedBy="module")
 	private List<DeviceType> deviceTypes;
 
+	//uni-directional many-to-one association to Icon
+	@ManyToOne
+	@JoinColumn(name="idIcon")
+	private Icon icon;
+
 	public Module() {
 	}
 
@@ -64,6 +69,14 @@ public class Module implements Serializable {
 		deviceType.setModule(null);
 
 		return deviceType;
+	}
+
+	public Icon getIcon() {
+		return this.icon;
+	}
+
+	public void setIcon(Icon icon) {
+		this.icon = icon;
 	}
 
 }
