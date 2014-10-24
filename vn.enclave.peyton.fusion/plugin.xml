@@ -165,6 +165,18 @@
             name="Device Template Detail"
             restorable="true">
       </view>
+      <category
+            id="vn.enclave.peyton.fusion.category.project.bottomRight"
+            name="Project.BottomRight">
+      </category>
+      <view
+            allowMultiple="true"
+            category="vn.enclave.peyton.fusion.category.project.bottomRight"
+            class="vn.enclave.peyton.fusion.view.NewDeviceViewPart"
+            id="vn.enclave.peyton.fusion.newDeviceViewPart"
+            name="New Device"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
@@ -238,10 +250,14 @@
             id="vn.enclave.peyton.fusion.command.delete"
             name="Delete">
       </command>
+      <category
+            id="device.command.category.toolbar"
+            name="Device.Toolbar">
+      </category>
       <command
             categoryId="device.command.category.toolbar"
-            id="vn.enclave.peyton.fusion.command.add"
-            name="Add">
+            id="device.command.category.toolbar.add"
+            name="Device.Toolbar.Add">
       </command>
       <command
             categoryId="device.command.category.toolbar"
@@ -283,10 +299,6 @@
             id="vn.enclave.peyton.fusion.command.requestOnlineStatus"
             name="Request Online Status">
       </command>
-      <category
-            id="device.command.category.toolbar"
-            name="Device.Toolbar">
-      </category>
       <category
             id="project.command.category.popup"
             name="Project.Popup">
@@ -585,7 +597,7 @@
                visible="true">
          </separator>
          <command
-               commandId="vn.enclave.peyton.fusion.command.add"
+               commandId="device.command.category.toolbar.add"
                icon="icons/add.png"
                style="push">
          </command>
@@ -949,6 +961,10 @@
                </adapt>
             </iterate>
          </enabledWhen>
+      </handler>
+      <handler
+            class="vn.enclave.peyton.fusion.command.AddDeviceHandler"
+            commandId="device.command.category.toolbar.add">
       </handler>
    </extension>
 </plugin>

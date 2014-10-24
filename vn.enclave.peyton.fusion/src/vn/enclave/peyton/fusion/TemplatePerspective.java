@@ -31,10 +31,12 @@ public class TemplatePerspective implements IPerspectiveFactory {
             layout.createFolder(
                 "left", IPageLayout.LEFT, 0.35f, IPageLayout.ID_EDITOR_AREA);
         left.addView(AreasTemplatesViewPart.ID);
+        layout.getViewLayout(AreasTemplatesViewPart.ID).setCloseable(false);
 
         topRight =
             layout.createFolder("topRight", IPageLayout.TOP, 0.7f, editorArea);
         topRight.addView(DeviceTemplateViewPart.ID);
+        layout.getViewLayout(DeviceTemplateViewPart.ID).setCloseable(false);
 
         bottomRight =
             layout.createFolder(

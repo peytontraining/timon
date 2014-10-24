@@ -29,7 +29,7 @@ import vn.enclave.peyton.fusion.common.Constant;
 import vn.enclave.peyton.fusion.entity.DeviceTemplate;
 import vn.enclave.peyton.fusion.filter.TemplateFilter;
 import vn.enclave.peyton.fusion.provider.TemplateTreeContentProvider;
-import vn.enclave.peyton.fusion.provider.TemplateTreeLabelProvider;
+import vn.enclave.peyton.fusion.provider.TemplateTreeTableLabelProvider;
 import vn.enclave.peyton.fusion.service.impl.ModuleService;
 
 public class DeviceTemplateViewPart extends ViewPart
@@ -83,7 +83,7 @@ public class DeviceTemplateViewPart extends ViewPart
 
         // Set ContentProvider and LabelProvider for treeViewer.
         treeViewer.setContentProvider(new TemplateTreeContentProvider());
-        treeViewer.setLabelProvider(new TemplateTreeLabelProvider());
+        treeViewer.setLabelProvider(new TemplateTreeTableLabelProvider());
 
         // Set data for treeViewer.
         ModuleService moduleService = new ModuleService();
