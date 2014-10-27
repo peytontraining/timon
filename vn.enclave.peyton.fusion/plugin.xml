@@ -177,6 +177,14 @@
             name="New Device"
             restorable="true">
       </view>
+      <view
+            allowMultiple="true"
+            category="vn.enclave.peyton.fusion.category.project.bottomRight"
+            class="vn.enclave.peyton.fusion.view.EditDeviceViewPart"
+            id="vn.enalve.peyton.fusion.view.editDeviceViewPart"
+            name="Edit Device"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
@@ -484,6 +492,36 @@
             categoryId="deviceTemplateDetail.command.category.toolbar"
             id="deviceTemplateDetail.command.category.toolbar.addTemplate"
             name="DeviceTemplateDetail.Toolbar.AddTemplate">
+      </command>
+      <category
+            id="newDevice.command.category.toolbar"
+            name="NewDevice.Toolbar">
+      </category>
+      <command
+            categoryId="newDevice.command.category.toolbar"
+            defaultHandler="vn.enclave.peyton.fusion.command.SaveDeviceHandler"
+            id="newDevice.command.category.toolbar.save"
+            name="NewDevice.Toolbar.Save">
+      </command>
+      <command
+            categoryId="newDevice.command.category.toolbar"
+            id="newDevice.command.category.toolbar.saveClose"
+            name="NewDevice.Toolbar.SaveClose">
+      </command>
+      <command
+            categoryId="newDevice.command.category.toolbar"
+            id="newDevice.command.category.toolbar.deviceUpdate"
+            name="NewDevice.Toolbar.DeviceUpdate">
+      </command>
+      <command
+            categoryId="newDevice.command.category.toolbar"
+            id="newDevice.command.category.toolbar.showDevice"
+            name="NewDevice.Toolbar.ShowDevice">
+      </command>
+      <command
+            categoryId="newDevice.command.category.toolbar"
+            id="newDevice.command.category.toolbar.serviceEdit"
+            name="NewDevice.Toolbar.ServiceEdit">
       </command>
    </extension>
    <extension
@@ -899,6 +937,42 @@
          <command
                commandId="deviceTemplateDetail.command.category.toolbar.templateChild"
                icon="icons/template_child.png"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:vn.enclave.peyton.fusion.newDeviceViewPart">
+         <command
+               commandId="newDevice.command.category.toolbar.save"
+               icon="icons/save_as.png"
+               style="push">
+         </command>
+         <command
+               commandId="deviceTemplates.command.category.toolbar.addTemplate"
+               icon="icons/save_and_close.png"
+               style="push">
+         </command>
+         <separator
+               name="vn.enclave.peyton.fusion.separator1"
+               visible="true">
+         </separator>
+         <command
+               commandId="newDevice.command.category.toolbar.deviceUpdate"
+               icon="icons/device_update.png"
+               style="push">
+         </command>
+         <command
+               commandId="newDevice.command.category.toolbar.showDevice"
+               icon="icons/show_devices.png"
+               style="push">
+         </command>
+         <separator
+               name="vn.enclave.peyton.fusion.separator2"
+               visible="true">
+         </separator>
+         <command
+               commandId="newDevice.command.category.toolbar.serviceEdit"
+               icon="icons/service.png"
                style="push">
          </command>
       </menuContribution>

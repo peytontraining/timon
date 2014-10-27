@@ -16,11 +16,20 @@ public class DeviceService implements IService<Device> {
     @Override
     public List<Device> getAll() {
         em = JPAUtil.getEntityManager();
-        TypedQuery<Device> query = 
+        TypedQuery<Device> query =
             em.createNamedQuery("Device.findAll", Device.class);
         List<Device> devices = query.getResultList();
         em.close();
         return devices;
+    }
+
+    public Device save(Device newDevice) {
+        em = JPAUtil.getEntityManager();
+        em.getTransaction().begin();
+        newDevice = em.merge(newDevice);
+        em.getTransaction().commit();
+        em.close();
+        return newDevice;
     }
 
 }

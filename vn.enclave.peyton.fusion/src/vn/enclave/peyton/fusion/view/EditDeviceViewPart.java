@@ -9,13 +9,13 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.part.ViewPart;
 
 import vn.enclave.peyton.fusion.common.Utils;
-import vn.enclave.peyton.fusion.entity.DeviceTemplate;
+import vn.enclave.peyton.fusion.entity.Device;
 import vn.enclave.peyton.fusion.view.form.DeviceDetailsForm;
 
-public class NewDeviceViewPart extends ViewPart {
+public class EditDeviceViewPart extends ViewPart {
 
     public static final String ID =
-        "vn.enclave.peyton.fusion.newDeviceViewPart";
+        "vn.enalve.peyton.fusion.view.editDeviceViewPart";
 
     private DeviceDetailsForm form;
 
@@ -63,14 +63,14 @@ public class NewDeviceViewPart extends ViewPart {
         item.setText("Configure");
     }
 
-    public void setData(DeviceTemplate template) {
-        String pluginId = template.getIcon().getPluginId();
-        String imageFilePath = template.getIcon().getImageFilePath();
+    public void setData(Device device) {
+        String pluginId = device.getIcon().getPluginId();
+        String imageFilePath = device.getIcon().getImageFilePath();
 
         // change the viewpart name.
-        setPartName(template.getName());
+        setPartName(device.getName());
         setTitleImage(Utils.createImage(pluginId, imageFilePath));
 
-        form.setDataInForm(template);
+        form.setDataInForm(device);
     }
 }

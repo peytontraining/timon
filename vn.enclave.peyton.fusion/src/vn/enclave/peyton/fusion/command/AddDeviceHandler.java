@@ -30,10 +30,16 @@ public class AddDeviceHandler extends AbstractHandler implements IHandler {
 
         if (dialog.open() == Window.OK && dialog.getTemplate() != null) {
             try {
+                String secondaryId = String.valueOf((new Date()).getTime());
                 window.getActivePage().showView(
-                    NewDeviceViewPart.ID,
-                    String.valueOf((new Date()).getTime()),
+                    NewDeviceViewPart.ID, secondaryId,
                     IWorkbenchPage.VIEW_ACTIVATE);
+                NewDeviceViewPart newDeviceViewPart =
+                    (NewDeviceViewPart) window
+                        .getActivePage()
+                        .findViewReference(NewDeviceViewPart.ID, secondaryId)
+                        .getView(true);
+                newDeviceViewPart.setData(dialog.getTemplate());
             } catch (PartInitException e) {
                 e.printStackTrace();
             }

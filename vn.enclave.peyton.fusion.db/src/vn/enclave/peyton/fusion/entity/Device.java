@@ -1,95 +1,151 @@
 package vn.enclave.peyton.fusion.entity;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import java.util.Date;
 
+import javax.persistence.*;
 
 /**
  * The persistent class for the devices database table.
  * 
  */
 @Entity
-@Table(name="devices")
-@NamedQuery(name="Device.findAll", query="SELECT d FROM Device d")
+@Table(name = "devices")
+@NamedQuery(name = "Device.findAll", query = "SELECT d FROM Device d")
 public class Device implements Serializable {
-	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
+    private static final long serialVersionUID = 1L;
 
-	private String appModule;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-	private String deviceType;
+    private String appModule;
 
-	private String manufacture;
+    private String deviceType;
 
-	private String name;
+    private String manufacture;
 
-	private String physicalLocation;
+    private String name;
 
-	//bi-directional many-to-one association to Version
-	@ManyToOne(cascade={CascadeType.PERSIST})
-	@JoinColumn(name="idVersion")
-	private Version version;
+    private String physicalLocation;
 
-	public Device() {
-	}
+    private String modelNumber;
 
-	public int getId() {
-		return this.id;
-	}
+    private String notes;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    @Column(name = "version")
+    private String versionDevice;
 
-	public String getAppModule() {
-		return this.appModule;
-	}
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastModified;
 
-	public void setAppModule(String appModule) {
-		this.appModule = appModule;
-	}
+    // bi-directional many-to-one association to Version
+    @ManyToOne(cascade = {CascadeType.PERSIST})
+    @JoinColumn(name = "idVersion")
+    private Version version;
 
-	public String getDeviceType() {
-		return this.deviceType;
-	}
+    // uni-directional many-to-one association to Icon
+    @ManyToOne
+    @JoinColumn(name = "idIcon")
+    private Icon icon;
 
-	public void setDeviceType(String deviceType) {
-		this.deviceType = deviceType;
-	}
+    public Device() {
+    }
 
-	public String getManufacture() {
-		return this.manufacture;
-	}
+    public int getId() {
+        return this.id;
+    }
 
-	public void setManufacture(String manufacture) {
-		this.manufacture = manufacture;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public String getAppModule() {
+        return this.appModule;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setAppModule(String appModule) {
+        this.appModule = appModule;
+    }
 
-	public String getPhysicalLocation() {
-		return this.physicalLocation;
-	}
+    public String getDeviceType() {
+        return this.deviceType;
+    }
 
-	public void setPhysicalLocation(String physicalLocation) {
-		this.physicalLocation = physicalLocation;
-	}
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
+    }
 
-	public Version getVersion() {
-		return this.version;
-	}
+    public String getManufacture() {
+        return this.manufacture;
+    }
 
-	public void setVersion(Version version) {
-		this.version = version;
-	}
+    public void setManufacture(String manufacture) {
+        this.manufacture = manufacture;
+    }
 
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPhysicalLocation() {
+        return this.physicalLocation;
+    }
+
+    public void setPhysicalLocation(String physicalLocation) {
+        this.physicalLocation = physicalLocation;
+    }
+
+    public Version getVersion() {
+        return this.version;
+    }
+
+    public void setVersion(Version version) {
+        this.version = version;
+    }
+
+    public Icon getIcon() {
+        return icon;
+    }
+
+    public void setIcon(Icon icon) {
+        this.icon = icon;
+    }
+
+    public String getModelNumber() {
+        return modelNumber;
+    }
+
+    public void setModelNumber(String modelNumber) {
+        this.modelNumber = modelNumber;
+    }
+
+    public String getVersionDevice() {
+        return versionDevice;
+    }
+
+    public void setVersionDevice(String versionDevice) {
+        this.versionDevice = versionDevice;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public Date getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified(Date lastModified) {
+        this.lastModified = lastModified;
+    }
 }

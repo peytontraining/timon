@@ -6,9 +6,10 @@ import org.eclipse.ui.IPerspectiveFactory;
 
 import vn.enclave.peyton.fusion.view.AreaTreeViewPart;
 import vn.enclave.peyton.fusion.view.DeviceTableViewPart;
-import vn.enclave.peyton.fusion.view.DeviceTemplateDetailViewPart;
 import vn.enclave.peyton.fusion.view.DriverTreeViewPart;
+import vn.enclave.peyton.fusion.view.EditDeviceViewPart;
 import vn.enclave.peyton.fusion.view.NavigationViewPart;
+import vn.enclave.peyton.fusion.view.NewDeviceViewPart;
 import vn.enclave.peyton.fusion.view.RuleTableViewPart;
 import vn.enclave.peyton.fusion.view.SceneTableViewPart;
 import vn.enclave.peyton.fusion.view.ServiceTableViewPart;
@@ -56,6 +57,7 @@ public class ProjectPerspective implements IPerspectiveFactory {
         bottomRight =
             layout.createFolder(
                 "bottomRight", IPageLayout.BOTTOM, 0.7f, editorArea);
-        bottomRight.addPlaceholder(DeviceTemplateDetailViewPart.ID + ":*");
+        bottomRight.addPlaceholder(NewDeviceViewPart.ID + ":*");
+        bottomRight.addPlaceholder(EditDeviceViewPart.ID + ":*");
     }
 }

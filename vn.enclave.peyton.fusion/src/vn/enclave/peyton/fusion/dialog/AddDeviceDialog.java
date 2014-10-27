@@ -86,7 +86,7 @@ public class AddDeviceDialog extends Dialog {
         toolkit.createLabel(container, "Communication Method:");
         CCombo combo = new CCombo(container, SWT.BORDER);
         combo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-
+        
         return container;
     }
 
