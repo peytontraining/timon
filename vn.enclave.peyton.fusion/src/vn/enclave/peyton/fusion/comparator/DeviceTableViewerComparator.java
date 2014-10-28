@@ -58,7 +58,7 @@ public class DeviceTableViewerComparator extends ViewerComparator {
                 break;
 
             case MANUFACTURE_COLUMN:
-                rc = d1.getManufacture().compareTo(d2.getManufacture());
+                rc = d1.getManufacturer().compareTo(d2.getManufacturer());
                 break;
         }
 

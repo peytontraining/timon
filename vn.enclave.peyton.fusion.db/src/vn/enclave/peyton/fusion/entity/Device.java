@@ -24,7 +24,7 @@ public class Device implements Serializable {
 
     private String deviceType;
 
-    private String manufacture;
+    private String manufacturer;
 
     private String name;
 
@@ -77,12 +77,12 @@ public class Device implements Serializable {
         this.deviceType = deviceType;
     }
 
-    public String getManufacture() {
-        return this.manufacture;
+    public String getManufacturer() {
+        return this.manufacturer;
     }
 
-    public void setManufacture(String manufacture) {
-        this.manufacture = manufacture;
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
     }
 
     public String getName() {

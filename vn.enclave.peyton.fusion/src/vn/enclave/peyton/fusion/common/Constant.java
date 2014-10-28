@@ -5,6 +5,8 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 public class Constant {
 
+    private static final String PLUGIN_ID = "vn.enclave.peyton.fusion";
+
     public static final String PERSISTENCE_UNIT_NAME =
         "vn.enclave.peyton.fusion";
 
@@ -14,58 +16,67 @@ public class Constant {
 
     /* Image */
     public static final Image IMAGE_PLAN = AbstractUIPlugin
-        .imageDescriptorFromPlugin(
-            "vn.enclave.peyton.fusion", "/icons/company_group.png")
+        .imageDescriptorFromPlugin(PLUGIN_ID, "icons/company_group.png")
         .createImage();
 
     public static final Image IMAGE_PROJECT = AbstractUIPlugin
-        .imageDescriptorFromPlugin(
-            "vn.enclave.peyton.fusion", "/icons/project.png").createImage();
+        .imageDescriptorFromPlugin(PLUGIN_ID, "icons/project.png")
+        .createImage();
 
     public static final Image IMAGE_VERSION = AbstractUIPlugin
-        .imageDescriptorFromPlugin(
-            "vn.enclave.peyton.fusion", "/icons/version.png").createImage();
+        .imageDescriptorFromPlugin(PLUGIN_ID, "icons/version.png")
+        .createImage();
 
     public static final Image IMAGE_CAMERA = AbstractUIPlugin
-        .imageDescriptorFromPlugin(
-            "vn.enclave.peyton.fusion", "/icons/camera.png").createImage();
+        .imageDescriptorFromPlugin(PLUGIN_ID, "icons/camera.png").createImage();
 
     public static final Image IMAGE_DVR_NVR = AbstractUIPlugin
-        .imageDescriptorFromPlugin(
-            "vn.enclave.peyton.fusion", "/icons/cctv.png").createImage();
+        .imageDescriptorFromPlugin(PLUGIN_ID, "icons/cctv.png").createImage();
 
     public static final Image IMAGE_CCTV = AbstractUIPlugin
-        .imageDescriptorFromPlugin(
-            "vn.enclave.peyton.fusion", "/icons/cctv.png").createImage();
+        .imageDescriptorFromPlugin(PLUGIN_ID, "icons/cctv.png").createImage();
 
     public static final Image IMAGE_FIREPLACE_CONTROLLER = AbstractUIPlugin
-        .imageDescriptorFromPlugin(
-            "vn.enclave.peyton.fusion", "/icons/fireplace-controller.png")
+        .imageDescriptorFromPlugin(PLUGIN_ID, "icons/fireplace-controller.png")
         .createImage();
 
     public static final Image IMAGE_ARROW_UP = AbstractUIPlugin
-        .imageDescriptorFromPlugin(
-            "vn.enclave.peyton.fusion", "/icons/arrow_up.png").createImage();
+        .imageDescriptorFromPlugin(PLUGIN_ID, "icons/arrow_up.png")
+        .createImage();
 
     public static final Image IMAGE_ARROW_DOWN = AbstractUIPlugin
-        .imageDescriptorFromPlugin(
-            "vn.enclave.peyton.fusion", "/icons/arrow_down.png").createImage();
+        .imageDescriptorFromPlugin(PLUGIN_ID, "icons/arrow_down.png")
+        .createImage();
 
     public static final Image IMAGE_SAVE = AbstractUIPlugin
-        .imageDescriptorFromPlugin(
-            "vn.enclave.peyton.fusion", "/icons/save_as.png").createImage();
+        .imageDescriptorFromPlugin(PLUGIN_ID, "icons/save_as.png")
+        .createImage();
 
     public static final Image IMAGE_EDIT = AbstractUIPlugin
-        .imageDescriptorFromPlugin(
-            "vn.enclave.peyton.fusion", "/icons/edit.png").createImage();
+        .imageDescriptorFromPlugin(PLUGIN_ID, "icons/edit.png").createImage();
 
     public static final Image IMAGE_ADD_FOLDER = AbstractUIPlugin
-        .imageDescriptorFromPlugin(
-            "vn.enclave.peyton.fusion", "/icons/add_folder.png").createImage();
+        .imageDescriptorFromPlugin(PLUGIN_ID, "icons/add_folder.png")
+        .createImage();
 
     public static final Image IMAGE_DELETE = AbstractUIPlugin
-        .imageDescriptorFromPlugin(
-            "vn.enclave.peyton.fusion", "/icons/delete.png").createImage();
+        .imageDescriptorFromPlugin(PLUGIN_ID, "icons/delete.png").createImage();
+
+    public static final Image IMAGE_SAVE_CLOSE = AbstractUIPlugin
+        .imageDescriptorFromPlugin(PLUGIN_ID, "icons/save_and_close.png")
+        .createImage();
+
+    public static final Image IMAGE_UPDATE_DEVICE = AbstractUIPlugin
+        .imageDescriptorFromPlugin(PLUGIN_ID, "icons/device_update.png")
+        .createImage();
+
+    public static final Image IMAGE_SHOW_DEVICE = AbstractUIPlugin
+        .imageDescriptorFromPlugin(PLUGIN_ID, "icons/show_devices.png")
+        .createImage();
+
+    public static final Image IMAGE_EDIT_SERVICE = AbstractUIPlugin
+        .imageDescriptorFromPlugin(PLUGIN_ID, "icons/service.png")
+        .createImage();
 
     /* Device Type */
     public static final String DVR_NVR = "DVR/NVR";
@@ -76,4 +87,5 @@ public class Constant {
 
     /* Module Type */
     public static final String CCTV = "CCTV";
+
 }

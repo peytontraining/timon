@@ -35,7 +35,7 @@ public class DeviceDetailsForm {
 
     private ScrolledForm form;
 
-    private DeviceTemplate device;
+    private DeviceTemplate template;
 
     public Label getIcon() {
         return icon;
@@ -162,7 +162,7 @@ public class DeviceDetailsForm {
     }
 
     public void setDataInForm(DeviceTemplate template) {
-        this.device = template;
+        this.template = template;
         String name = template.getName();
         String manufacturer = template.getManufacturer();
         String modelNumber = template.getModelNumber();
@@ -186,15 +186,15 @@ public class DeviceDetailsForm {
 
     public Device getNewDevice() {
         Device newDevice = new Device();
-        newDevice.setAppModule(device.getDeviceType().getModule().getName());
-        newDevice.setDeviceType(device.getDeviceType().getName());
-        newDevice.setIcon(device.getIcon());
+        newDevice.setAppModule(template.getDeviceType().getModule().getName());
+        newDevice.setDeviceType(template.getDeviceType().getName());
+        newDevice.setIcon(template.getIcon());
         newDevice.setLastModified(new Date());
-        newDevice.setManufacture(device.getManufacturer());
-        newDevice.setModelNumber(device.getModelNumber());
+        newDevice.setManufacturer(template.getManufacturer());
+        newDevice.setModelNumber(template.getModelNumber());
         newDevice.setName(nameText.getText());
         newDevice.setNotes(notesText.getText());
-        newDevice.setVersionDevice(device.getVersion());
+        newDevice.setVersionDevice(template.getVersion());
         newDevice.setPhysicalLocation("");
 
         return newDevice;
@@ -202,7 +202,7 @@ public class DeviceDetailsForm {
 
     public void setDataInForm(Device device) {
         String name = device.getName();
-        String manufacturer = device.getManufacture();
+        String manufacturer = device.getManufacturer();
         String modelNumber = device.getModelNumber();
         String types = device.getDeviceType();
         String notes = device.getNotes();

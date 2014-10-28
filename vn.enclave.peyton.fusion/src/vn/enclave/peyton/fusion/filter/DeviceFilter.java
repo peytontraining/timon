@@ -27,7 +27,7 @@ public class DeviceFilter extends ViewerFilter {
         String appModule = device.getAppModule().toLowerCase();
         String deviceType = device.getDeviceType().toLowerCase();
         String physicalLocation = device.getPhysicalLocation().toLowerCase();
-        String manufacture = device.getManufacture().toLowerCase();
+        String manufacture = device.getManufacturer().toLowerCase();
 
         if (name != null && name.contains(filterString)) {
             return true;

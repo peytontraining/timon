@@ -10,7 +10,7 @@
 			    d.appModule,
 			    d.deviceType,
 			    d.physicalLocation,
-			    d.manufacture
+			    d.manufacturer
 			FROM
 			    Device d
 			WHERE

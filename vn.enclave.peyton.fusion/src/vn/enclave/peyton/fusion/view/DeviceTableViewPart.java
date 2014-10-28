@@ -387,7 +387,7 @@ public class DeviceTableViewPart extends ViewPart
             @Override
             public void update(ViewerCell cell) {
                 Device device = (Device) cell.getElement();
-                cell.setText(device.getManufacture());
+                cell.setText(device.getManufacturer());
             }
         });
     }

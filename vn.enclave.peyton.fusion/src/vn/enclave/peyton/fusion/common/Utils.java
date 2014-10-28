@@ -1,5 +1,6 @@
 package vn.enclave.peyton.fusion.common;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -20,6 +21,16 @@ public class Utils {
     public static String convertDate2String(Date date) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return format.format(date);
+    }
+
+    public static Date convertString2Date(String date) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            return format.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**

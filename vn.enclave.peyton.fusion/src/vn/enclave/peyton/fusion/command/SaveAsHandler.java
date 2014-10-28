@@ -63,7 +63,7 @@ public class SaveAsHandler extends AbstractHandler implements IHandler {
                     Device d = new Device();
                     d.setAppModule(device.getAppModule());
                     d.setDeviceType(device.getDeviceType());
-                    d.setManufacture(device.getManufacture());
+                    d.setManufacturer(device.getManufacturer());
                     d.setName(device.getName());
                     d.setPhysicalLocation(device.getPhysicalLocation());
                     d.setVersion(newVersion);
