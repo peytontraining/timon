@@ -57,7 +57,6 @@ public class NewDeviceViewPart extends ViewPart implements ISaveablePart {
     public void doSave(IProgressMonitor monitor) {
         saveDevice();
         monitor.setCanceled(isCanceled);
-
     }
 
     @Override
@@ -104,27 +103,29 @@ public class NewDeviceViewPart extends ViewPart implements ISaveablePart {
     }
 
     private void createToolbar(Composite parent) {
-        ToolBar bar = new ToolBar(parent, SWT.NONE);
-
         GridData layoutData = new GridData(SWT.RIGHT, SWT.NONE, true, false);
+        ToolBar bar = new ToolBar(parent, SWT.FLAT);
         bar.setLayoutData(layoutData);
 
-        ToolItem save = createToolItem(bar, Constant.IMAGE_SAVE);
+        createToolItems(bar);
+    }
+
+    private void createToolItems(ToolBar parent) {
+        ToolItem save = createToolItem(parent, Constant.IMAGE_SAVE);
         save.addSelectionListener(saveAdapter);
 
-        ToolItem saveAndClose = createToolItem(bar, Constant.IMAGE_SAVE_CLOSE);
+        ToolItem saveAndClose = createToolItem(parent, Constant.IMAGE_SAVE_CLOSE);
 
-        new ToolItem(bar, SWT.SEPARATOR);
+        new ToolItem(parent, SWT.SEPARATOR);
 
         ToolItem updateDevice =
-            createToolItem(bar, Constant.IMAGE_UPDATE_DEVICE);
+            createToolItem(parent, Constant.IMAGE_UPDATE_DEVICE);
 
-        ToolItem showDevice = createToolItem(bar, Constant.IMAGE_SHOW_DEVICE);
+        ToolItem showDevice = createToolItem(parent, Constant.IMAGE_SHOW_DEVICE);
 
-        new ToolItem(bar, SWT.SEPARATOR);
+        new ToolItem(parent, SWT.SEPARATOR);
 
-        ToolItem editService = createToolItem(bar, Constant.IMAGE_EDIT_SERVICE);
-
+        ToolItem editService = createToolItem(parent, Constant.IMAGE_EDIT_SERVICE);
     }
 
     private ToolItem createToolItem(ToolBar parent, Image image) {
@@ -151,16 +152,23 @@ public class NewDeviceViewPart extends ViewPart implements ISaveablePart {
         folder.setLayoutData(layoutData);
 
         createDetailsTabItem(folder);
+
+        createConfigureTabItem(folder);
     }
 
-    private void createDetailsTabItem(TabFolder folder) {
-        TabItem tabItem = new TabItem(folder, SWT.NONE);
-        tabItem.setText("Details");
+    private void createDetailsTabItem(TabFolder parent) {
+        TabItem detailsTabItem = new TabItem(parent, SWT.NONE);
+        detailsTabItem.setText("Details");
 
-        deviceForm = new DeviceForm(folder);
+        deviceForm = new DeviceForm(parent);
         deviceForm.addModifyListener(modifyListener);
 
-        tabItem.setControl(deviceForm.getScrolledForm());
+        detailsTabItem.setControl(deviceForm.getScrolledForm());
+    }
+
+    private void createConfigureTabItem(TabFolder parent) {
+        TabItem configureTabItem = new TabItem(parent, SWT.NONE);
+        configureTabItem.setText("Configure");
     }
 
     @Override

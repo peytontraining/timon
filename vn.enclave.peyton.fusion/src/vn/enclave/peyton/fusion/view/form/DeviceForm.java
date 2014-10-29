@@ -71,9 +71,7 @@ public class DeviceForm {
     private void createForm(Composite parent) {
         FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 
-        GridLayout layout = new GridLayout(2, false);
         scrolledForm = buildForm(parent, toolkit);
-        scrolledForm.getBody().setLayout(layout);
 
         iconLbl = buildLabel(scrolledForm.getBody(), toolkit, "Icon");
         iconContentLbl = buildLabel(scrolledForm.getBody(), toolkit, "");
@@ -103,6 +101,13 @@ public class DeviceForm {
         lastModifiedTxt = buildText(scrolledForm.getBody(), toolkit);
     }
 
+    private ScrolledForm buildForm(Composite parent, FormToolkit toolkit) {
+        GridLayout layout = new GridLayout(2, false);
+        ScrolledForm form = toolkit.createScrolledForm(parent);
+        form.getBody().setLayout(layout);
+        return form;
+    }
+
     private Text buildText(Composite parent, FormToolkit toolkit) {
         GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, false);
         Text text = toolkit.createText(parent, "");
@@ -114,13 +119,6 @@ public class DeviceForm {
         Label buildLabel(Composite parent, FormToolkit toolkit, String text) {
         Label label = toolkit.createLabel(parent, text);
         return label;
-    }
-
-    private ScrolledForm buildForm(Composite parent, FormToolkit toolkit) {
-        GridLayout layout = new GridLayout(2, false);
-        ScrolledForm form = toolkit.createScrolledForm(parent);
-        form.setLayout(layout);
-        return form;
     }
 
     public void fillInForm(DeviceTemplate template) {

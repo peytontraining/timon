@@ -20,7 +20,8 @@ public class DeviceTemplate implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private boolean certified;
+    @Column(name = "certified")
+    private boolean isCertified;
 
     private String deviceDriver;
 
@@ -58,12 +59,12 @@ public class DeviceTemplate implements Serializable {
         this.id = id;
     }
 
-    public boolean getCertified() {
-        return this.certified;
+    public boolean isCertified() {
+        return this.isCertified;
     }
 
-    public void setCertified(boolean certified) {
-        this.certified = certified;
+    public void setCertified(boolean isCertified) {
+        this.isCertified = isCertified;
     }
 
     public String getDeviceDriver() {

@@ -20,8 +20,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
@@ -182,19 +182,27 @@ public class DeviceTemplateViewPart extends ViewPart
 
     @Override
     public void doubleClick(DoubleClickEvent event) {
-        IWorkbenchWindow window = getSite().getWorkbenchWindow();
+        IWorkbenchPage page = getSite().getWorkbenchWindow().getActivePage();
         ISelection selection = event.getSelection();
         IStructuredSelection sselection = (IStructuredSelection) selection;
         Object firstElement = sselection.getFirstElement();
         if (firstElement instanceof DeviceTemplate) {
             try {
-                window.getActivePage().showView(
-                    DeviceTemplateDetailViewPart.ID,
-                    String.valueOf((new Date()).getTime()),
-                    IWorkbenchPage.VIEW_ACTIVATE);
+                DeviceTemplate template = (DeviceTemplate) firstElement;
+                showTemplateDetail(page, template);
             } catch (PartInitException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private
+        void showTemplateDetail(IWorkbenchPage page, DeviceTemplate template)
+            throws PartInitException {
+        String viewId = DeviceTemplateDetailViewPart.ID;
+        String secondaryId = String.valueOf((new Date()).getTime());
+        int mode = IWorkbenchPage.VIEW_ACTIVATE;
+        IViewPart viewPart = page.showView(viewId, secondaryId, mode);
+        ((DeviceTemplateDetailViewPart) viewPart).setData(template);
     }
 }

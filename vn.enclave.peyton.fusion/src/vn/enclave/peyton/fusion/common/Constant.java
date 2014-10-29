@@ -78,6 +78,14 @@ public class Constant {
         .imageDescriptorFromPlugin(PLUGIN_ID, "icons/service.png")
         .createImage();
 
+    public static final Image IMAGE_NEW_TEMPLATE = AbstractUIPlugin
+        .imageDescriptorFromPlugin(PLUGIN_ID, "icons/new_template.png")
+        .createImage();
+
+    public static final Image IMAGE_TEMPLATE_CHILD = AbstractUIPlugin
+        .imageDescriptorFromPlugin(PLUGIN_ID, "icons/template_child.png")
+        .createImage();
+
     /* Device Type */
     public static final String DVR_NVR = "DVR/NVR";
 

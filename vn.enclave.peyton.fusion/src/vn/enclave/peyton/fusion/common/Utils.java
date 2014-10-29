@@ -7,6 +7,8 @@ import java.util.Date;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import vn.enclave.peyton.fusion.entity.Icon;
+
 public class Utils {
 
     /**
@@ -49,5 +51,20 @@ public class Utils {
     public static Image createImage(String pluginId, String imageFilePath) {
         return AbstractUIPlugin.imageDescriptorFromPlugin(
             pluginId, imageFilePath).createImage();
+    }
+
+    /**
+     * This method is used to create an org.eclipse.swt.graphics.Image from
+     * icon.
+     * 
+     * @param icon
+     *            an instance of vn.enclave.peyton.fusion.entity.Icon.
+     * @return image is instant of org.eclipse.swt.graphics.Image or null if
+     *         image is not existed.
+     */
+    public static Image createImage(Icon icon) {
+        String pluginId = icon.getPluginId();
+        String imageFilePath = icon.getImageFilePath();
+        return createImage(pluginId, imageFilePath);
     }
 }

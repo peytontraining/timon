@@ -1,203 +1,126 @@
 package vn.enclave.peyton.fusion.view;
 
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.ScrolledForm;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.part.ViewPart;
 
+import vn.enclave.peyton.fusion.common.Constant;
 import vn.enclave.peyton.fusion.common.Utils;
 import vn.enclave.peyton.fusion.entity.DeviceTemplate;
+import vn.enclave.peyton.fusion.view.form.DeviceTemplateForm;
 
 public class DeviceTemplateDetailViewPart extends ViewPart {
 
     public static final String ID =
         "vn.enclave.peyton.fusion.view.DeviceTemplateDetailViewPart";
 
-    private Button certifiedCheck;
-
-    private Button setButton;
-
-    private Button removeButton;
-
-    private Button editTypesButton;
-
-    private Button selectDriverButton;
-
-    private Text nameText;
-
-    private Text manufacturerText;
-
-    private Text modelNumberText;
-
-    private Label typesText;
-
-    private Label deviceDriverText;
-
-    private Text notesText;
-
-    private Label icon;
+    private DeviceTemplateForm templateForm;
 
     @Override
     public void createPartControl(Composite parent) {
-        // Create the TabFolder.
+        GridLayout layout = new GridLayout(1, false);
+        layout.verticalSpacing = 0;
+        layout.marginHeight = 0;
+        parent.setLayout(layout);
+
+        createToolbarComposite(parent);
+
+        createTabFolderComposite(parent);
+    }
+
+    private void createToolbarComposite(Composite parent) {
+        GridLayout layout = new GridLayout(1, false);
+        layout.marginTop = -5;
+        layout.marginBottom = -5;
+        GridData layoutData = new GridData(SWT.FILL, SWT.NONE, true, false);
+        Composite toolbarComposite = new Composite(parent, SWT.None);
+        toolbarComposite.setLayout(layout);
+        toolbarComposite.setLayoutData(layoutData);
+
+        createToolbar(toolbarComposite);
+    }
+
+    private void createToolbar(Composite parent) {
+        GridData layoutData = new GridData(SWT.RIGHT, SWT.NONE, true, false);
+        ToolBar bar = new ToolBar(parent, SWT.FLAT);
+        bar.setLayoutData(layoutData);
+
+        createToolItems(bar);
+    }
+
+    private void createToolItems(ToolBar parent) {
+        ToolItem save = createToolItem(parent, Constant.IMAGE_SAVE);
+
+        ToolItem saveAndClose =
+            createToolItem(parent, Constant.IMAGE_SAVE_CLOSE);
+
+        new ToolItem(parent, SWT.SEPARATOR);
+
+        ToolItem newTemplate =
+            createToolItem(parent, Constant.IMAGE_NEW_TEMPLATE);
+
+        ToolItem templateChild =
+            createToolItem(parent, Constant.IMAGE_TEMPLATE_CHILD);
+    }
+
+    private ToolItem createToolItem(ToolBar parent, Image image) {
+        ToolItem toolItem = new ToolItem(parent, SWT.PUSH);
+        toolItem.setImage(image);
+        return toolItem;
+    }
+
+    private void createTabFolderComposite(Composite parent) {
+        GridLayout layout = new GridLayout(1, false);
+        layout.marginTop = -10;
+        layout.marginWidth = 0;
+        GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
+        Composite tabFolderComposite = new Composite(parent, SWT.NONE);
+        tabFolderComposite.setLayout(layout);
+        tabFolderComposite.setLayoutData(layoutData);
+
+        createTabFolder(tabFolderComposite);
+    }
+
+    private void createTabFolder(Composite parent) {
+        GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
         TabFolder folder = new TabFolder(parent, SWT.NONE);
+        folder.setLayoutData(layoutData);
 
-        // Create the Detail TabItem.
-        createDetailsTab(parent, folder);
+        createDetailsTabItem(folder);
 
-        // Create the Configure TabItem.
-        createConfigureTab(parent, folder);
-
-        // Change the name and icon of ViewPart, set data for form.
-        setData();
+        createConfigureTabItem(folder);
     }
 
-    /*
-     * Create the Detail TabItem inside TabFolder.
-     */
-    private void createDetailsTab(Composite parent, TabFolder folder) {
-        // Create TabItem and set its title.
-        TabItem item = new TabItem(folder, SWT.NONE);
-        item.setText("Details");
+    private void createDetailsTabItem(TabFolder parent) {
+        TabItem detailsTabItem = new TabItem(parent, SWT.NONE);
+        detailsTabItem.setText("Details");
 
-        // Create the FormToolKit.
-        FormToolkit toolkit = new FormToolkit(parent.getDisplay());
+        templateForm = new DeviceTemplateForm(parent);
+        
 
-        // Create the ScrolledForm and set layout for it.
-        ScrolledForm form = toolkit.createScrolledForm(folder);
-        form.getBody().setLayout(new GridLayout(4, false));
-
-        // Create content for the form.
-        createDetailsFormContent(toolkit, form);
-
-        // Set the form is the TabItem's control.
-        item.setControl(form);
+        detailsTabItem.setControl(templateForm.getScrolledForm());
     }
 
-    /*
-     * Create all buttons, labels and texts for form.
-     */
-    private
-        void createDetailsFormContent(FormToolkit toolkit, ScrolledForm form) {
-        GridData layoutData;
-
-        layoutData = new GridData(SWT.LEFT, SWT.NONE, true, false, 3, 1);
-        toolkit.createLabel(form.getBody(), "Certified:");
-        certifiedCheck = toolkit.createButton(form.getBody(), "", SWT.CHECK);
-        certifiedCheck.setLayoutData(layoutData);
-
-        layoutData = new GridData(SWT.LEFT, SWT.NONE, false, false, 1, 1);
-        toolkit.createLabel(form.getBody(), "Icon:");
-        icon = toolkit.createLabel(form.getBody(), "");
-        setButton = toolkit.createButton(form.getBody(), "Set...", SWT.PUSH);
-        setButton.setLayoutData(layoutData);
-        removeButton = toolkit.createButton(form.getBody(), "Remove", SWT.NONE);
-        removeButton.setLayoutData(layoutData);
-
-        layoutData = new GridData(SWT.FILL, SWT.NONE, true, false, 3, 1);
-        toolkit.createLabel(form.getBody(), "Name:");
-        nameText = toolkit.createText(form.getBody(), "");
-        nameText.setLayoutData(layoutData);
-
-        toolkit.createLabel(form.getBody(), "Manufacturer:");
-        manufacturerText = toolkit.createText(form.getBody(), "");
-        manufacturerText.setLayoutData(layoutData);
-
-        toolkit.createLabel(form.getBody(), "Model Number:");
-        modelNumberText = toolkit.createText(form.getBody(), "");
-        modelNumberText.setLayoutData(layoutData);
-
-        toolkit.createLabel(form.getBody(), "Types:");
-        Composite typesComposite =
-            toolkit.createComposite(form.getBody(), SWT.BORDER);
-        typesComposite.setLayoutData(new GridData(
-            SWT.FILL, SWT.NONE, true, false, 3, 1));
-        typesComposite.setLayout(new GridLayout(2, false));
-        typesText = toolkit.createLabel(typesComposite, "");
-        typesText.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
-        editTypesButton =
-            toolkit.createButton(typesComposite, "Edit Types", SWT.PUSH);
-        editTypesButton.setLayoutData(new GridData(
-            SWT.RIGHT, SWT.NONE, true, false));
-
-        toolkit.createLabel(form.getBody(), "Device Driver:");
-        Composite driverComposite =
-            toolkit.createComposite(form.getBody(), SWT.BORDER);
-        driverComposite.setLayoutData(new GridData(
-            SWT.FILL, SWT.NONE, true, false, 3, 1));
-        driverComposite.setLayout(new GridLayout(2, false));
-        deviceDriverText = toolkit.createLabel(driverComposite, "");
-        deviceDriverText.setLayoutData(new GridData(
-            SWT.FILL, SWT.NONE, true, false));
-        selectDriverButton =
-            toolkit.createButton(driverComposite, "Select Driver", SWT.PUSH);
-        selectDriverButton.setLayoutData(new GridData(
-            SWT.RIGHT, SWT.NONE, true, false));
-
-        layoutData = new GridData(SWT.FILL, SWT.NONE, true, false, 3, 1);
-        toolkit.createLabel(form.getBody(), "Notes:");
-        notesText = toolkit.createText(form.getBody(), "", SWT.MULTI);
-        layoutData.heightHint = notesText.getLineHeight() * 5;
-        notesText.setLayoutData(layoutData);
+    private void createConfigureTabItem(TabFolder parent) {
+        TabItem configureTabItem = new TabItem(parent, SWT.NONE);
+        configureTabItem.setText("Configure");
     }
 
-    /*
-     * Create the Configure TabItem inside TabFolder.
-     */
-    private void createConfigureTab(Composite parent, TabFolder folder) {
-        // Create TabItem and set its title.
-        TabItem item = new TabItem(folder, SWT.BORDER);
-        item.setText("Configure");
+    public void setData(DeviceTemplate template) {
+        changeTitleAndImage(template);
+        templateForm.fillInForm(template);
     }
 
-    /*
-     * Change the name of the ViewPart is same as the name of the selected
-     * device template row. Set data to Details form.
-     */
-    private void setData() {
-        ISelection selection =
-            getSite()
-                .getWorkbenchWindow().getSelectionService()
-                .getSelection(DeviceTemplateViewPart.ID);
-        IStructuredSelection sselection = (IStructuredSelection) selection;
-        Object firstElement = sselection.getFirstElement();
-        if (firstElement instanceof DeviceTemplate) {
-            DeviceTemplate template = (DeviceTemplate) firstElement;
-            boolean certified = template.getCertified();
-            String name = template.getName();
-            String manufacturer = template.getManufacturer();
-            String modelNumber = template.getModelNumber();
-            String types = template.getDeviceType().getName();
-            String deviceDriver = template.getDeviceDriver();
-            String notes = template.getNotes();
-            String pluginId = template.getIcon().getPluginId();
-            String imageFilePath = template.getIcon().getImageFilePath();
-
-            // Change the viewpart name.
-            setPartName(((DeviceTemplate) firstElement).getName());
-
-            setTitleImage(Utils.createImage(pluginId, imageFilePath));
-
-            // Set data to form.
-            certifiedCheck.setSelection(certified);
-            nameText.setText(name);
-            manufacturerText.setText(manufacturer);
-            modelNumberText.setText(modelNumber);
-            typesText.setText(types);
-            deviceDriverText.setText(deviceDriver);
-            notesText.setText(notes);
-            icon.setImage(Utils.createImage(pluginId, imageFilePath));
-        }
+    private void changeTitleAndImage(DeviceTemplate template) {
+        setTitleImage(Utils.createImage(template.getIcon()));
+        setPartName(template.getName());
     }
 
     @Override
