@@ -160,9 +160,9 @@
       <view
             allowMultiple="true"
             category="vn.enclave.peyton.fusion.category.template.bottomRight"
-            class="vn.enclave.peyton.fusion.view.DeviceTemplateDetailViewPart"
-            id="vn.enclave.peyton.fusion.view.DeviceTemplateDetailViewPart"
-            name="Device Template Detail"
+            class="vn.enclave.peyton.fusion.view.DetailedDeviceTemplateViewPart"
+            id="vn.enclave.peyton.fusion.view.DetailedDeviceTemplateViewPart"
+            name="Detailed Device Template"
             restorable="true">
       </view>
       <category
@@ -172,17 +172,17 @@
       <view
             allowMultiple="true"
             category="vn.enclave.peyton.fusion.category.project.bottomRight"
-            class="vn.enclave.peyton.fusion.view.NewDeviceViewPart"
-            id="vn.enclave.peyton.fusion.view.newDeviceViewPart"
-            name="New Device"
+            class="vn.enclave.peyton.fusion.view.AddingDeviceViewPart"
+            id="vn.enclave.peyton.fusion.view.addingDeviceViewPart"
+            name="Adding Device"
             restorable="true">
       </view>
       <view
             allowMultiple="true"
             category="vn.enclave.peyton.fusion.category.project.bottomRight"
-            class="vn.enclave.peyton.fusion.view.EditDeviceViewPart"
-            id="vn.enalve.peyton.fusion.view.editDeviceViewPart"
-            name="Edit Device"
+            class="vn.enclave.peyton.fusion.view.ModifyingDeviceViewPart"
+            id="vn.enalve.peyton.fusion.view.modifyingDeviceViewPart"
+            name="Modifying Device"
             restorable="true">
       </view>
    </extension>

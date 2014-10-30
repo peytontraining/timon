@@ -86,14 +86,12 @@ public class Constant {
         .imageDescriptorFromPlugin(PLUGIN_ID, "icons/template_child.png")
         .createImage();
 
-    /* Device Type */
-    public static final String DVR_NVR = "DVR/NVR";
+    public static final Image IMAGE_NODE_ADD = AbstractUIPlugin
+        .imageDescriptorFromPlugin(PLUGIN_ID, "icons/node_add.png")
+        .createImage();
 
-    public static final String FIREPLACE_CONTROLLER = "Fireplace Controller";
-
-    public static final String IP_CAMERAS = "IP Cameras";
-
-    /* Module Type */
-    public static final String CCTV = "CCTV";
+    public static final Image IMAGE_NODE_DELETE = AbstractUIPlugin
+        .imageDescriptorFromPlugin(PLUGIN_ID, "icons/node_delete.png")
+        .createImage();
 
 }

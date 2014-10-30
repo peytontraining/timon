@@ -5,7 +5,7 @@ import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
 import vn.enclave.peyton.fusion.view.AreasTemplatesViewPart;
-import vn.enclave.peyton.fusion.view.DeviceTemplateDetailViewPart;
+import vn.enclave.peyton.fusion.view.DetailedDeviceTemplateViewPart;
 import vn.enclave.peyton.fusion.view.DeviceTemplateViewPart;
 
 /**
@@ -41,6 +41,6 @@ public class TemplatePerspective implements IPerspectiveFactory {
         bottomRight =
             layout.createFolder(
                 "bottomRight", IPageLayout.BOTTOM, 0.7f, editorArea);
-        bottomRight.addPlaceholder(DeviceTemplateDetailViewPart.ID + ":*");
+        bottomRight.addPlaceholder(DetailedDeviceTemplateViewPart.ID + ":*");
     }
 }

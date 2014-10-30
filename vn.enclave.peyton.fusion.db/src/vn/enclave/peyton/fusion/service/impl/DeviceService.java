@@ -23,7 +23,7 @@ public class DeviceService implements IService<Device> {
         return devices;
     }
 
-    public Device save(Device newDevice) {
+    public Device insert(Device newDevice) {
         em = JPAUtil.getEntityManager();
         em.getTransaction().begin();
         newDevice = em.merge(newDevice);
@@ -32,4 +32,11 @@ public class DeviceService implements IService<Device> {
         return newDevice;
     }
 
+    public void update(Device modifiedDevice) {
+        em = JPAUtil.getEntityManager();
+        em.getTransaction().begin();
+        em.merge(modifiedDevice);
+        em.getTransaction().commit();
+        em.close();
+    }
 }

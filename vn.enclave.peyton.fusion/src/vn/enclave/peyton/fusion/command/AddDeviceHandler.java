@@ -13,7 +13,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import vn.enclave.peyton.fusion.dialog.AddDeviceDialog;
-import vn.enclave.peyton.fusion.view.NewDeviceViewPart;
+import vn.enclave.peyton.fusion.view.AddingDeviceViewPart;
 
 /**
  * This class is used to handle adding a device from device template list. It is
@@ -32,12 +32,12 @@ public class AddDeviceHandler extends AbstractHandler implements IHandler {
             try {
                 String secondaryId = String.valueOf((new Date()).getTime());
                 window.getActivePage().showView(
-                    NewDeviceViewPart.ID, secondaryId,
+                    AddingDeviceViewPart.ID, secondaryId,
                     IWorkbenchPage.VIEW_ACTIVATE);
-                NewDeviceViewPart newDeviceViewPart =
-                    (NewDeviceViewPart) window
+                AddingDeviceViewPart newDeviceViewPart =
+                    (AddingDeviceViewPart) window
                         .getActivePage()
-                        .findViewReference(NewDeviceViewPart.ID, secondaryId)
+                        .findViewReference(AddingDeviceViewPart.ID, secondaryId)
                         .getView(true);
                 newDeviceViewPart.setData(dialog.getTemplate());
             } catch (PartInitException e) {

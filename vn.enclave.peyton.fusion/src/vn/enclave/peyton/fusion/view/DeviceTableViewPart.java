@@ -21,7 +21,6 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -33,6 +32,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISelectionService;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -44,7 +44,6 @@ import vn.enclave.peyton.fusion.common.Constant;
 import vn.enclave.peyton.fusion.common.Utils;
 import vn.enclave.peyton.fusion.comparator.DeviceTableViewerComparator;
 import vn.enclave.peyton.fusion.entity.Device;
-import vn.enclave.peyton.fusion.entity.Icon;
 import vn.enclave.peyton.fusion.entity.Version;
 import vn.enclave.peyton.fusion.filter.DeviceFilter;
 
@@ -326,7 +325,7 @@ public class DeviceTableViewPart extends ViewPart
                 cell.setText(device.getName());
 
                 // Set image for cell
-                cell.setImage(createImage(device.getIcon()));
+                cell.setImage(Utils.createImage(device.getIcon()));
             }
         });
 
@@ -423,12 +422,6 @@ public class DeviceTableViewPart extends ViewPart
         return selectionAdapter;
     }
 
-    private Image createImage(Icon icon) {
-        Image image = null;
-        image = Utils.createImage(icon.getPluginId(), icon.getImageFilePath());
-        return image;
-    }
-
     private void createSelectionListener() {
         // Get current window.
         IWorkbenchWindow window =
@@ -447,12 +440,12 @@ public class DeviceTableViewPart extends ViewPart
                     IStructuredSelection sselection =
                         (IStructuredSelection) selection;
                     Object firstElement = sselection.getFirstElement();
-                    fillDataToTable(firstElement);
+                    fillInTable(firstElement);
                 }
             });
     }
 
-    private void fillDataToTable(Object firstElement) {
+    private void fillInTable(Object firstElement) {
         if (firstElement != null && firstElement instanceof Version) {
             List<Device> devices = ((Version) firstElement).getDevices();
 
@@ -467,32 +460,27 @@ public class DeviceTableViewPart extends ViewPart
 
     @Override
     public void doubleClick(DoubleClickEvent event) {
-        IWorkbenchWindow window =
-            PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-        String secondaryId = String.valueOf((new Date()).getTime());
         try {
-            ISelection selection = viewer.getSelection();
+            ISelection selection = event.getSelection();
             IStructuredSelection sselection = (IStructuredSelection) selection;
             Object firstObject = sselection.getFirstElement();
             if (firstObject instanceof Device) {
-                window.getActivePage().showView(
-                    EditDeviceViewPart.ID, secondaryId,
-                    IWorkbenchPage.VIEW_ACTIVATE);
-                window
-                    .getActivePage()
-                    .findViewReference(EditDeviceViewPart.ID, secondaryId)
-                    .getView(true);
-
-                EditDeviceViewPart part =
-                    (EditDeviceViewPart) window
-                        .getActivePage()
-                        .findViewReference(EditDeviceViewPart.ID, secondaryId)
-                        .getView(true);
-                part.setData((Device) firstObject);
+                Device device = (Device) firstObject;
+                showModifyingDeviceViewPart(device);
             }
         } catch (PartInitException e) {
             e.printStackTrace();
         }
 
+    }
+
+    private void showModifyingDeviceViewPart(Device device)
+        throws PartInitException {
+        IWorkbenchPage page = getSite().getWorkbenchWindow().getActivePage();
+        String viewId = ModifyingDeviceViewPart.ID;
+        String secondaryId = String.valueOf((new Date()).getTime());
+        int mode = IWorkbenchPage.VIEW_ACTIVATE;
+        IViewPart viewPart = page.showView(viewId, secondaryId, mode);
+        ((ModifyingDeviceViewPart) viewPart).setData(device);
     }
 }

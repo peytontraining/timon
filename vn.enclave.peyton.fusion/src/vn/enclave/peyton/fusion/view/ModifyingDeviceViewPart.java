@@ -1,9 +1,6 @@
 package vn.enclave.peyton.fusion.view;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -13,50 +10,48 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.ISaveablePart;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.ViewPart;
 
 import vn.enclave.peyton.fusion.common.Constant;
 import vn.enclave.peyton.fusion.common.Utils;
 import vn.enclave.peyton.fusion.entity.Device;
-import vn.enclave.peyton.fusion.entity.DeviceTemplate;
-import vn.enclave.peyton.fusion.entity.Version;
 import vn.enclave.peyton.fusion.service.impl.DeviceService;
-import vn.enclave.peyton.fusion.view.form.DeviceForm;
+import vn.enclave.peyton.fusion.view.form.DetailedDeviceForm;
 
-public class NewDeviceViewPart extends ViewPart implements ISaveablePart {
+public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
 
     public static final String ID =
-        "vn.enclave.peyton.fusion.view.newDeviceViewPart";
+        "vn.enalve.peyton.fusion.view.modifyingDeviceViewPart";
 
     private boolean isDirty;
 
-    private boolean isCanceled;
+    private boolean isFilled;
 
-    private DeviceForm deviceForm;
+    private DetailedDeviceForm detailedDeviceForm;
 
     public void setDirty(boolean isDirty) {
         this.isDirty = isDirty;
         firePropertyChange(PROP_DIRTY);
     }
 
-    public void setCanceled(boolean isCanceled) {
-        this.isCanceled = isCanceled;
+    public void setFilled(boolean isFilled) {
+        this.isFilled = isFilled;
     }
 
-    public DeviceForm getDeviceForm() {
-        return deviceForm;
+    public DetailedDeviceForm getDetailedDeviceForm() {
+        return detailedDeviceForm;
     }
 
     @Override
     public void doSave(IProgressMonitor monitor) {
-        saveDevice();
-        monitor.setCanceled(isCanceled);
+        updateDevice();
     }
 
     @Override
@@ -114,18 +109,21 @@ public class NewDeviceViewPart extends ViewPart implements ISaveablePart {
         ToolItem save = createToolItem(parent, Constant.IMAGE_SAVE);
         save.addSelectionListener(saveAdapter);
 
-        ToolItem saveAndClose = createToolItem(parent, Constant.IMAGE_SAVE_CLOSE);
+        ToolItem saveAndClose =
+            createToolItem(parent, Constant.IMAGE_SAVE_CLOSE);
 
         new ToolItem(parent, SWT.SEPARATOR);
 
-        ToolItem updateDevice =
+        ToolItem updateDevcie =
             createToolItem(parent, Constant.IMAGE_UPDATE_DEVICE);
 
-        ToolItem showDevice = createToolItem(parent, Constant.IMAGE_SHOW_DEVICE);
+        ToolItem showDevice =
+            createToolItem(parent, Constant.IMAGE_SHOW_DEVICE);
 
         new ToolItem(parent, SWT.SEPARATOR);
 
-        ToolItem editService = createToolItem(parent, Constant.IMAGE_EDIT_SERVICE);
+        ToolItem editService =
+            createToolItem(parent, Constant.IMAGE_EDIT_SERVICE);
     }
 
     private ToolItem createToolItem(ToolBar parent, Image image) {
@@ -160,114 +158,69 @@ public class NewDeviceViewPart extends ViewPart implements ISaveablePart {
         TabItem detailsTabItem = new TabItem(parent, SWT.NONE);
         detailsTabItem.setText("Details");
 
-        deviceForm = new DeviceForm(parent);
-        deviceForm.addModifyListener(modifyListener);
+        detailedDeviceForm = new DetailedDeviceForm(parent);
+        detailedDeviceForm.addModifyListener(modifyListener);
 
-        detailsTabItem.setControl(deviceForm.getScrolledForm());
+        detailsTabItem.setControl(detailedDeviceForm.getScrolledForm());
     }
 
     private void createConfigureTabItem(TabFolder parent) {
         TabItem configureTabItem = new TabItem(parent, SWT.NONE);
         configureTabItem.setText("Configure");
+
+        Section configureSection = createConfigureSection(parent);
+
+        configureTabItem.setControl(configureSection);
+    }
+
+    private Section createConfigureSection(Composite parent) {
+        FormToolkit toolkit = new FormToolkit(parent.getDisplay());
+        int sectionStyle = Section.TITLE_BAR;
+        Section configureSection = toolkit.createSection(parent, sectionStyle);
+        configureSection.setText("Configuration Properties");
+
+        return configureSection;
     }
 
     @Override
     public void setFocus() {
-
     }
 
-    public void setData(DeviceTemplate template) {
-        changeTitleAndImage(template);
-        deviceForm.fillInForm(template);
+    public void setData(Device device) {
+        changeTitleAndImage(device);
+        detailedDeviceForm.fillInForm(device);
+        setFilled(true);
     }
 
-    private void changeTitleAndImage(DeviceTemplate template) {
-        String pluginId = template.getIcon().getPluginId();
-        String imageFilePath = template.getIcon().getImageFilePath();
-        setTitleImage(Utils.createImage(pluginId, imageFilePath));
-        setPartName(template.getName());
+    private void changeTitleAndImage(Device device) {
+        setPartName(device.getName());
+        setTitleImage(Utils.createImage(device.getIcon()));
     }
-
-    ModifyListener modifyListener = new ModifyListener() {
-
-        private static final long serialVersionUID = -417147842389328557L;
-
-        @Override
-        public void modifyText(ModifyEvent event) {
-            setDirty(true);
-        }
-    };
 
     private SelectionAdapter saveAdapter = new SelectionAdapter() {
 
-        private static final long serialVersionUID = 8118227841225144756L;
+        private static final long serialVersionUID = -1772039129772087714L;
 
         @Override
         public void widgetSelected(SelectionEvent e) {
-            saveDevice();
+            updateDevice();
+            setDirty(false);
         }
-
     };
 
-    private void saveDevice() {
-        ISelection selection =
-            getSite().getPage().getSelection(NavigationViewPart.ID);
-        IStructuredSelection sselection = (IStructuredSelection) selection;
-        Object firstElement = sselection.getFirstElement();
-        if (firstElement instanceof Version) {
-            Version selectedVersion = (Version) firstElement;
-
-            Device newDevice = addDevice2Database(selectedVersion);
-
-            addDevice2Tree(selectedVersion, newDevice);
-
-            setDirty(false);
-            setCanceled(false);
-        } else {
-            setCanceled(true);
-            createWarningMessageDialog();
-        }
-    }
-
-    private Device addDevice2Database(Version selectedVersion) {
-        /*
-         * Get new device from form, then set the selected version to it.
-         */
-        Device newDevice = deviceForm.getDevice();
-        newDevice.setVersion(selectedVersion);
-
-        /*
-         * Save device into database.
-         */
+    private void updateDevice() {
+        Device modifiedDevice = detailedDeviceForm.getModifiedDevice();
         DeviceService deviceService = new DeviceService();
-        newDevice = deviceService.save(newDevice);
-        return newDevice;
+        deviceService.update(modifiedDevice);
     }
 
-    private void addDevice2Tree(Version selectedVersion, Device newDevice) {
-        /*
-         * Set the selected version to the new device, which returned from
-         * addDevice2Database() method.
-         */
-        newDevice.setVersion(selectedVersion);
+    private ModifyListener modifyListener = new ModifyListener() {
 
-        /*
-         * Add the new device into the list devices of the selected version.
-         */
-        selectedVersion.getDevices().add(newDevice);
+        private static final long serialVersionUID = 5212741420498281275L;
 
-        /*
-         * Refresh the device table to display the new device.
-         */
-        ((DeviceTableViewPart) getSite()
-            .getWorkbenchWindow().getActivePage()
-            .findView(DeviceTableViewPart.ID)).getViewer().refresh();
-    }
-
-    private void createWarningMessageDialog() {
-        Shell shell = getSite().getShell();
-        String title = "Warning";
-        String message = "Please choose a version to add the device!";
-        MessageDialog.openWarning(shell, title, message);
-    }
+        @Override
+        public void modifyText(ModifyEvent event) {
+            setDirty(true && isFilled);
+        }
+    };
 }

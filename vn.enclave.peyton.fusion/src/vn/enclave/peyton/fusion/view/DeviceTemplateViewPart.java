@@ -182,27 +182,26 @@ public class DeviceTemplateViewPart extends ViewPart
 
     @Override
     public void doubleClick(DoubleClickEvent event) {
-        IWorkbenchPage page = getSite().getWorkbenchWindow().getActivePage();
         ISelection selection = event.getSelection();
         IStructuredSelection sselection = (IStructuredSelection) selection;
         Object firstElement = sselection.getFirstElement();
         if (firstElement instanceof DeviceTemplate) {
             try {
                 DeviceTemplate template = (DeviceTemplate) firstElement;
-                showTemplateDetail(page, template);
+                showTemplateDetail(template);
             } catch (PartInitException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private
-        void showTemplateDetail(IWorkbenchPage page, DeviceTemplate template)
-            throws PartInitException {
-        String viewId = DeviceTemplateDetailViewPart.ID;
+    private void showTemplateDetail(DeviceTemplate template)
+        throws PartInitException {
+        IWorkbenchPage page = getSite().getWorkbenchWindow().getActivePage();
+        String viewId = DetailedDeviceTemplateViewPart.ID;
         String secondaryId = String.valueOf((new Date()).getTime());
         int mode = IWorkbenchPage.VIEW_ACTIVATE;
         IViewPart viewPart = page.showView(viewId, secondaryId, mode);
-        ((DeviceTemplateDetailViewPart) viewPart).setData(template);
+        ((DetailedDeviceTemplateViewPart) viewPart).setData(template);
     }
 }

@@ -16,10 +16,10 @@ import vn.enclave.peyton.fusion.common.Utils;
 import vn.enclave.peyton.fusion.entity.DeviceTemplate;
 import vn.enclave.peyton.fusion.view.form.DeviceTemplateForm;
 
-public class DeviceTemplateDetailViewPart extends ViewPart {
+public class DetailedDeviceTemplateViewPart extends ViewPart {
 
     public static final String ID =
-        "vn.enclave.peyton.fusion.view.DeviceTemplateDetailViewPart";
+        "vn.enclave.peyton.fusion.view.DetailedDeviceTemplateViewPart";
 
     private DeviceTemplateForm templateForm;
 
@@ -103,7 +103,6 @@ public class DeviceTemplateDetailViewPart extends ViewPart {
         detailsTabItem.setText("Details");
 
         templateForm = new DeviceTemplateForm(parent);
-        
 
         detailsTabItem.setControl(templateForm.getScrolledForm());
     }

@@ -1,7 +1,6 @@
 package vn.enclave.peyton.fusion.view.form;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -115,7 +114,7 @@ public class DeviceTemplateForm {
 
     private
         Label buildLabel(Composite parent, FormToolkit toolkit, String text) {
-        Label label = toolkit.createLabel(parent, text);
+        Label label = toolkit.createLabel(parent, text, SWT.WRAP);
         return label;
     }
 
@@ -180,7 +179,7 @@ public class DeviceTemplateForm {
         composite.setLayout(layout);
         composite.setLayoutData(layoutData);
 
-        deviceDriverContentLbl = buildLabel(composite, toolkit, "Type Content");
+        deviceDriverContentLbl = buildLabel(composite, toolkit, "");
         selectDriverBtn = buildRightButton(toolkit, composite, "Select Driver");
 
         return composite;
@@ -207,6 +206,12 @@ public class DeviceTemplateForm {
         setIcon(template);
         setText(template);
         setLabel(template);
+
+        /*
+         * Layout all children of form. Fix an issue: icon doesn't show after
+         * the first open of ViewPart.
+         */
+        scrolledForm.layout(true, true);
     }
 
     private void setCheckBox(DeviceTemplate template) {
@@ -214,7 +219,6 @@ public class DeviceTemplateForm {
     }
 
     private void setIcon(DeviceTemplate template) {
-        // TODO: Icon doesn't display after close and open the viewpart again.
         iconContentLbl.setImage(Utils.createImage(template.getIcon()));
     }
 

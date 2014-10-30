@@ -13,8 +13,9 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import vn.enclave.peyton.fusion.common.Utils;
 import vn.enclave.peyton.fusion.entity.Device;
 import vn.enclave.peyton.fusion.entity.DeviceTemplate;
+import vn.enclave.peyton.fusion.entity.Icon;
 
-public class DeviceForm {
+public class NewDeviceForm {
 
     @SuppressWarnings("unused")
     private Label iconLbl;
@@ -28,7 +29,7 @@ public class DeviceForm {
     private Label manufacturerLbl;
 
     @SuppressWarnings("unused")
-    private Label modelNumbeLbl;
+    private Label modelNumberLbl;
 
     @SuppressWarnings("unused")
     private Label typesLbl;
@@ -64,7 +65,7 @@ public class DeviceForm {
         return scrolledForm;
     }
 
-    public DeviceForm(Composite parent) {
+    public NewDeviceForm(Composite parent) {
         createForm(parent);
     }
 
@@ -72,33 +73,31 @@ public class DeviceForm {
         FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 
         scrolledForm = buildForm(parent, toolkit);
+        Composite formBody = scrolledForm.getBody();
 
-        iconLbl = buildLabel(scrolledForm.getBody(), toolkit, "Icon");
-        iconContentLbl = buildLabel(scrolledForm.getBody(), toolkit, "");
+        iconLbl = buildLabel(formBody, toolkit, "Icon");
+        iconContentLbl = buildLabel(formBody, toolkit, "");
 
-        nameLbl = buildLabel(scrolledForm.getBody(), toolkit, "Name:");
-        nameTxt = buildText(scrolledForm.getBody(), toolkit);
+        nameLbl = buildLabel(formBody, toolkit, "Name:");
+        nameTxt = buildText(formBody, toolkit);
 
-        manufacturerLbl =
-            buildLabel(scrolledForm.getBody(), toolkit, "Manufacturer:");
-        manufacturerTxt = buildText(scrolledForm.getBody(), toolkit);
+        manufacturerLbl = buildLabel(formBody, toolkit, "Manufacturer:");
+        manufacturerTxt = buildText(formBody, toolkit);
 
-        modelNumbeLbl =
-            buildLabel(scrolledForm.getBody(), toolkit, "Model Number:");
-        modelNumberTxt = buildText(scrolledForm.getBody(), toolkit);
+        modelNumberLbl = buildLabel(formBody, toolkit, "Model Number:");
+        modelNumberTxt = buildText(formBody, toolkit);
 
-        typesLbl = buildLabel(scrolledForm.getBody(), toolkit, "Types:");
-        typesTxt = buildText(scrolledForm.getBody(), toolkit);
+        typesLbl = buildLabel(formBody, toolkit, "Types:");
+        typesTxt = buildText(formBody, toolkit);
 
-        notesLbl = buildLabel(scrolledForm.getBody(), toolkit, "Notes:");
-        notesTxt = buildText(scrolledForm.getBody(), toolkit);
+        notesLbl = buildLabel(formBody, toolkit, "Notes:");
+        notesTxt = buildTextArea(formBody, toolkit);
 
-        versionLbl = buildLabel(scrolledForm.getBody(), toolkit, "Version:");
-        versionTxt = buildText(scrolledForm.getBody(), toolkit);
+        versionLbl = buildLabel(formBody, toolkit, "Version:");
+        versionTxt = buildText(formBody, toolkit);
 
-        lastModifiedLbl =
-            buildLabel(scrolledForm.getBody(), toolkit, "Last Modified:");
-        lastModifiedTxt = buildText(scrolledForm.getBody(), toolkit);
+        lastModifiedLbl = buildLabel(formBody, toolkit, "Last Modified:");
+        lastModifiedTxt = buildText(formBody, toolkit);
     }
 
     private ScrolledForm buildForm(Composite parent, FormToolkit toolkit) {
@@ -108,6 +107,12 @@ public class DeviceForm {
         return form;
     }
 
+    private
+        Label buildLabel(Composite parent, FormToolkit toolkit, String text) {
+        Label label = toolkit.createLabel(parent, text);
+        return label;
+    }
+
     private Text buildText(Composite parent, FormToolkit toolkit) {
         GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, false);
         Text text = toolkit.createText(parent, "");
@@ -115,34 +120,45 @@ public class DeviceForm {
         return text;
     }
 
-    private
-        Label buildLabel(Composite parent, FormToolkit toolkit, String text) {
-        Label label = toolkit.createLabel(parent, text);
-        return label;
+    private Text buildTextArea(Composite parent, FormToolkit toolkit) {
+        Text text = toolkit.createText(parent, "", SWT.MULTI);
+        GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, false);
+        layoutData.heightHint = text.getLineHeight() * 5;
+        text.setLayoutData(layoutData);
+        return text;
     }
 
     public void fillInForm(DeviceTemplate template) {
+        /*
+         * Set data to template for using in getDevice() method.
+         */
         this.template = template;
-        setIcon(template);
+
+        setIcon(template.getIcon());
         setDefaultText(template);
+
+        /*
+         * Layout all children of form. Fix an issue: icon doesn't show after
+         * the first open of ViewPart.
+         */
+        scrolledForm.layout(true, true);
     }
 
     private void setDefaultText(DeviceTemplate template) {
+        String lastModified =
+            Utils.convertDate2String(template.getLastModified());
+
         nameTxt.setText(template.getName());
         manufacturerTxt.setText(template.getManufacturer());
         modelNumberTxt.setText(template.getModelNumber());
         typesTxt.setText(template.getDeviceType().getName());
         notesTxt.setText(template.getNotes());
         versionTxt.setText(template.getVersion());
-        String lastModified =
-            Utils.convertDate2String(template.getLastModified());
         lastModifiedTxt.setText(lastModified);
     }
 
-    private void setIcon(DeviceTemplate template) {
-        String pluginId = template.getIcon().getPluginId();
-        String imageFilePath = template.getIcon().getImageFilePath();
-        iconContentLbl.setImage(Utils.createImage(pluginId, imageFilePath));
+    private void setIcon(Icon icon) {
+        iconContentLbl.setImage(Utils.createImage(icon));
     }
 
     public Device getDevice() {
