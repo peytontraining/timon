@@ -18,6 +18,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import vn.enclave.peyton.fusion.dialog.SaveAsDialog;
 import vn.enclave.peyton.fusion.entity.Device;
 import vn.enclave.peyton.fusion.entity.Project;
+import vn.enclave.peyton.fusion.entity.Property;
 import vn.enclave.peyton.fusion.entity.Version;
 import vn.enclave.peyton.fusion.service.impl.VersionService;
 import vn.enclave.peyton.fusion.view.NavigationViewPart;
@@ -61,19 +62,37 @@ public class SaveAsHandler extends AbstractHandler implements IHandler {
                 List<Device> copyDevices = new ArrayList<>();
                 for (Device device : devices) {
                     Device d = new Device();
+                    d.setIcon(device.getIcon());
+                    d.setName(device.getName());
                     d.setAppModule(device.getAppModule());
                     d.setDeviceType(device.getDeviceType());
-                    d.setManufacturer(device.getManufacturer());
-                    d.setName(device.getName());
                     d.setPhysicalLocation(device.getPhysicalLocation());
+                    d.setManufacturer(device.getManufacturer());
+                    d.setModelNumber(device.getModelNumber());
+                    d.setNotes(device.getNotes());
+                    d.setLastModified(device.getLastModified());
+                    d.setVersionDevice(device.getVersionDevice());
                     d.setVersion(newVersion);
                     copyDevices.add(d);
+
+                    List<Property> properties = device.getProperties();
+                    List<Property> copyProperties = new ArrayList<Property>();
+                    for (Property property : properties) {
+                        Property p = new Property();
+                        p.setName(property.getName());
+                        p.setValue(property.getValue());
+                        p.setMandatory(property.isMandatory());
+                        p.setDescription(property.getDescription());
+                        p.setDevice(d);
+                        copyProperties.add(p);
+                    }
+                    d.setProperties(copyProperties);
                 }
                 newVersion.setDevices(copyDevices);
 
                 /*
-                 * After add() method run, the return variable newVersion
-                 * has a new Project pointer.
+                 * After add() method run, the return variable newVersion has a
+                 * new Project pointer.
                  */
                 newVersion = versionService.add(newVersion);
 
@@ -87,7 +106,7 @@ public class SaveAsHandler extends AbstractHandler implements IHandler {
                 // Refresh the tree after adding new version.
                 ((NavigationViewPart) HandlerUtil.getActivePart(event))
                     .getViewer().refresh();
-                
+
                 // Focus on the new added verion.
                 ((NavigationViewPart) HandlerUtil.getActivePart(event))
                     .getViewer().setSelection(

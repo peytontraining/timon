@@ -2,6 +2,7 @@ package vn.enclave.peyton.fusion.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -49,6 +50,10 @@ public class Device implements Serializable {
     @ManyToOne
     @JoinColumn(name = "idIcon")
     private Icon icon;
+
+    // bi-directional many-to-one association to Version
+    @OneToMany(mappedBy = "device", cascade = {CascadeType.PERSIST})
+    private List<Property> properties;
 
     public Device() {
     }
@@ -147,5 +152,27 @@ public class Device implements Serializable {
 
     public void setLastModified(Date lastModified) {
         this.lastModified = lastModified;
+    }
+
+    public List<Property> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(List<Property> properties) {
+        this.properties = properties;
+    }
+
+    public Property addProperty(Property property) {
+        getProperties().add(property);
+        property.setDevice(this);
+
+        return property;
+    }
+
+    public Property removeProperty(Property property) {
+        getProperties().remove(property);
+        property.setDevice(null);
+
+        return property;
     }
 }

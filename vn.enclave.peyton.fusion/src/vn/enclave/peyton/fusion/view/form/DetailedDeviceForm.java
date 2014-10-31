@@ -1,5 +1,7 @@
 package vn.enclave.peyton.fusion.view.form;
 
+import java.util.Date;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
@@ -15,6 +17,12 @@ import vn.enclave.peyton.fusion.common.Utils;
 import vn.enclave.peyton.fusion.entity.Device;
 import vn.enclave.peyton.fusion.entity.Icon;
 
+/**
+ * This class is used to show and collect all data of device in Details tab.
+ * 
+ * @author enclaveit
+ * 
+ */
 public class DetailedDeviceForm {
 
     private Label iconLbl;
@@ -168,6 +176,7 @@ public class DetailedDeviceForm {
     public Device getModifiedDevice() {
         device.setName(nameTxt.getText());
         device.setNotes(notesTxt.getText());
+        device.setLastModified(new Date());
         return device;
     }
 }

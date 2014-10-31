@@ -15,12 +15,12 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.ISaveablePart;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.Section;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.part.ViewPart;
 
 import vn.enclave.peyton.fusion.common.Constant;
 import vn.enclave.peyton.fusion.common.Utils;
+import vn.enclave.peyton.fusion.control.DevicePropertySection;
 import vn.enclave.peyton.fusion.entity.Device;
 import vn.enclave.peyton.fusion.service.impl.DeviceService;
 import vn.enclave.peyton.fusion.view.form.DetailedDeviceForm;
@@ -34,8 +34,6 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
 
     private boolean isFilled;
 
-    private DetailedDeviceForm detailedDeviceForm;
-
     public void setDirty(boolean isDirty) {
         this.isDirty = isDirty;
         firePropertyChange(PROP_DIRTY);
@@ -45,9 +43,11 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
         this.isFilled = isFilled;
     }
 
-    public DetailedDeviceForm getDetailedDeviceForm() {
-        return detailedDeviceForm;
-    }
+    private Device selectedDevice;
+
+    private DetailedDeviceForm detailedDeviceForm;
+
+    private DevicePropertySection devicePropertySection;
 
     @Override
     public void doSave(IProgressMonitor monitor) {
@@ -155,31 +155,20 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
     }
 
     private void createDetailsTabItem(TabFolder parent) {
-        TabItem detailsTabItem = new TabItem(parent, SWT.NONE);
-        detailsTabItem.setText("Details");
-
         detailedDeviceForm = new DetailedDeviceForm(parent);
         detailedDeviceForm.addModifyListener(modifyListener);
 
+        TabItem detailsTabItem = new TabItem(parent, SWT.NONE);
+        detailsTabItem.setText("Details");
         detailsTabItem.setControl(detailedDeviceForm.getScrolledForm());
     }
 
     private void createConfigureTabItem(TabFolder parent) {
+        devicePropertySection = new DevicePropertySection(parent);
+
         TabItem configureTabItem = new TabItem(parent, SWT.NONE);
         configureTabItem.setText("Configure");
-
-        Section configureSection = createConfigureSection(parent);
-
-        configureTabItem.setControl(configureSection);
-    }
-
-    private Section createConfigureSection(Composite parent) {
-        FormToolkit toolkit = new FormToolkit(parent.getDisplay());
-        int sectionStyle = Section.TITLE_BAR;
-        Section configureSection = toolkit.createSection(parent, sectionStyle);
-        configureSection.setText("Configuration Properties");
-
-        return configureSection;
+        configureTabItem.setControl(devicePropertySection.getSection());
     }
 
     @Override
@@ -187,14 +176,12 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
     }
 
     public void setData(Device device) {
-        changeTitleAndImage(device);
-        detailedDeviceForm.fillInForm(device);
-        setFilled(true);
-    }
-
-    private void changeTitleAndImage(Device device) {
+        selectedDevice = device;
         setPartName(device.getName());
         setTitleImage(Utils.createImage(device.getIcon()));
+        detailedDeviceForm.fillInForm(device);
+        devicePropertySection.fillInTree(device.getProperties());
+        setFilled(true);
     }
 
     private SelectionAdapter saveAdapter = new SelectionAdapter() {
@@ -204,14 +191,22 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
         @Override
         public void widgetSelected(SelectionEvent e) {
             updateDevice();
+            refreshDeviceTable();
+            setPartName(selectedDevice.getName());
             setDirty(false);
         }
     };
 
     private void updateDevice() {
-        Device modifiedDevice = detailedDeviceForm.getModifiedDevice();
+        selectedDevice = detailedDeviceForm.getModifiedDevice();
         DeviceService deviceService = new DeviceService();
-        deviceService.update(modifiedDevice);
+        deviceService.update(selectedDevice);
+    }
+
+    private void refreshDeviceTable() {
+        IViewPart viewPart =
+            getSite().getPage().findView(DeviceTableViewPart.ID);
+        ((DeviceTableViewPart) viewPart).getViewer().refresh();
     }
 
     private ModifyListener modifyListener = new ModifyListener() {
@@ -223,4 +218,5 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
             setDirty(true && isFilled);
         }
     };
+
 }
