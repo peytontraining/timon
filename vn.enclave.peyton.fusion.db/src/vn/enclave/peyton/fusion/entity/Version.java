@@ -38,7 +38,7 @@ public class Version implements Serializable {
 
     // bi-directional many-to-one association to Device
     @OneToMany(mappedBy = "version", cascade = {CascadeType.PERSIST})
-    @OrderBy(value = "name DESC")
+    @OrderBy(value = "id DESC, name DESC")
     private List<Device> devices;
 
     // bi-directional many-to-one association to Project

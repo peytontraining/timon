@@ -1,7 +1,6 @@
 package vn.enclave.peyton.fusion.view;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -47,42 +46,23 @@ import vn.enclave.peyton.fusion.entity.Device;
 import vn.enclave.peyton.fusion.entity.Version;
 import vn.enclave.peyton.fusion.filter.DeviceFilter;
 
-public class DeviceTableViewPart extends ViewPart
-    implements IDoubleClickListener {
-
+public class DeviceTableViewPart extends ViewPart implements IDoubleClickListener {
     public static final int NAME_COLUMN = 0;
-
     public static final int APP_MODULE_COLUMN = 1;
-
     public static final int DEVICE_TYPE_COLUMN = 2;
-
     public static final int PHYSICAL_LOCATION_COLUMN = 3;
-
     public static final int MANUFACTURE_COLUMN = 4;
-
     private static final int DEFAULT_WIDTH = 100;
-
     private static final int DOWN_OFFSET = 1;
-
     private static final int UP_OFFSET = -1;
-
-    public static final String ID =
-        "vn.enclave.peyton.fusion.view.deviceTableViewPart";
-
-    private static final String[] TITLES =
-        {
-            "Name", "App Module", "Device Type", "Physical Location",
-            "Manufacture"};
-
+    public static final String ID = "vn.enclave.peyton.fusion.view.deviceTableViewPart";
+    private static final String[] TITLES = {"Name", "App Module", "Device Type", "Physical Location", "Manufacture"};
     private TableViewer viewer;
-
     private DeviceTableViewerComparator comparator;
-
     private Text filterText, finderText;
-
     private Button clear, up, down;
-
     private DeviceFilter filter;
+    private IWorkbenchPage activePage;
 
     public TableViewer getViewer() {
         return viewer;
@@ -90,6 +70,8 @@ public class DeviceTableViewPart extends ViewPart
 
     @Override
     public void createPartControl(Composite parent) {
+        createActivePage();
+
         GridLayout layout = new GridLayout(9, false);
         parent.setLayout(layout);
 
@@ -114,6 +96,11 @@ public class DeviceTableViewPart extends ViewPart
         createSelectionListener();
     }
 
+    private void createActivePage() {
+        IWorkbenchWindow window = getSite().getWorkbenchWindow();
+        activePage = window.getActivePage();
+    }
+
     @Override
     public void setFocus() {
         viewer.getControl().setFocus();
@@ -125,8 +112,7 @@ public class DeviceTableViewPart extends ViewPart
         label.setText("Filter:");
 
         // Create and layout filter text.
-        GridData layoutData =
-            new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1);
+        GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1);
         filterText = new Text(parent, SWT.BORDER | SWT.SEARCH);
         filterText.setLayoutData(layoutData);
         filterText.addModifyListener(new ModifyListener() {
@@ -137,9 +123,7 @@ public class DeviceTableViewPart extends ViewPart
             public void modifyText(ModifyEvent event) {
                 filter.setFilterString(filterText.getText());
                 viewer.refresh();
-                boolean enabled =
-                    filterText.getText() != null
-                        & filterText.getText().length() != 0;
+                boolean enabled = filterText.getText() != null & filterText.getText().length() != 0;
                 clear.setEnabled(enabled);
             }
         });
@@ -162,8 +146,7 @@ public class DeviceTableViewPart extends ViewPart
 
     private void createFinder(Composite parent) {
         // Create and layout finder label.
-        GridData layoutData =
-            new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
+        GridData layoutData = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
         Label label = new Label(parent, SWT.NONE);
         label.setText("Find:");
         label.setLayoutData(layoutData);
@@ -230,9 +213,7 @@ public class DeviceTableViewPart extends ViewPart
             // Get indexes of match rows.
             for (int i = 0; i < numberOfRow; i++) {
                 for (int j = 0; j < nubmerOfColumn; j++) {
-                    if (rows[i]
-                        .getText(j).toLowerCase()
-                        .contains(findText.trim().toLowerCase())) {
+                    if (rows[i].getText(j).toLowerCase().contains(findText.trim().toLowerCase())) {
                         index = i;
                         table.select(index);
                         break;
@@ -261,9 +242,7 @@ public class DeviceTableViewPart extends ViewPart
             // Get indexes of match rows.
             for (int i = 0; i < numberOfRow; i++) {
                 for (int j = 0; j < nubmerOfColumn; j++) {
-                    if (rows[i]
-                        .getText(j).toLowerCase()
-                        .contains(findText.trim().toLowerCase())) {
+                    if (rows[i].getText(j).toLowerCase().contains(findText.trim().toLowerCase())) {
                         focusIndexes.add(i);
                         break;
                     }
@@ -282,9 +261,7 @@ public class DeviceTableViewPart extends ViewPart
 
     private void createViewer(Composite parent) {
         // Define the TableViewer.
-        viewer =
-            new TableViewer(parent, SWT.H_SCROLL
-                | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
+        viewer = new TableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 
         // Layout the viewer
         GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true, 9, 1);
@@ -310,9 +287,7 @@ public class DeviceTableViewPart extends ViewPart
 
     private void createColumns(Composite parent) {
         // First column is for the Name.
-        TableViewerColumn column =
-            createTableViewerColumn(
-                TITLES[NAME_COLUMN], DEFAULT_WIDTH, NAME_COLUMN);
+        TableViewerColumn column = createTableViewerColumn(TITLES[NAME_COLUMN], DEFAULT_WIDTH, NAME_COLUMN);
         column.setLabelProvider(new CellLabelProvider() {
 
             private static final long serialVersionUID = -8940575743109974080L;
@@ -330,9 +305,7 @@ public class DeviceTableViewPart extends ViewPart
         });
 
         // Second column is for the App module
-        column =
-            createTableViewerColumn(
-                TITLES[APP_MODULE_COLUMN], DEFAULT_WIDTH, APP_MODULE_COLUMN);
+        column = createTableViewerColumn(TITLES[APP_MODULE_COLUMN], DEFAULT_WIDTH, APP_MODULE_COLUMN);
         column.setLabelProvider(new CellLabelProvider() {
 
             private static final long serialVersionUID = 406059287858697720L;
@@ -345,9 +318,7 @@ public class DeviceTableViewPart extends ViewPart
         });
 
         // Third column is for the Device type
-        column =
-            createTableViewerColumn(
-                TITLES[DEVICE_TYPE_COLUMN], DEFAULT_WIDTH, DEVICE_TYPE_COLUMN);
+        column = createTableViewerColumn(TITLES[DEVICE_TYPE_COLUMN], DEFAULT_WIDTH, DEVICE_TYPE_COLUMN);
         column.setLabelProvider(new CellLabelProvider() {
 
             private static final long serialVersionUID = -9169642429241436682L;
@@ -360,10 +331,7 @@ public class DeviceTableViewPart extends ViewPart
         });
 
         // Fourth column is for the Physical location
-        column =
-            createTableViewerColumn(
-                TITLES[PHYSICAL_LOCATION_COLUMN], DEFAULT_WIDTH,
-                PHYSICAL_LOCATION_COLUMN);
+        column = createTableViewerColumn(TITLES[PHYSICAL_LOCATION_COLUMN], DEFAULT_WIDTH, PHYSICAL_LOCATION_COLUMN);
         column.setLabelProvider(new CellLabelProvider() {
 
             private static final long serialVersionUID = -8236537062078809905L;
@@ -376,9 +344,7 @@ public class DeviceTableViewPart extends ViewPart
         });
 
         // Fifth column is for the Manufacture
-        column =
-            createTableViewerColumn(
-                TITLES[MANUFACTURE_COLUMN], DEFAULT_WIDTH, MANUFACTURE_COLUMN);
+        column = createTableViewerColumn(TITLES[MANUFACTURE_COLUMN], DEFAULT_WIDTH, MANUFACTURE_COLUMN);
         column.setLabelProvider(new CellLabelProvider() {
 
             private static final long serialVersionUID = 7303645075256781731L;
@@ -391,10 +357,8 @@ public class DeviceTableViewPart extends ViewPart
         });
     }
 
-    private TableViewerColumn createTableViewerColumn(
-        String title, int width, int columnNumber) {
-        TableViewerColumn viewerColumn =
-            new TableViewerColumn(viewer, SWT.NONE);
+    private TableViewerColumn createTableViewerColumn(String title, int width, int columnNumber) {
+        TableViewerColumn viewerColumn = new TableViewerColumn(viewer, SWT.NONE);
         TableColumn column = viewerColumn.getColumn();
         column.setText(title);
         column.setWidth(width);
@@ -404,8 +368,7 @@ public class DeviceTableViewPart extends ViewPart
         return viewerColumn;
     }
 
-    private SelectionListener getSelectionAdapter(
-        final TableColumn column, final int columnNumber) {
+    private SelectionListener getSelectionAdapter(final TableColumn column, final int columnNumber) {
         SelectionAdapter selectionAdapter = new SelectionAdapter() {
 
             private static final long serialVersionUID = 4234122934768663966L;
@@ -424,25 +387,21 @@ public class DeviceTableViewPart extends ViewPart
 
     private void createSelectionListener() {
         // Get current window.
-        IWorkbenchWindow window =
-            PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+        IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 
         // Get selection service.
         ISelectionService selectionService = window.getSelectionService();
 
         // Add selection listener.
-        selectionService.addSelectionListener(
-            NavigationViewPart.ID, new ISelectionListener() {
+        selectionService.addSelectionListener(NavigationViewPart.ID, new ISelectionListener() {
 
-                @Override
-                public void selectionChanged(
-                    IWorkbenchPart part, ISelection selection) {
-                    IStructuredSelection sselection =
-                        (IStructuredSelection) selection;
-                    Object firstElement = sselection.getFirstElement();
-                    fillInTable(firstElement);
-                }
-            });
+            @Override
+            public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+                IStructuredSelection sselection = (IStructuredSelection) selection;
+                Object firstElement = sselection.getFirstElement();
+                fillInTable(firstElement);
+            }
+        });
     }
 
     private void fillInTable(Object firstElement) {
@@ -466,21 +425,27 @@ public class DeviceTableViewPart extends ViewPart
             Object firstObject = sselection.getFirstElement();
             if (firstObject instanceof Device) {
                 Device device = (Device) firstObject;
-                showModifyingDeviceViewPart(device);
+                showModifyingDeviceViewPartAndPopulateFrom(device);
             }
         } catch (PartInitException e) {
             e.printStackTrace();
         }
-
     }
 
-    private void showModifyingDeviceViewPart(Device device)
-        throws PartInitException {
-        IWorkbenchPage page = getSite().getWorkbenchWindow().getActivePage();
+    private void showModifyingDeviceViewPartAndPopulateFrom(Device device) throws PartInitException {
         String viewId = ModifyingDeviceViewPart.ID;
-        String secondaryId = String.valueOf((new Date()).getTime());
+        String secondaryId = String.valueOf(device.getId());
         int mode = IWorkbenchPage.VIEW_ACTIVATE;
-        IViewPart viewPart = page.showView(viewId, secondaryId, mode);
-        ((ModifyingDeviceViewPart) viewPart).setData(device);
+        IViewPart viewPart = null;
+        if (isViewPartOpened(viewId, secondaryId)) {
+            viewPart = activePage.showView(viewId, secondaryId, mode);
+            ((ModifyingDeviceViewPart) viewPart).setData(device);
+        } else {
+            viewPart = activePage.showView(viewId, secondaryId, mode);
+        }
+    }
+
+    private boolean isViewPartOpened(String viewId, String secondaryId) {
+        return activePage.findViewReference(viewId, secondaryId) == null;
     }
 }

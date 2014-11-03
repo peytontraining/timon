@@ -22,8 +22,7 @@ import vn.enclave.peyton.fusion.provider.PropertyTreeTableLabelProvider;
 
 public class DevicePropertySection {
 
-    private static final String[] TITLES = {
-        "Name", "Value", "Mandatory", "Description"};
+    private static final String[] TITLES = {"Name", "Value", "Mandatory", "Description"};
 
     private static final int DEFAULT_WIDTH = 120;
 
@@ -48,10 +47,10 @@ public class DevicePropertySection {
     }
 
     public DevicePropertySection(Composite parent) {
-        createSection(parent);
+        createSectionInside(parent);
     }
 
-    private void createSection(Composite parent) {
+    private void createSectionInside(Composite parent) {
         FormToolkit toolkit = new FormToolkit(parent.getDisplay());
         section = toolkit.createSection(parent, Section.TITLE_BAR);
         section.setText("Configuration Properties");
@@ -59,7 +58,7 @@ public class DevicePropertySection {
         createTextClientControl(toolkit);
 
         treeViewer = createTreeViewer(section);
-        
+
         section.setClient(treeViewer.getTree());
     }
 
@@ -77,18 +76,20 @@ public class DevicePropertySection {
         composite.setBackgroundMode(SWT.INHERIT_NONE);
         composite.setBackground(null);
 
-        createCombo(composite);
-        createToolbar(composite);
+        createComboInside(composite);
+        createToolbarInside(composite);
 
         return composite;
     }
 
-    private void createCombo(Composite composite) {
+    private void createComboInside(Composite composite) {
         Combo combo = new Combo(composite, SWT.NONE);
-        combo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+        
+        GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
+        combo.setLayoutData(layoutData);
     }
 
-    private void createToolbar(Composite parent) {
+    private void createToolbarInside(Composite parent) {
         ToolBar bar = new ToolBar(parent, SWT.FLAT);
         bar.setBackgroundMode(SWT.INHERIT_DEFAULT);
 
@@ -112,8 +113,7 @@ public class DevicePropertySection {
     }
 
     private Tree createTree(Composite parent) {
-        int style =
-            SWT.MULTI | SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL;
+        int style = SWT.MULTI | SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL;
         Tree tree = new Tree(parent, style);
         tree.setHeaderVisible(true);
         tree.setLinesVisible(true);

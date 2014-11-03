@@ -1,5 +1,8 @@
 package vn.enclave.peyton.fusion.view;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -23,22 +26,26 @@ import org.eclipse.ui.part.ViewPart;
 
 import vn.enclave.peyton.fusion.common.Constant;
 import vn.enclave.peyton.fusion.common.Utils;
+import vn.enclave.peyton.fusion.control.NewDevicePropertySection;
 import vn.enclave.peyton.fusion.entity.Device;
 import vn.enclave.peyton.fusion.entity.DeviceTemplate;
+import vn.enclave.peyton.fusion.entity.Property;
+import vn.enclave.peyton.fusion.entity.PropertyTemplate;
 import vn.enclave.peyton.fusion.entity.Version;
 import vn.enclave.peyton.fusion.service.impl.DeviceService;
 import vn.enclave.peyton.fusion.view.form.NewDeviceForm;
 
 public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
 
-    public static final String ID =
-        "vn.enclave.peyton.fusion.view.addingDeviceViewPart";
+    public static final String ID = "vn.enclave.peyton.fusion.view.addingDeviceViewPart";
 
     private boolean isDirty;
 
     private boolean isCanceled;
 
     private NewDeviceForm newDeviceForm;
+
+    private NewDevicePropertySection newDevicePropertySection;
 
     public void setDirty(boolean isDirty) {
         this.isDirty = isDirty;
@@ -114,21 +121,17 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
         ToolItem save = createToolItem(parent, Constant.IMAGE_SAVE);
         save.addSelectionListener(saveAdapter);
 
-        ToolItem saveAndClose =
-            createToolItem(parent, Constant.IMAGE_SAVE_CLOSE);
+        ToolItem saveAndClose = createToolItem(parent, Constant.IMAGE_SAVE_CLOSE);
 
         new ToolItem(parent, SWT.SEPARATOR);
 
-        ToolItem updateDevice =
-            createToolItem(parent, Constant.IMAGE_UPDATE_DEVICE);
+        ToolItem updateDevice = createToolItem(parent, Constant.IMAGE_UPDATE_DEVICE);
 
-        ToolItem showDevice =
-            createToolItem(parent, Constant.IMAGE_SHOW_DEVICE);
+        ToolItem showDevice = createToolItem(parent, Constant.IMAGE_SHOW_DEVICE);
 
         new ToolItem(parent, SWT.SEPARATOR);
 
-        ToolItem editService =
-            createToolItem(parent, Constant.IMAGE_EDIT_SERVICE);
+        ToolItem editService = createToolItem(parent, Constant.IMAGE_EDIT_SERVICE);
     }
 
     private ToolItem createToolItem(ToolBar parent, Image image) {
@@ -172,6 +175,10 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
     private void createConfigureTabItem(TabFolder parent) {
         TabItem configureTabItem = new TabItem(parent, SWT.NONE);
         configureTabItem.setText("Configure");
+
+        newDevicePropertySection = new NewDevicePropertySection(parent);
+
+        configureTabItem.setControl(newDevicePropertySection.getPropertySection());
     }
 
     @Override
@@ -179,9 +186,10 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
 
     }
 
-    public void setData(DeviceTemplate template) {
-        changeTitleAndImage(template);
-        newDeviceForm.fillInForm(template);
+    public void setData(DeviceTemplate deviceTemplate) {
+        changeTitleAndImage(deviceTemplate);
+        newDeviceForm.fillInForm(deviceTemplate);
+        newDevicePropertySection.populatePropertyTreeViewerFrom(deviceTemplate);
     }
 
     private void changeTitleAndImage(DeviceTemplate template) {
@@ -213,13 +221,13 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
     };
 
     private void saveDevice() {
-        ISelection selection =
-            getSite().getPage().getSelection(NavigationViewPart.ID);
+        ISelection selection = getSite().getPage().getSelection(NavigationViewPart.ID);
         IStructuredSelection sselection = (IStructuredSelection) selection;
         Object firstElement = sselection.getFirstElement();
         if (firstElement instanceof Version) {
             Version selectedVersion = (Version) firstElement;
-
+            
+            System.out.println(selectedVersion.getName());
             Device newDevice = addDevice2Database(selectedVersion);
 
             addDevice2Tree(selectedVersion, newDevice);
@@ -232,11 +240,32 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
         }
     }
 
+    private Device prepareNewDevice() {
+        Device newDevice = newDeviceForm.getDevice();
+        addPropertyDeviceTo(newDevice);
+        return newDevice;
+    }
+
+    private void addPropertyDeviceTo(Device newDevice) {
+        List<PropertyTemplate> propertyTemplates = newDevicePropertySection.getNewDeviceProperties();
+        List<Property> properties = new ArrayList<Property>();
+        for (PropertyTemplate propertyTemplate : propertyTemplates) {
+            Property property = new Property();
+            property.setName(propertyTemplate.getName());
+            property.setValue(propertyTemplate.getValue());
+            property.setMandatory(propertyTemplate.isMandatory());
+            property.setDescription(propertyTemplate.getDescription());
+            property.setDevice(newDevice);
+            properties.add(property);
+        }
+        newDevice.setProperties(properties);
+    }
+
     private Device addDevice2Database(Version selectedVersion) {
         /*
          * Get new device from form, then set the selected version to it.
          */
-        Device newDevice = newDeviceForm.getDevice();
+        Device newDevice = prepareNewDevice();
         newDevice.setVersion(selectedVersion);
 
         /*
@@ -262,9 +291,8 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
         /*
          * Refresh the device table to display the new device.
          */
-        ((DeviceTableViewPart) getSite()
-            .getWorkbenchWindow().getActivePage()
-            .findView(DeviceTableViewPart.ID)).getViewer().refresh();
+        ((DeviceTableViewPart) getSite().getWorkbenchWindow().getActivePage().findView(DeviceTableViewPart.ID))
+            .getViewer().refresh();
     }
 
     private void createWarningMessageDialog() {

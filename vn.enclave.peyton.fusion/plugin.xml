@@ -182,7 +182,7 @@
             category="vn.enclave.peyton.fusion.category.project.bottomRight"
             class="vn.enclave.peyton.fusion.view.ModifyingDeviceViewPart"
             id="vn.enalve.peyton.fusion.view.modifyingDeviceViewPart"
-            name="Modifying Device"
+            name="Modify Device"
             restorable="true">
       </view>
    </extension>

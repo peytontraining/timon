@@ -13,7 +13,7 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import vn.enclave.peyton.fusion.common.Utils;
 import vn.enclave.peyton.fusion.entity.DeviceTemplate;
 
-public class DeviceTemplateForm {
+public class DetailedDeviceTemplateForm {
 
     private Label certifiedLbl;
 
@@ -57,11 +57,11 @@ public class DeviceTemplateForm {
 
     private ScrolledForm scrolledForm;
 
-    public ScrolledForm getScrolledForm() {
+    public ScrolledForm getDetailedDeviceTemplateForm() {
         return scrolledForm;
     }
 
-    public DeviceTemplateForm(Composite parent) {
+    public DetailedDeviceTemplateForm(Composite parent) {
         createForm(parent);
     }
 
@@ -201,7 +201,7 @@ public class DeviceTemplateForm {
         return areaText;
     }
 
-    public void fillInForm(DeviceTemplate template) {
+    public void populateDeviceTemplateFormFrom(DeviceTemplate template) {
         setCheckBox(template);
         setIcon(template);
         setText(template);

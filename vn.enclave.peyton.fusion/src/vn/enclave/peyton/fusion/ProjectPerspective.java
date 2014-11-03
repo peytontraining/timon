@@ -20,8 +20,7 @@ import vn.enclave.peyton.fusion.view.ServiceTableViewPart;
  */
 public class ProjectPerspective implements IPerspectiveFactory {
 
-    public static final String ID =
-        "vn.enclave.peyton.fusion.projectPerspective";
+    public static final String ID = "vn.enclave.peyton.fusion.projectPerspective";
 
     private IFolderLayout left;
 
@@ -32,32 +31,22 @@ public class ProjectPerspective implements IPerspectiveFactory {
     public void createInitialLayout(IPageLayout layout) {
         String editorArea = layout.getEditorArea();
         layout.setEditorAreaVisible(false);
+        layout.setFixed(true);
 
-        left =
-            layout.createFolder(
-                "left", IPageLayout.LEFT, 0.35f, IPageLayout.ID_EDITOR_AREA);
+        left = layout.createFolder("left", IPageLayout.LEFT, 0.35f, IPageLayout.ID_EDITOR_AREA);
         left.addView(NavigationViewPart.ID);
         left.addView(DriverTreeViewPart.ID);
         left.addView(AreaTreeViewPart.ID);
-        layout.getViewLayout(NavigationViewPart.ID).setCloseable(false);
-        layout.getViewLayout(DriverTreeViewPart.ID).setCloseable(false);
-        layout.getViewLayout(AreaTreeViewPart.ID).setCloseable(false);
 
-        topRight =
-            layout.createFolder("topRight", IPageLayout.TOP, 0.7f, editorArea);
+        topRight = layout.createFolder("topRight", IPageLayout.TOP, 0.7f, editorArea);
         topRight.addView(DeviceTableViewPart.ID);
         topRight.addView(ServiceTableViewPart.ID);
         topRight.addView(SceneTableViewPart.ID);
         topRight.addView(RuleTableViewPart.ID);
-        layout.getViewLayout(DeviceTableViewPart.ID).setCloseable(false);
-        layout.getViewLayout(ServiceTableViewPart.ID).setCloseable(false);
-        layout.getViewLayout(SceneTableViewPart.ID).setCloseable(false);
-        layout.getViewLayout(RuleTableViewPart.ID).setCloseable(false);
 
-        bottomRight =
-            layout.createFolder(
-                "bottomRight", IPageLayout.BOTTOM, 0.7f, editorArea);
+        bottomRight = layout.createFolder("bottomRight", IPageLayout.BOTTOM, 0.9f, editorArea);
         bottomRight.addPlaceholder(AddingDeviceViewPart.ID + ":*");
         bottomRight.addPlaceholder(ModifyingDeviceViewPart.ID + ":*");
     }
+
 }

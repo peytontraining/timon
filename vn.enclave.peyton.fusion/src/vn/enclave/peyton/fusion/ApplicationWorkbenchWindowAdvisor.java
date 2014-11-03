@@ -12,8 +12,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
     private static final String DELIMITER = ",";
 
-    public ApplicationWorkbenchWindowAdvisor(
-        IWorkbenchWindowConfigurer configurer) {
+    public ApplicationWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
         super(configurer);
     }
 
@@ -22,25 +21,24 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
         getWindowConfigurer().setShellStyle(SWT.NO_TRIM);
         getWindowConfigurer().setShowMenuBar(false);
         getWindowConfigurer().setShowPerspectiveBar(true);
-        PlatformUI.getPreferenceStore().
-            setValue(IWorkbenchPreferenceConstants.PERSPECTIVE_BAR_EXTRAS,
-                ProjectPerspective.ID.concat(DELIMITER)
-                .concat(TemplatePerspective.ID).concat(DELIMITER)
-                .concat(SystemPerspective.ID).concat(DELIMITER)
-                .concat(UserPerspective.ID).concat(DELIMITER)
-                .concat(LogoutPerspective.ID));
-        PlatformUI.getPreferenceStore().
-            setValue(IWorkbenchPreferenceConstants.SHOW_OPEN_ON_PERSPECTIVE_BAR,
-                false);
-        PlatformUI.getPreferenceStore().
-        setValue(IWorkbenchPreferenceConstants.DOCK_PERSPECTIVE_BAR,
-            "topRight");
-        PlatformUI.getPreferenceStore().
-            setValue(IWorkbenchPreferenceConstants.LOCK_TRIM, true);
+        PlatformUI.getPreferenceStore().setValue(
+            IWorkbenchPreferenceConstants.PERSPECTIVE_BAR_EXTRAS,
+            ProjectPerspective.ID
+                .concat(DELIMITER).concat(TemplatePerspective.ID).concat(DELIMITER).concat(SystemPerspective.ID)
+                .concat(DELIMITER).concat(UserPerspective.ID).concat(DELIMITER).concat(LogoutPerspective.ID));
+        PlatformUI.getPreferenceStore().setValue(IWorkbenchPreferenceConstants.SHOW_OPEN_ON_PERSPECTIVE_BAR, false);
+        PlatformUI.getPreferenceStore().setValue(IWorkbenchPreferenceConstants.DOCK_PERSPECTIVE_BAR, "topRight");
+        PlatformUI.getPreferenceStore().setValue(IWorkbenchPreferenceConstants.LOCK_TRIM, true);
     }
 
     @Override
     public void postWindowOpen() {
         getWindowConfigurer().getWindow().getShell().setMaximized(true);
     }
+
+    @Override
+    public boolean isDurableFolder(String perspectiveId, String folderId) {
+        return true;
+    }
+
 }

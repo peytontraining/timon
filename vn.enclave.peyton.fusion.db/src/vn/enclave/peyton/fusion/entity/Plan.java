@@ -23,7 +23,7 @@ public class Plan implements Serializable {
 
 	//bi-directional many-to-one association to Project
 	@OneToMany(mappedBy="plan")
-	@OrderBy(value = "name DESC")
+	@OrderBy(value = "id DESC, name DESC")
 	private List<Project> projects;
 
 	public Plan() {

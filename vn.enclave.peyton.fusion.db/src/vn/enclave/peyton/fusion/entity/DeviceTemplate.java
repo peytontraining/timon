@@ -1,8 +1,11 @@
 package vn.enclave.peyton.fusion.entity;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.util.Date;
+import java.util.List;
 
 /**
  * The persistent class for the device_templates database table.
@@ -10,8 +13,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "device_templates")
-@NamedQuery(
-    name = "DeviceTemplate.findAll", query = "SELECT d FROM DeviceTemplate d")
+@NamedQuery(name = "DeviceTemplate.findAll", query = "SELECT d FROM DeviceTemplate d")
 public class DeviceTemplate implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -47,6 +49,10 @@ public class DeviceTemplate implements Serializable {
     @ManyToOne
     @JoinColumn(name = "idIcon")
     private Icon icon;
+
+    // bi-directional many-to-one association to PropertyTemplate
+    @OneToMany(mappedBy = "deviceTemplate", cascade = {CascadeType.PERSIST})
+    private List<PropertyTemplate> propertyTemplates;
 
     public DeviceTemplate() {
     }
@@ -139,4 +145,25 @@ public class DeviceTemplate implements Serializable {
         this.icon = icon;
     }
 
+    public List<PropertyTemplate> getPropertyTemplates() {
+        return this.propertyTemplates;
+    }
+
+    public void setPropertyTemplates(List<PropertyTemplate> propertyTemplates) {
+        this.propertyTemplates = propertyTemplates;
+    }
+
+    public PropertyTemplate addPropertyTemplate(PropertyTemplate propertyTemplate) {
+        getPropertyTemplates().add(propertyTemplate);
+        propertyTemplate.setDeviceTemplate(this);
+
+        return propertyTemplate;
+    }
+
+    public PropertyTemplate removePropertyTemplate(PropertyTemplate propertyTemplate) {
+        getPropertyTemplates().remove(propertyTemplate);
+        propertyTemplate.setDeviceTemplate(null);
+
+        return propertyTemplate;
+    }
 }

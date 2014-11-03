@@ -4,11 +4,11 @@ import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-import vn.enclave.peyton.fusion.entity.Property;
+import vn.enclave.peyton.fusion.entity.PropertyTemplate;
 
-public class PropertyTreeTableLabelProvider implements ITableLabelProvider {
+public class PropertyTemplateTreeTableLabelProvider implements ITableLabelProvider {
 
-    private static final long serialVersionUID = 5217708117312627071L;
+    private static final long serialVersionUID = -2673821834981057092L;
 
     private static final int NAME_COLUMN = 0;
 
@@ -22,30 +22,26 @@ public class PropertyTreeTableLabelProvider implements ITableLabelProvider {
     public String getColumnText(Object element, int columnIndex) {
         switch (columnIndex) {
             case NAME_COLUMN :
-                if (element instanceof Property) {
-                    return ((Property) element).getName();
+                if (element instanceof PropertyTemplate) {
+                    return ((PropertyTemplate) element).getName();
                 }
 
             case VALUE_COLUMN :
-                if (element instanceof Property) {
-                    return ((Property) element).getValue();
+                if (element instanceof PropertyTemplate) {
+                    return ((PropertyTemplate) element).getValue();
                 }
 
             case MANDATORY_COLUMN :
-                if (element instanceof Property) {
-                    return ((Property) element).isMandatory() ? "yes" : "no";
+                if (element instanceof PropertyTemplate) {
+                    return ((PropertyTemplate) element).isMandatory() ? "yes" : "no";
                 }
 
             case DESCRIPTION_COLUMN :
-                if (element instanceof Property) {
-                    return ((Property) element).getDescription();
+                if (element instanceof PropertyTemplate) {
+                    return ((PropertyTemplate) element).getDescription();
                 }
         }
-        return null;
-    }
 
-    @Override
-    public Image getColumnImage(Object element, int columnIndex) {
         return null;
     }
 
@@ -65,4 +61,10 @@ public class PropertyTreeTableLabelProvider implements ITableLabelProvider {
     @Override
     public void removeListener(ILabelProviderListener listener) {
     }
+
+    @Override
+    public Image getColumnImage(Object element, int columnIndex) {
+        return null;
+    }
+
 }

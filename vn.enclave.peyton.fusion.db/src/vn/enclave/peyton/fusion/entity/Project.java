@@ -46,7 +46,7 @@ public class Project implements Serializable {
 
     // bi-directional many-to-one association to Version
     @OneToMany(mappedBy = "project")
-    @OrderBy(value = "name DESC")
+    @OrderBy(value = "id DESC, name DESC")
     private List<Version> versions;
 
     public Project() {

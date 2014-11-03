@@ -1,7 +1,5 @@
 package vn.enclave.peyton.fusion.view;
 
-import java.util.Date;
-
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -22,6 +20,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
@@ -32,27 +31,23 @@ import vn.enclave.peyton.fusion.provider.TemplateTreeContentProvider;
 import vn.enclave.peyton.fusion.provider.TemplateTreeTableLabelProvider;
 import vn.enclave.peyton.fusion.service.impl.ModuleService;
 
-public class DeviceTemplateViewPart extends ViewPart
-    implements IDoubleClickListener {
-
-    public static final String ID =
-        "vn.enclave.peyton.fusion.view.deviceTemplatesViewPart";
-
-    private static final String[] TITLES = {
-        "Name", "Last Modified", "Manufacture", "Model Number", "Version"};
-
+public class DeviceTemplateViewPart extends ViewPart implements IDoubleClickListener {
+    public static final String ID = "vn.enclave.peyton.fusion.view.deviceTemplatesViewPart";
+    private static final String[] TITLES = {"Name", "Last Modified", "Manufacture", "Model Number", "Version"};
     private static final int DEFAULT_WIDTH = 120;
-
     private TreeViewer treeViewer;
-
-    private Text filterText, finderText;
-
-    private Button clear, up, down;
-
+    private Text filterText;
+    private Text finderText;
+    private Button clear;
+    private Button up;
+    private Button down;
     private TemplateFilter filter;
+    private IWorkbenchPage activePage;
 
     @Override
     public void createPartControl(Composite parent) {
+        createActivePage();
+
         // Layout the parent.
         GridLayout layout = new GridLayout(9, false);
         parent.setLayout(layout);
@@ -64,10 +59,8 @@ public class DeviceTemplateViewPart extends ViewPart
         createFinder(parent);
 
         // Create and layout a Tree.
-        GridData layoutData =
-            new GridData(SWT.FILL, SWT.FILL, true, true, 9, 1);
-        int style =
-            SWT.MULTI | SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL;
+        GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true, 9, 1);
+        int style = SWT.MULTI | SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL;
         Tree tree = new Tree(parent, style);
         tree.setLayoutData(layoutData);
 
@@ -98,6 +91,11 @@ public class DeviceTemplateViewPart extends ViewPart
         getSite().setSelectionProvider(treeViewer);
     }
 
+    private void createActivePage() {
+        IWorkbenchWindow window = getSite().getWorkbenchWindow();
+        activePage = window.getActivePage();
+    }
+
     @Override
     public void setFocus() {
         treeViewer.getTree().setFocus();
@@ -109,8 +107,7 @@ public class DeviceTemplateViewPart extends ViewPart
         label.setText("Filter:");
 
         // Create and layout filter text.
-        GridData layoutData =
-            new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1);
+        GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1);
         int style = SWT.BORDER | SWT.SEARCH;
         filterText = new Text(parent, style);
         filterText.setLayoutData(layoutData);
@@ -122,9 +119,7 @@ public class DeviceTemplateViewPart extends ViewPart
             public void modifyText(ModifyEvent event) {
                 filter.setFilterString(filterText.getText());
                 treeViewer.refresh();
-                boolean enabled =
-                    filterText.getText() != null
-                        && filterText.getText().length() != 0;
+                boolean enabled = filterText.getText() != null && filterText.getText().length() != 0;
                 clear.setEnabled(enabled);
             }
         });
@@ -147,8 +142,7 @@ public class DeviceTemplateViewPart extends ViewPart
 
     private void createFinder(Composite parent) {
         // Create filter label.
-        GridData layoutData =
-            new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
+        GridData layoutData = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
         Label label = new Label(parent, SWT.NONE);
         label.setText("Find:");
         label.setLayoutData(layoutData);
@@ -187,21 +181,29 @@ public class DeviceTemplateViewPart extends ViewPart
         Object firstElement = sselection.getFirstElement();
         if (firstElement instanceof DeviceTemplate) {
             try {
-                DeviceTemplate template = (DeviceTemplate) firstElement;
-                showTemplateDetail(template);
+                DeviceTemplate deviceTemplate = (DeviceTemplate) firstElement;
+                showTemplateDetailViewPartAndPopulateFrom(deviceTemplate);
             } catch (PartInitException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void showTemplateDetail(DeviceTemplate template)
-        throws PartInitException {
-        IWorkbenchPage page = getSite().getWorkbenchWindow().getActivePage();
+    private void showTemplateDetailViewPartAndPopulateFrom(DeviceTemplate template) throws PartInitException {
         String viewId = DetailedDeviceTemplateViewPart.ID;
-        String secondaryId = String.valueOf((new Date()).getTime());
+        String secondaryId = String.valueOf(template.getId());
         int mode = IWorkbenchPage.VIEW_ACTIVATE;
-        IViewPart viewPart = page.showView(viewId, secondaryId, mode);
-        ((DetailedDeviceTemplateViewPart) viewPart).setData(template);
+        IViewPart viewPart = null;
+        if (isViewPartOpened(viewId, secondaryId)) {
+            viewPart = activePage.showView(viewId, secondaryId, mode);
+            ((DetailedDeviceTemplateViewPart) viewPart).populateViewPartFrom(template);
+        } else {
+            viewPart = activePage.showView(viewId, secondaryId, mode);
+        }
+
+    }
+
+    private boolean isViewPartOpened(String viewId, String secondaryId) {
+        return activePage.findViewReference(viewId, secondaryId) == null;
     }
 }

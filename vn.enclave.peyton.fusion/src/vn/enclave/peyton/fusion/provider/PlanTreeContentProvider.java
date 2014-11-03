@@ -44,7 +44,7 @@ public class PlanTreeContentProvider implements ITreeContentProvider {
         } else if (element != null && element instanceof Version) {
             return ((Version) element).getProject();
         }
-        return new Object();
+        return null;
     }
 
     @Override

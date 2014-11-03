@@ -1,7 +1,6 @@
 package vn.enclave.peyton.fusion.view;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -13,15 +12,14 @@ import org.eclipse.ui.part.ViewPart;
 
 import vn.enclave.peyton.fusion.common.Constant;
 import vn.enclave.peyton.fusion.common.Utils;
+import vn.enclave.peyton.fusion.control.DevicePropertyTemplateSection;
 import vn.enclave.peyton.fusion.entity.DeviceTemplate;
-import vn.enclave.peyton.fusion.view.form.DeviceTemplateForm;
+import vn.enclave.peyton.fusion.view.form.DetailedDeviceTemplateForm;
 
 public class DetailedDeviceTemplateViewPart extends ViewPart {
-
-    public static final String ID =
-        "vn.enclave.peyton.fusion.view.DetailedDeviceTemplateViewPart";
-
-    private DeviceTemplateForm templateForm;
+    public static final String ID = "vn.enclave.peyton.fusion.view.DetailedDeviceTemplateViewPart";
+    private DetailedDeviceTemplateForm detailedDeviceTemplateForm;
+    private DevicePropertyTemplateSection devicePropertyTemplateSection;
 
     @Override
     public void createPartControl(Composite parent) {
@@ -30,12 +28,12 @@ public class DetailedDeviceTemplateViewPart extends ViewPart {
         layout.marginHeight = 0;
         parent.setLayout(layout);
 
-        createToolbarComposite(parent);
+        createToolbarCompositeInside(parent);
 
-        createTabFolderComposite(parent);
+        createTabFolderCompositeInside(parent);
     }
 
-    private void createToolbarComposite(Composite parent) {
+    private void createToolbarCompositeInside(Composite parent) {
         GridLayout layout = new GridLayout(1, false);
         layout.marginTop = -5;
         layout.marginBottom = -5;
@@ -44,39 +42,10 @@ public class DetailedDeviceTemplateViewPart extends ViewPart {
         toolbarComposite.setLayout(layout);
         toolbarComposite.setLayoutData(layoutData);
 
-        createToolbar(toolbarComposite);
+        createToolbarTo(toolbarComposite);
     }
 
-    private void createToolbar(Composite parent) {
-        GridData layoutData = new GridData(SWT.RIGHT, SWT.NONE, true, false);
-        ToolBar bar = new ToolBar(parent, SWT.FLAT);
-        bar.setLayoutData(layoutData);
-
-        createToolItems(bar);
-    }
-
-    private void createToolItems(ToolBar parent) {
-        ToolItem save = createToolItem(parent, Constant.IMAGE_SAVE);
-
-        ToolItem saveAndClose =
-            createToolItem(parent, Constant.IMAGE_SAVE_CLOSE);
-
-        new ToolItem(parent, SWT.SEPARATOR);
-
-        ToolItem newTemplate =
-            createToolItem(parent, Constant.IMAGE_NEW_TEMPLATE);
-
-        ToolItem templateChild =
-            createToolItem(parent, Constant.IMAGE_TEMPLATE_CHILD);
-    }
-
-    private ToolItem createToolItem(ToolBar parent, Image image) {
-        ToolItem toolItem = new ToolItem(parent, SWT.PUSH);
-        toolItem.setImage(image);
-        return toolItem;
-    }
-
-    private void createTabFolderComposite(Composite parent) {
+    private void createTabFolderCompositeInside(Composite parent) {
         GridLayout layout = new GridLayout(1, false);
         layout.marginTop = -10;
         layout.marginWidth = 0;
@@ -85,41 +54,75 @@ public class DetailedDeviceTemplateViewPart extends ViewPart {
         tabFolderComposite.setLayout(layout);
         tabFolderComposite.setLayoutData(layoutData);
 
-        createTabFolder(tabFolderComposite);
+        createTabFolderTo(tabFolderComposite);
     }
 
-    private void createTabFolder(Composite parent) {
+    private void createToolbarTo(Composite toolbarComposite) {
+        GridData layoutData = new GridData(SWT.RIGHT, SWT.NONE, true, false);
+        ToolBar toolBar = new ToolBar(toolbarComposite, SWT.FLAT);
+        toolBar.setLayoutData(layoutData);
+
+        createAllToolItemsTo(toolBar);
+    }
+
+    private void createTabFolderTo(Composite tabFolderComposite) {
         GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
-        TabFolder folder = new TabFolder(parent, SWT.NONE);
-        folder.setLayoutData(layoutData);
+        TabFolder tabFolder = new TabFolder(tabFolderComposite, SWT.NONE);
+        tabFolder.setLayoutData(layoutData);
 
-        createDetailsTabItem(folder);
+        createDetailsTabItemInside(tabFolder);
 
-        createConfigureTabItem(folder);
+        createConfigureTabItemInside(tabFolder);
     }
 
-    private void createDetailsTabItem(TabFolder parent) {
-        TabItem detailsTabItem = new TabItem(parent, SWT.NONE);
+    private void createAllToolItemsTo(ToolBar toolBar) {
+        ToolItem saveToolItem = createToolItemTo(toolBar);
+        saveToolItem.setImage(Constant.IMAGE_SAVE);
+
+        ToolItem saveAndCloseToolItem = createToolItemTo(toolBar);
+        saveAndCloseToolItem.setImage(Constant.IMAGE_SAVE_CLOSE);
+
+        new ToolItem(toolBar, SWT.SEPARATOR);
+
+        ToolItem newTemplateToolItem = createToolItemTo(toolBar);
+        newTemplateToolItem.setImage(Constant.IMAGE_NEW_TEMPLATE);
+
+        ToolItem templateChildToolItem = createToolItemTo(toolBar);
+        templateChildToolItem.setImage(Constant.IMAGE_TEMPLATE_CHILD);
+    }
+
+    private void createDetailsTabItemInside(TabFolder tabFolder) {
+        TabItem detailsTabItem = new TabItem(tabFolder, SWT.NONE);
         detailsTabItem.setText("Details");
 
-        templateForm = new DeviceTemplateForm(parent);
+        detailedDeviceTemplateForm = new DetailedDeviceTemplateForm(tabFolder);
 
-        detailsTabItem.setControl(templateForm.getScrolledForm());
+        detailsTabItem.setControl(detailedDeviceTemplateForm.getDetailedDeviceTemplateForm());
     }
 
-    private void createConfigureTabItem(TabFolder parent) {
-        TabItem configureTabItem = new TabItem(parent, SWT.NONE);
+    private void createConfigureTabItemInside(TabFolder tabFolder) {
+        TabItem configureTabItem = new TabItem(tabFolder, SWT.NONE);
         configureTabItem.setText("Configure");
+
+        devicePropertyTemplateSection = new DevicePropertyTemplateSection(tabFolder);
+
+        configureTabItem.setControl(devicePropertyTemplateSection.getPropertyTemplateSection());
     }
 
-    public void setData(DeviceTemplate template) {
-        changeTitleAndImage(template);
-        templateForm.fillInForm(template);
+    private ToolItem createToolItemTo(ToolBar toolBar) {
+        ToolItem toolItem = new ToolItem(toolBar, SWT.PUSH);
+        return toolItem;
     }
 
-    private void changeTitleAndImage(DeviceTemplate template) {
-        setTitleImage(Utils.createImage(template.getIcon()));
+    public void populateViewPartFrom(DeviceTemplate deviceTemplate) {
+        changeNameAndImageViewPartFrom(deviceTemplate);
+        detailedDeviceTemplateForm.populateDeviceTemplateFormFrom(deviceTemplate);
+        devicePropertyTemplateSection.populatePropertyTreeViewerFrom(deviceTemplate);
+    }
+
+    private void changeNameAndImageViewPartFrom(DeviceTemplate template) {
         setPartName(template.getName());
+        setTitleImage(Utils.createImage(template.getIcon()));
     }
 
     @Override
