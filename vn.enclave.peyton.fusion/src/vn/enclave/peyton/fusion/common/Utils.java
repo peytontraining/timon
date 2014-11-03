@@ -48,7 +48,7 @@ public class Utils {
      * @return image is instant of org.eclipse.swt.graphics.Image or null if
      *         image is not existed.
      */
-    public static Image createImage(String pluginId, String imageFilePath) {
+    public static Image createImageFromPluginIdAndImageFilePath(String pluginId, String imageFilePath) {
         return AbstractUIPlugin.imageDescriptorFromPlugin(
             pluginId, imageFilePath).createImage();
     }
@@ -62,9 +62,9 @@ public class Utils {
      * @return image is instant of org.eclipse.swt.graphics.Image or null if
      *         image is not existed.
      */
-    public static Image createImage(Icon icon) {
+    public static Image createImageFromIcon(Icon icon) {
         String pluginId = icon.getPluginId();
         String imageFilePath = icon.getImageFilePath();
-        return createImage(pluginId, imageFilePath);
+        return createImageFromPluginIdAndImageFilePath(pluginId, imageFilePath);
     }
 }

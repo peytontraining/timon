@@ -16,6 +16,8 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.ISaveablePart;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.part.ViewPart;
 
 import vn.enclave.peyton.fusion.common.Constant;
@@ -27,12 +29,13 @@ import vn.enclave.peyton.fusion.view.form.DetailedDeviceForm;
 
 public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
 
-    public static final String ID =
-        "vn.enalve.peyton.fusion.view.modifyingDeviceViewPart";
-
+    public static final String ID = "vn.enalve.peyton.fusion.view.modifyingDeviceViewPart";
     private boolean isDirty;
-
     private boolean isFilled;
+    private Device selectedDevice;
+    private DetailedDeviceForm detailedDeviceForm;
+    private DevicePropertySection devicePropertySection;
+    private IWorkbenchPage activePage;
 
     public void setDirty(boolean isDirty) {
         this.isDirty = isDirty;
@@ -43,38 +46,10 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
         this.isFilled = isFilled;
     }
 
-    private Device selectedDevice;
-
-    private DetailedDeviceForm detailedDeviceForm;
-
-    private DevicePropertySection devicePropertySection;
-
-    @Override
-    public void doSave(IProgressMonitor monitor) {
-        updateDevice();
-    }
-
-    @Override
-    public void doSaveAs() {
-    }
-
-    @Override
-    public boolean isDirty() {
-        return isDirty;
-    }
-
-    @Override
-    public boolean isSaveAsAllowed() {
-        return false;
-    }
-
-    @Override
-    public boolean isSaveOnCloseNeeded() {
-        return true;
-    }
-
     @Override
     public void createPartControl(Composite parent) {
+        createActivePage();
+
         GridLayout layout = new GridLayout(1, false);
         layout.verticalSpacing = 0;
         layout.marginHeight = 0;
@@ -83,6 +58,11 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
         createToolbarComposite(parent);
 
         createTabFolderComposite(parent);
+    }
+
+    private void createActivePage() {
+        IWorkbenchWindow window = getSite().getWorkbenchWindow();
+        activePage = window.getActivePage();
     }
 
     private void createToolbarComposite(Composite parent) {
@@ -109,21 +89,17 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
         ToolItem save = createToolItem(parent, Constant.IMAGE_SAVE);
         save.addSelectionListener(saveAdapter);
 
-        ToolItem saveAndClose =
-            createToolItem(parent, Constant.IMAGE_SAVE_CLOSE);
+        ToolItem saveAndClose = createToolItem(parent, Constant.IMAGE_SAVE_CLOSE);
 
         new ToolItem(parent, SWT.SEPARATOR);
 
-        ToolItem updateDevcie =
-            createToolItem(parent, Constant.IMAGE_UPDATE_DEVICE);
+        ToolItem updateDevcie = createToolItem(parent, Constant.IMAGE_UPDATE_DEVICE);
 
-        ToolItem showDevice =
-            createToolItem(parent, Constant.IMAGE_SHOW_DEVICE);
+        ToolItem showDevice = createToolItem(parent, Constant.IMAGE_SHOW_DEVICE);
 
         new ToolItem(parent, SWT.SEPARATOR);
 
-        ToolItem editService =
-            createToolItem(parent, Constant.IMAGE_EDIT_SERVICE);
+        ToolItem editService = createToolItem(parent, Constant.IMAGE_EDIT_SERVICE);
     }
 
     private ToolItem createToolItem(ToolBar parent, Image image) {
@@ -172,13 +148,12 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
     }
 
     @Override
-    public void setFocus() {
-    }
+    public void setFocus() {}
 
     public void setData(Device device) {
         selectedDevice = device;
         setPartName(device.getName());
-        setTitleImage(Utils.createImage(device.getIcon()));
+        setTitleImage(Utils.createImageFromIcon(device.getIcon()));
         detailedDeviceForm.fillInForm(device);
         devicePropertySection.fillInTree(device.getProperties());
         setFilled(true);
@@ -204,9 +179,8 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
     }
 
     private void refreshDeviceTable() {
-        IViewPart viewPart =
-            getSite().getPage().findView(DeviceTableViewPart.ID);
-        ((DeviceTableViewPart) viewPart).getViewer().refresh();
+        IViewPart viewpart = activePage.findView(DeviceTableViewPart.ID);
+        ((DeviceTableViewPart) viewpart).refreshTableViewer();
     }
 
     private ModifyListener modifyListener = new ModifyListener() {
@@ -219,4 +193,26 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
         }
     };
 
+    @Override
+    public void doSave(IProgressMonitor monitor) {
+        updateDevice();
+    }
+
+    @Override
+    public void doSaveAs() {}
+
+    @Override
+    public boolean isDirty() {
+        return isDirty;
+    }
+
+    @Override
+    public boolean isSaveAsAllowed() {
+        return false;
+    }
+
+    @Override
+    public boolean isSaveOnCloseNeeded() {
+        return true;
+    }
 }

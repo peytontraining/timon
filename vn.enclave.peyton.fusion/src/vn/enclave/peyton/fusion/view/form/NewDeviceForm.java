@@ -128,7 +128,7 @@ public class NewDeviceForm {
         return text;
     }
 
-    public void fillInForm(DeviceTemplate template) {
+    public void populateNewDeviceFormFrom(DeviceTemplate template) {
         /*
          * Set data to template for using in getDevice() method.
          */
@@ -158,7 +158,7 @@ public class NewDeviceForm {
     }
 
     private void setIcon(Icon icon) {
-        iconContentLbl.setImage(Utils.createImage(icon));
+        iconContentLbl.setImage(Utils.createImageFromIcon(icon));
     }
 
     public Device getDevice() {

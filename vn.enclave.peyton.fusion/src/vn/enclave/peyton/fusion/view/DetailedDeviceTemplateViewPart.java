@@ -82,7 +82,7 @@ public class DetailedDeviceTemplateViewPart extends ViewPart {
         ToolItem saveAndCloseToolItem = createToolItemTo(toolBar);
         saveAndCloseToolItem.setImage(Constant.IMAGE_SAVE_CLOSE);
 
-        new ToolItem(toolBar, SWT.SEPARATOR);
+        createSeparatorTo(toolBar);
 
         ToolItem newTemplateToolItem = createToolItemTo(toolBar);
         newTemplateToolItem.setImage(Constant.IMAGE_NEW_TEMPLATE);
@@ -114,6 +114,10 @@ public class DetailedDeviceTemplateViewPart extends ViewPart {
         return toolItem;
     }
 
+    private void createSeparatorTo(ToolBar toolBar) {
+        new ToolItem(toolBar, SWT.SEPARATOR);
+    }
+
     public void populateViewPartFrom(DeviceTemplate deviceTemplate) {
         changeNameAndImageViewPartFrom(deviceTemplate);
         detailedDeviceTemplateForm.populateDeviceTemplateFormFrom(deviceTemplate);
@@ -122,11 +126,10 @@ public class DetailedDeviceTemplateViewPart extends ViewPart {
 
     private void changeNameAndImageViewPartFrom(DeviceTemplate template) {
         setPartName(template.getName());
-        setTitleImage(Utils.createImage(template.getIcon()));
+        setTitleImage(Utils.createImageFromIcon(template.getIcon()));
     }
 
     @Override
-    public void setFocus() {
-    }
+    public void setFocus() {}
 
 }

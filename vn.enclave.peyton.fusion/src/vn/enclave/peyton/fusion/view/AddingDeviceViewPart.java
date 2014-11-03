@@ -12,7 +12,6 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -22,6 +21,9 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.ISaveablePart;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.part.ViewPart;
 
 import vn.enclave.peyton.fusion.common.Constant;
@@ -36,16 +38,12 @@ import vn.enclave.peyton.fusion.service.impl.DeviceService;
 import vn.enclave.peyton.fusion.view.form.NewDeviceForm;
 
 public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
-
     public static final String ID = "vn.enclave.peyton.fusion.view.addingDeviceViewPart";
-
     private boolean isDirty;
-
     private boolean isCanceled;
-
     private NewDeviceForm newDeviceForm;
-
     private NewDevicePropertySection newDevicePropertySection;
+    private IWorkbenchPage activePage;
 
     public void setDirty(boolean isDirty) {
         this.isDirty = isDirty;
@@ -56,48 +54,26 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
         this.isCanceled = isCanceled;
     }
 
-    public NewDeviceForm getNewDeviceForm() {
-        return newDeviceForm;
-    }
-
-    @Override
-    public void doSave(IProgressMonitor monitor) {
-        saveDevice();
-        monitor.setCanceled(isCanceled);
-    }
-
-    @Override
-    public void doSaveAs() {
-    }
-
-    @Override
-    public boolean isDirty() {
-        return isDirty;
-    }
-
-    @Override
-    public boolean isSaveAsAllowed() {
-        return false;
-    }
-
-    @Override
-    public boolean isSaveOnCloseNeeded() {
-        return true;
-    }
-
     @Override
     public void createPartControl(Composite parent) {
+        createActivePage();
+
         GridLayout layout = new GridLayout(1, false);
         layout.verticalSpacing = 0;
         layout.marginHeight = 0;
         parent.setLayout(layout);
 
-        createToolbarComposite(parent);
+        createToolbarCompositeInside(parent);
 
-        createTabFolderComposite(parent);
+        createTabFolderCompositeInside(parent);
     }
 
-    private void createToolbarComposite(Composite parent) {
+    private void createActivePage() {
+        IWorkbenchWindow window = getSite().getWorkbenchWindow();
+        activePage = window.getActivePage();
+    }
+
+    private void createToolbarCompositeInside(Composite parent) {
         GridLayout layout = new GridLayout(1, false);
         layout.marginTop = -5;
         layout.marginBottom = -5;
@@ -106,41 +82,10 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
         toolbarComposite.setLayout(layout);
         toolbarComposite.setLayoutData(layoutData);
 
-        createToolbar(toolbarComposite);
+        createToolbarTo(toolbarComposite);
     }
 
-    private void createToolbar(Composite parent) {
-        GridData layoutData = new GridData(SWT.RIGHT, SWT.NONE, true, false);
-        ToolBar bar = new ToolBar(parent, SWT.FLAT);
-        bar.setLayoutData(layoutData);
-
-        createToolItems(bar);
-    }
-
-    private void createToolItems(ToolBar parent) {
-        ToolItem save = createToolItem(parent, Constant.IMAGE_SAVE);
-        save.addSelectionListener(saveAdapter);
-
-        ToolItem saveAndClose = createToolItem(parent, Constant.IMAGE_SAVE_CLOSE);
-
-        new ToolItem(parent, SWT.SEPARATOR);
-
-        ToolItem updateDevice = createToolItem(parent, Constant.IMAGE_UPDATE_DEVICE);
-
-        ToolItem showDevice = createToolItem(parent, Constant.IMAGE_SHOW_DEVICE);
-
-        new ToolItem(parent, SWT.SEPARATOR);
-
-        ToolItem editService = createToolItem(parent, Constant.IMAGE_EDIT_SERVICE);
-    }
-
-    private ToolItem createToolItem(ToolBar parent, Image image) {
-        ToolItem toolItem = new ToolItem(parent, SWT.PUSH);
-        toolItem.setImage(image);
-        return toolItem;
-    }
-
-    private void createTabFolderComposite(Composite parent) {
+    private void createTabFolderCompositeInside(Composite parent) {
         GridLayout layout = new GridLayout(1, false);
         layout.marginTop = -10;
         layout.marginWidth = 0;
@@ -149,85 +94,108 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
         tabFolderComposite.setLayout(layout);
         tabFolderComposite.setLayoutData(layoutData);
 
-        createTabFolder(tabFolderComposite);
+        createTabFolderTo(tabFolderComposite);
     }
 
-    private void createTabFolder(Composite parent) {
+    private void createToolbarTo(Composite toolbarComposite) {
+        GridData layoutData = new GridData(SWT.RIGHT, SWT.NONE, true, false);
+        ToolBar toolBar = new ToolBar(toolbarComposite, SWT.FLAT);
+        toolBar.setLayoutData(layoutData);
+
+        createAllToolItemsTo(toolBar);
+    }
+
+    private void createTabFolderTo(Composite tabFolderComposite) {
         GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
-        TabFolder folder = new TabFolder(parent, SWT.NONE);
-        folder.setLayoutData(layoutData);
+        TabFolder tabFolder = new TabFolder(tabFolderComposite, SWT.NONE);
+        tabFolder.setLayoutData(layoutData);
 
-        createDetailsTabItem(folder);
+        createDetailsTabItemInside(tabFolder);
 
-        createConfigureTabItem(folder);
+        createConfigureTabItemInside(tabFolder);
     }
 
-    private void createDetailsTabItem(TabFolder parent) {
-        TabItem detailsTabItem = new TabItem(parent, SWT.NONE);
+    private void createAllToolItemsTo(ToolBar toolBar) {
+        ToolItem saveToolItem = createToolItemInside(toolBar);
+        saveToolItem.setImage(Constant.IMAGE_SAVE);
+        saveToolItem.addSelectionListener(getSelectionAdapterToSaveToolItem());
+
+        ToolItem saveAndCloseToolItem = createToolItemInside(toolBar);
+        saveAndCloseToolItem.setImage(Constant.IMAGE_SAVE_CLOSE);
+
+        createSeparatorInside(toolBar);
+
+        ToolItem updateDeviceToolItem = createToolItemInside(toolBar);
+        updateDeviceToolItem.setImage(Constant.IMAGE_UPDATE_DEVICE);
+
+        ToolItem showDeviceToolItem = createToolItemInside(toolBar);
+        showDeviceToolItem.setImage(Constant.IMAGE_SHOW_DEVICE);
+
+        createSeparatorInside(toolBar);
+
+        ToolItem editServiceToolItem = createToolItemInside(toolBar);
+        editServiceToolItem.setImage(Constant.IMAGE_EDIT_SERVICE);
+    }
+
+    private void createDetailsTabItemInside(TabFolder tabFolder) {
+        TabItem detailsTabItem = new TabItem(tabFolder, SWT.NONE);
         detailsTabItem.setText("Details");
 
-        newDeviceForm = new NewDeviceForm(parent);
-        newDeviceForm.addModifyListener(modifyListener);
+        newDeviceForm = new NewDeviceForm(tabFolder);
+        newDeviceForm.addModifyListener(getModifyListerTo());
 
         detailsTabItem.setControl(newDeviceForm.getScrolledForm());
     }
 
-    private void createConfigureTabItem(TabFolder parent) {
-        TabItem configureTabItem = new TabItem(parent, SWT.NONE);
+    private void createConfigureTabItemInside(TabFolder tabFolder) {
+        TabItem configureTabItem = new TabItem(tabFolder, SWT.NONE);
         configureTabItem.setText("Configure");
 
-        newDevicePropertySection = new NewDevicePropertySection(parent);
+        newDevicePropertySection = new NewDevicePropertySection(tabFolder);
 
         configureTabItem.setControl(newDevicePropertySection.getPropertySection());
     }
 
-    @Override
-    public void setFocus() {
-
+    private ToolItem createToolItemInside(ToolBar toolBar) {
+        ToolItem toolItem = new ToolItem(toolBar, SWT.PUSH);
+        return toolItem;
     }
 
-    public void setData(DeviceTemplate deviceTemplate) {
-        changeTitleAndImage(deviceTemplate);
-        newDeviceForm.fillInForm(deviceTemplate);
-        newDevicePropertySection.populatePropertyTreeViewerFrom(deviceTemplate);
+    private void createSeparatorInside(ToolBar toolBar) {
+        new ToolItem(toolBar, SWT.SEPARATOR);
     }
 
-    private void changeTitleAndImage(DeviceTemplate template) {
-        String pluginId = template.getIcon().getPluginId();
-        String imageFilePath = template.getIcon().getImageFilePath();
-        setTitleImage(Utils.createImage(pluginId, imageFilePath));
-        setPartName(template.getName());
+    private SelectionAdapter getSelectionAdapterToSaveToolItem() {
+        return new SelectionAdapter() {
+
+            private static final long serialVersionUID = 8118227841225144756L;
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                saveDevice();
+            }
+        };
     }
 
-    private ModifyListener modifyListener = new ModifyListener() {
+    private ModifyListener getModifyListerTo() {
+        return new ModifyListener() {
 
-        private static final long serialVersionUID = -417147842389328557L;
+            private static final long serialVersionUID = -417147842389328557L;
 
-        @Override
-        public void modifyText(ModifyEvent event) {
-            setDirty(true);
-        }
-    };
-
-    private SelectionAdapter saveAdapter = new SelectionAdapter() {
-
-        private static final long serialVersionUID = 8118227841225144756L;
-
-        @Override
-        public void widgetSelected(SelectionEvent e) {
-            saveDevice();
-        }
-
-    };
+            @Override
+            public void modifyText(ModifyEvent event) {
+                setDirty(true);
+            }
+        };
+    }
 
     private void saveDevice() {
-        ISelection selection = getSite().getPage().getSelection(NavigationViewPart.ID);
+        ISelection selection = activePage.getSelection(NavigationViewPart.ID);
         IStructuredSelection sselection = (IStructuredSelection) selection;
         Object firstElement = sselection.getFirstElement();
         if (firstElement instanceof Version) {
             Version selectedVersion = (Version) firstElement;
-            
-            System.out.println(selectedVersion.getName());
+
             Device newDevice = addDevice2Database(selectedVersion);
 
             addDevice2Tree(selectedVersion, newDevice);
@@ -238,27 +206,6 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
             setCanceled(true);
             createWarningMessageDialog();
         }
-    }
-
-    private Device prepareNewDevice() {
-        Device newDevice = newDeviceForm.getDevice();
-        addPropertyDeviceTo(newDevice);
-        return newDevice;
-    }
-
-    private void addPropertyDeviceTo(Device newDevice) {
-        List<PropertyTemplate> propertyTemplates = newDevicePropertySection.getNewDeviceProperties();
-        List<Property> properties = new ArrayList<Property>();
-        for (PropertyTemplate propertyTemplate : propertyTemplates) {
-            Property property = new Property();
-            property.setName(propertyTemplate.getName());
-            property.setValue(propertyTemplate.getValue());
-            property.setMandatory(propertyTemplate.isMandatory());
-            property.setDescription(propertyTemplate.getDescription());
-            property.setDevice(newDevice);
-            properties.add(property);
-        }
-        newDevice.setProperties(properties);
     }
 
     private Device addDevice2Database(Version selectedVersion) {
@@ -291,8 +238,8 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
         /*
          * Refresh the device table to display the new device.
          */
-        ((DeviceTableViewPart) getSite().getWorkbenchWindow().getActivePage().findView(DeviceTableViewPart.ID))
-            .getViewer().refresh();
+        IViewPart viewpart = activePage.findView(DeviceTableViewPart.ID);
+        ((DeviceTableViewPart) viewpart).refreshTableViewer();
     }
 
     private void createWarningMessageDialog() {
@@ -301,4 +248,63 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
         String message = "Please choose a version to add the device!";
         MessageDialog.openWarning(shell, title, message);
     }
+
+    private Device prepareNewDevice() {
+        Device newDevice = newDeviceForm.getDevice();
+        addPropertyDeviceTo(newDevice);
+        return newDevice;
+    }
+
+    private void addPropertyDeviceTo(Device newDevice) {
+        List<PropertyTemplate> propertyTemplates = newDevicePropertySection.getNewDeviceProperties();
+        List<Property> properties = new ArrayList<Property>();
+        for (PropertyTemplate propertyTemplate : propertyTemplates) {
+            Property property = new Property();
+            property.setName(propertyTemplate.getName());
+            property.setValue(propertyTemplate.getValue());
+            property.setMandatory(propertyTemplate.isMandatory());
+            property.setDescription(propertyTemplate.getDescription());
+            property.setDevice(newDevice);
+            properties.add(property);
+        }
+        newDevice.setProperties(properties);
+    }
+
+    @Override
+    public void doSave(IProgressMonitor monitor) {
+        saveDevice();
+        monitor.setCanceled(isCanceled);
+    }
+
+    public void populateViewPartFrom(DeviceTemplate deviceTemplate) {
+        changeNameAndImageViewPartFrom(deviceTemplate);
+        newDeviceForm.populateNewDeviceFormFrom(deviceTemplate);
+        newDevicePropertySection.populatePropertyTreeViewerFrom(deviceTemplate);
+    }
+
+    private void changeNameAndImageViewPartFrom(DeviceTemplate template) {
+        setPartName(template.getName());
+        setTitleImage(Utils.createImageFromIcon(template.getIcon()));
+    }
+
+    @Override
+    public boolean isDirty() {
+        return isDirty;
+    }
+
+    @Override
+    public boolean isSaveAsAllowed() {
+        return false;
+    }
+
+    @Override
+    public boolean isSaveOnCloseNeeded() {
+        return true;
+    }
+
+    @Override
+    public void setFocus() {}
+
+    @Override
+    public void doSaveAs() {}
 }

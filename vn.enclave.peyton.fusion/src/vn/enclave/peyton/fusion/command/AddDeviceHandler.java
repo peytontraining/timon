@@ -39,7 +39,7 @@ public class AddDeviceHandler extends AbstractHandler implements IHandler {
                         .getActivePage()
                         .findViewReference(AddingDeviceViewPart.ID, secondaryId)
                         .getView(true);
-                newDeviceViewPart.setData(dialog.getTemplate());
+                newDeviceViewPart.populateViewPartFrom(dialog.getTemplate());
             } catch (PartInitException e) {
                 e.printStackTrace();
             }

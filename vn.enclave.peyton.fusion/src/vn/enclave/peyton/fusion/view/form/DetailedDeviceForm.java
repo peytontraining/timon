@@ -152,7 +152,7 @@ public class DetailedDeviceForm {
     }
 
     private void setIcon(Icon icon) {
-        iconContentLbl.setImage(Utils.createImage(icon));
+        iconContentLbl.setImage(Utils.createImageFromIcon(icon));
     }
 
     private void setText(Device device) {

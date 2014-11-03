@@ -219,7 +219,7 @@ public class DetailedDeviceTemplateForm {
     }
 
     private void setIcon(DeviceTemplate template) {
-        iconContentLbl.setImage(Utils.createImage(template.getIcon()));
+        iconContentLbl.setImage(Utils.createImageFromIcon(template.getIcon()));
     }
 
     private void setText(DeviceTemplate template) {

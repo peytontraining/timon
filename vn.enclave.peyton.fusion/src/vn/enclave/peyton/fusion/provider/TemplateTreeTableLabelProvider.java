@@ -60,7 +60,7 @@ public class TemplateTreeTableLabelProvider implements ITableLabelProvider {
                     ((DeviceTemplate) element).getIcon().getImageFilePath();
             }
             if (pluginId != null && imageFilePath != null) {
-                return Utils.createImage(pluginId, imageFilePath);
+                return Utils.createImageFromPluginIdAndImageFilePath(pluginId, imageFilePath);
             }
         }
         return null;

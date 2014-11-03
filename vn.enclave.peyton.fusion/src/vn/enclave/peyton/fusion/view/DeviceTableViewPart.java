@@ -57,16 +57,16 @@ public class DeviceTableViewPart extends ViewPart implements IDoubleClickListene
     private static final int UP_OFFSET = -1;
     public static final String ID = "vn.enclave.peyton.fusion.view.deviceTableViewPart";
     private static final String[] TITLES = {"Name", "App Module", "Device Type", "Physical Location", "Manufacture"};
-    private TableViewer viewer;
+    private TableViewer tableViewer;
     private DeviceTableViewerComparator comparator;
     private Text filterText, finderText;
     private Button clear, up, down;
     private DeviceFilter filter;
     private IWorkbenchPage activePage;
 
-    public TableViewer getViewer() {
-        return viewer;
-    }
+    // public TableViewer getViewer() {
+    // return viewer;
+    // }
 
     @Override
     public void createPartControl(Composite parent) {
@@ -86,11 +86,11 @@ public class DeviceTableViewPart extends ViewPart implements IDoubleClickListene
 
         // Set the filter for the table.
         filter = new DeviceFilter();
-        viewer.addFilter(filter);
+        tableViewer.addFilter(filter);
 
         // Set the sorter for the table.
         comparator = new DeviceTableViewerComparator();
-        viewer.setComparator(comparator);
+        tableViewer.setComparator(comparator);
 
         // Set selection service
         createSelectionListener();
@@ -103,7 +103,7 @@ public class DeviceTableViewPart extends ViewPart implements IDoubleClickListene
 
     @Override
     public void setFocus() {
-        viewer.getControl().setFocus();
+        tableViewer.getControl().setFocus();
     }
 
     private void createFilter(Composite parent) {
@@ -122,7 +122,7 @@ public class DeviceTableViewPart extends ViewPart implements IDoubleClickListene
             @Override
             public void modifyText(ModifyEvent event) {
                 filter.setFilterString(filterText.getText());
-                viewer.refresh();
+                tableViewer.refresh();
                 boolean enabled = filterText.getText() != null & filterText.getText().length() != 0;
                 clear.setEnabled(enabled);
             }
@@ -204,7 +204,7 @@ public class DeviceTableViewPart extends ViewPart implements IDoubleClickListene
     }
 
     private void find(String findText) {
-        Table table = viewer.getTable();
+        Table table = tableViewer.getTable();
         TableItem[] rows = table.getItems();
         int numberOfRow = rows.length;
         int nubmerOfColumn = table.getColumnCount();
@@ -233,7 +233,7 @@ public class DeviceTableViewPart extends ViewPart implements IDoubleClickListene
     }
 
     protected void find(String findText, int offset) {
-        Table table = viewer.getTable();
+        Table table = tableViewer.getTable();
         TableItem[] rows = table.getItems();
         int numberOfRow = rows.length;
         int nubmerOfColumn = table.getColumnCount();
@@ -261,17 +261,17 @@ public class DeviceTableViewPart extends ViewPart implements IDoubleClickListene
 
     private void createViewer(Composite parent) {
         // Define the TableViewer.
-        viewer = new TableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
+        tableViewer = new TableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 
         // Layout the viewer
         GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true, 9, 1);
-        viewer.getControl().setLayoutData(gridData);
+        tableViewer.getControl().setLayoutData(gridData);
 
         // Set the ContentProvider
-        viewer.setContentProvider(ArrayContentProvider.getInstance());
+        tableViewer.setContentProvider(ArrayContentProvider.getInstance());
 
         // Make lines and make header visible.
-        Table table = viewer.getTable();
+        Table table = tableViewer.getTable();
         table.setHeaderVisible(true);
         table.setLinesVisible(true);
 
@@ -279,10 +279,10 @@ public class DeviceTableViewPart extends ViewPart implements IDoubleClickListene
         createColumns(parent);
 
         // Add DoubleClickListener for the viewer.
-        viewer.addDoubleClickListener(this);
+        tableViewer.addDoubleClickListener(this);
 
         // Make the selection available to other Views.
-        getSite().setSelectionProvider(viewer);
+        getSite().setSelectionProvider(tableViewer);
     }
 
     private void createColumns(Composite parent) {
@@ -300,7 +300,7 @@ public class DeviceTableViewPart extends ViewPart implements IDoubleClickListene
                 cell.setText(device.getName());
 
                 // Set image for cell
-                cell.setImage(Utils.createImage(device.getIcon()));
+                cell.setImage(Utils.createImageFromIcon(device.getIcon()));
             }
         });
 
@@ -358,7 +358,7 @@ public class DeviceTableViewPart extends ViewPart implements IDoubleClickListene
     }
 
     private TableViewerColumn createTableViewerColumn(String title, int width, int columnNumber) {
-        TableViewerColumn viewerColumn = new TableViewerColumn(viewer, SWT.NONE);
+        TableViewerColumn viewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
         TableColumn column = viewerColumn.getColumn();
         column.setText(title);
         column.setWidth(width);
@@ -377,9 +377,9 @@ public class DeviceTableViewPart extends ViewPart implements IDoubleClickListene
             public void widgetSelected(SelectionEvent e) {
                 comparator.setColumn(columnNumber);
                 int direction = comparator.getDirection();
-                viewer.getTable().setSortDirection(direction);
-                viewer.getTable().setSortColumn(column);
-                viewer.refresh();
+                tableViewer.getTable().setSortDirection(direction);
+                tableViewer.getTable().setSortColumn(column);
+                tableViewer.refresh();
             }
         };
         return selectionAdapter;
@@ -410,10 +410,10 @@ public class DeviceTableViewPart extends ViewPart implements IDoubleClickListene
 
             // Set the content for the Viewer,
             // setInput will call getElements in the ContentProvider.
-            viewer.setInput(devices);
+            tableViewer.setInput(devices);
 
         } else {
-            viewer.getTable().removeAll();
+            tableViewer.getTable().removeAll();
         }
     }
 
@@ -447,5 +447,9 @@ public class DeviceTableViewPart extends ViewPart implements IDoubleClickListene
 
     private boolean isViewPartOpened(String viewId, String secondaryId) {
         return activePage.findViewReference(viewId, secondaryId) == null;
+    }
+
+    public void refreshTableViewer() {
+        tableViewer.refresh();
     }
 }
