@@ -9,9 +9,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.ViewPart;
 
 public class AreasTemplatesViewPart extends ViewPart {
-
-    public static final String ID =
-        "vn.enclave.peyton.fusion.view.areasTemplatesViewPart";
+    public static final String ID = "vn.enclave.peyton.fusion.view.areasTemplatesViewPart";
 
     @Override
     public void createPartControl(Composite parent) {

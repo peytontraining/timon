@@ -570,7 +570,7 @@
          </command>
       </menuContribution>
       <menuContribution
-            locationURI="toolbar:vn.enclave.peyton.fusion.view.deviceTableViewPart">
+            locationURI="toolbar:vn.enclave.peyton.fusion.view.deviceTableViewPart1">
          <command
                commandId="vn.enclave.peyton.fusion.command.refresh"
                icon="icons/refresh.png"

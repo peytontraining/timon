@@ -109,7 +109,7 @@ CREATE TABLE `devices` (
   KEY `fk_devices_icons_idx` (`idIcon`),
   CONSTRAINT `fk_devices_icons` FOREIGN KEY (`idIcon`) REFERENCES `icons` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_devices_versions` FOREIGN KEY (`idVersion`) REFERENCES `versions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,7 +118,7 @@ CREATE TABLE `devices` (
 
 LOCK TABLES `devices` WRITE;
 /*!40000 ALTER TABLE `devices` DISABLE KEYS */;
-INSERT INTO `devices` VALUES (1,16,1,'Axis - None-PTZ Models','CCTV','IP Cameras',NULL,'Axis','Non-PTZ Models','This device belongs to version 1.0.15.\nCreated by Timon.','2.0.1','2014-11-03 16:18:48'),(2,17,1,'Axis - None-PTZ Models','CCTV','IP Cameras',NULL,'Axis','Non-PTZ Models','This device belongs to version 1.0.16.\nCreated by Timon.','2.0.1','2014-11-03 13:22:57'),(3,17,1,'Axis - PTZ Models','CCTV','IP Cameras',NULL,'Axis','PTZ Models','This device belongs version 1.0.16.\nCreated by Timon.','2.0.1','2014-08-06 18:03:00'),(4,18,1,'Axis - None-PTZ Models','CCTV','IP Cameras',NULL,'Axis','Non-PTZ Models','This device belongs to version 1.0.17.\nCreated by Timon.','2.0.1','2014-11-03 13:23:19'),(5,18,1,'Axis - PTZ Models','CCTV','IP Cameras',NULL,'Axis','PTZ Models','This device belongs version 1.0.17.\nCreated by Timon.\nModified by Timon, again.','2.0.1','2014-11-03 16:07:48'),(6,18,1,'Axis - PTZ Models','CCTV','IP Cameras',NULL,'Axis','PTZ Models','Create by Timon.','2.0.1','2014-08-06 18:03:00'),(7,16,1,'Axis - None-PTZ Models','CCTV','IP Cameras',NULL,'Axis','Non-PTZ Models','','2.0.1','2014-08-12 23:28:00'),(8,20,1,'Axis - PTZ Models','CCTV','IP Cameras',NULL,'Axis','PTZ Models','This device belongs version 1.0.17.\nCreated by Timon.\nModified by Timon, again.','2.0.1','2014-11-03 16:07:48'),(9,20,1,'Axis - None-PTZ Models','CCTV','IP Cameras',NULL,'Axis','Non-PTZ Models','This device belongs to version 1.0.17.\nCreated by Timon.','2.0.1','2014-11-03 13:23:19'),(10,20,1,'Axis - PTZ Models','CCTV','IP Cameras',NULL,'Axis','PTZ Models','Create by Timon.','2.0.1','2014-08-06 18:03:00');
+INSERT INTO `devices` VALUES (1,16,1,'Axis - None-PTZ Models','CCTV','IP Cameras',' ','Axis','Non-PTZ Models','This device belongs to version 1.0.15.\nCreated by Timon.','2.0.1','2014-11-03 16:18:48'),(2,17,1,'Axis - None-PTZ Models','CCTV','IP Cameras',' ','Axis','Non-PTZ Models','This device belongs to version 1.0.16.\nCreated by Timon.','2.0.1','2014-11-03 13:22:57'),(3,17,1,'Axis - PTZ Models','CCTV','IP Cameras',' ','Axis','PTZ Models','This device belongs version 1.0.16.\nCreated by Timon.','2.0.1','2014-08-06 18:03:00'),(4,18,1,'Axis - None-PTZ Models','CCTV','IP Cameras',' ','Axis','Non-PTZ Models','This device belongs to version 1.0.17.\nCreated by Timon.','2.0.1','2014-11-03 13:23:19'),(5,18,1,'Axis - PTZ Models','CCTV','IP Cameras',' ','Axis','PTZ Models','This device belongs version 1.0.17.\nCreated by Timon.\nModified by Timon, again.','2.0.1','2014-11-03 16:07:48'),(6,18,1,'Axis - PTZ Models','CCTV','IP Cameras',' ','Axis','PTZ Models','Create by Timon.','2.0.1','2014-08-06 18:03:00'),(7,16,1,'Axis - None-PTZ Models','CCTV','IP Cameras',' ','Axis','Non-PTZ Models','','2.0.1','2014-08-12 23:28:00'),(8,20,1,'Axis - PTZ Models','CCTV','IP Cameras',' ','Axis','PTZ Models','This device belongs version 1.0.17.\nCreated by Timon.\nModified by Timon, again.','2.0.1','2014-11-03 16:07:48'),(9,20,1,'Axis - None-PTZ Models','CCTV','IP Cameras',' ','Axis','Non-PTZ Models','This device belongs to version 1.0.17.\nCreated by Timon.','2.0.1','2014-11-03 13:23:19'),(10,20,1,'Axis - PTZ Models','CCTV','IP Cameras',' ','Axis','PTZ Models','Create by Timon.','2.0.1','2014-08-06 18:03:00'),(11,20,2,'Clare Controls - B Series Models','CCTV','IP Cameras',' ','Clare Controls','B Series ','','2.0.1','2014-08-04 18:13:00');
 /*!40000 ALTER TABLE `devices` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -334,4 +334,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-11-03 17:35:41
+-- Dump completed on 2014-11-04 17:13:14

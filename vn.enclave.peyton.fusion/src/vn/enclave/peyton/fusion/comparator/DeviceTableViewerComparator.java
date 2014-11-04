@@ -1,6 +1,10 @@
 package vn.enclave.peyton.fusion.comparator;
 
-import static vn.enclave.peyton.fusion.view.DeviceTableViewPart.*;
+import static vn.enclave.peyton.fusion.common.Constant.COLUMN_NAME;
+import static vn.enclave.peyton.fusion.common.Constant.COLUMN_APP_MODULE;
+import static vn.enclave.peyton.fusion.common.Constant.COLUMN_DEVICE_TYPE;
+import static vn.enclave.peyton.fusion.common.Constant.COLUMN_PHYSICAL_LOCATION;
+import static vn.enclave.peyton.fusion.common.Constant.COLUMN_MANUFACTURER;
 
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
@@ -13,11 +17,11 @@ public class DeviceTableViewerComparator extends ViewerComparator {
     private static final long serialVersionUID = 6467573382782190246L;
     private static final int DESCENDING = 1;
 
-    private int propertyIndex;
+    private int columnIndex;
     private int direction = DESCENDING;
 
     public DeviceTableViewerComparator() {
-        this.propertyIndex = 0;
+        this.columnIndex = 0;
         direction = DESCENDING;
     }
 
@@ -25,11 +29,11 @@ public class DeviceTableViewerComparator extends ViewerComparator {
         return direction == 1 ? SWT.DOWN : SWT.UP;
     }
 
-    public void setColumn(int column) {
-        if (this.propertyIndex == column) {
+    public void setColumnIndex(int columnIndex) {
+        if (this.columnIndex == columnIndex) {
             direction = 1 - direction;
         } else {
-            this.propertyIndex = column;
+            this.columnIndex = columnIndex;
             direction = DESCENDING;
         }
     }
@@ -39,25 +43,24 @@ public class DeviceTableViewerComparator extends ViewerComparator {
         Device d1 = (Device) e1;
         Device d2 = (Device) e2;
         int rc = 0;
-        switch (propertyIndex) {
-            case NAME_COLUMN:
+        switch (columnIndex) {
+            case COLUMN_NAME :
                 rc = d1.getName().compareTo(d2.getName());
                 break;
 
-            case APP_MODULE_COLUMN:
+            case COLUMN_APP_MODULE :
                 rc = d1.getAppModule().compareTo(d2.getAppModule());
                 break;
 
-            case DEVICE_TYPE_COLUMN:
+            case COLUMN_DEVICE_TYPE :
                 rc = d1.getDeviceType().compareTo(d2.getDeviceType());
                 break;
 
-            case PHYSICAL_LOCATION_COLUMN:
-                rc = d1.getPhysicalLocation()
-                    .compareTo(d2.getPhysicalLocation());
+            case COLUMN_PHYSICAL_LOCATION :
+                rc = d1.getPhysicalLocation().compareTo(d2.getPhysicalLocation());
                 break;
 
-            case MANUFACTURE_COLUMN:
+            case COLUMN_MANUFACTURER :
                 rc = d1.getManufacturer().compareTo(d2.getManufacturer());
                 break;
         }

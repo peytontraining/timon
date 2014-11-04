@@ -86,20 +86,20 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
     }
 
     private void createToolItems(ToolBar parent) {
-        ToolItem save = createToolItem(parent, Constant.IMAGE_SAVE);
+        ToolItem save = createToolItem(parent, Constant.IMAGE_SAVE_AS);
         save.addSelectionListener(saveAdapter);
 
-        ToolItem saveAndClose = createToolItem(parent, Constant.IMAGE_SAVE_CLOSE);
+        ToolItem saveAndClose = createToolItem(parent, Constant.IMAGE_SAVE_AND_CLOSE);
 
         new ToolItem(parent, SWT.SEPARATOR);
 
-        ToolItem updateDevcie = createToolItem(parent, Constant.IMAGE_UPDATE_DEVICE);
+        ToolItem updateDevcie = createToolItem(parent, Constant.IMAGE_DEVICE_UPDATE);
 
-        ToolItem showDevice = createToolItem(parent, Constant.IMAGE_SHOW_DEVICE);
+        ToolItem showDevice = createToolItem(parent, Constant.IMAGE_SHOW_DEVICES);
 
         new ToolItem(parent, SWT.SEPARATOR);
 
-        ToolItem editService = createToolItem(parent, Constant.IMAGE_EDIT_SERVICE);
+        ToolItem editService = createToolItem(parent, Constant.IMAGE_SERVICE);
     }
 
     private ToolItem createToolItem(ToolBar parent, Image image) {
@@ -180,7 +180,7 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
 
     private void refreshDeviceTable() {
         IViewPart viewpart = activePage.findView(DeviceTableViewPart.ID);
-        ((DeviceTableViewPart) viewpart).refreshTableViewer();
+        ((DeviceTableViewPart) viewpart).refreshDeviceTableViewer();
     }
 
     private ModifyListener modifyListener = new ModifyListener() {

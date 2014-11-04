@@ -77,10 +77,10 @@ public class DetailedDeviceTemplateViewPart extends ViewPart {
 
     private void createAllToolItemsTo(ToolBar toolBar) {
         ToolItem saveToolItem = createToolItemTo(toolBar);
-        saveToolItem.setImage(Constant.IMAGE_SAVE);
+        saveToolItem.setImage(Constant.IMAGE_SAVE_AS);
 
         ToolItem saveAndCloseToolItem = createToolItemTo(toolBar);
-        saveAndCloseToolItem.setImage(Constant.IMAGE_SAVE_CLOSE);
+        saveAndCloseToolItem.setImage(Constant.IMAGE_SAVE_AND_CLOSE);
 
         createSeparatorTo(toolBar);
 

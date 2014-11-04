@@ -4,14 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TableViewerColumn;
-import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -29,71 +26,55 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.ISelectionService;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import vn.enclave.peyton.fusion.common.Constant;
-import vn.enclave.peyton.fusion.common.Utils;
 import vn.enclave.peyton.fusion.comparator.DeviceTableViewerComparator;
 import vn.enclave.peyton.fusion.entity.Device;
 import vn.enclave.peyton.fusion.entity.Version;
 import vn.enclave.peyton.fusion.filter.DeviceFilter;
+import vn.enclave.peyton.fusion.provider.DeviceTableLabelProvider;
 
 public class DeviceTableViewPart extends ViewPart implements IDoubleClickListener {
-    public static final int NAME_COLUMN = 0;
-    public static final int APP_MODULE_COLUMN = 1;
-    public static final int DEVICE_TYPE_COLUMN = 2;
-    public static final int PHYSICAL_LOCATION_COLUMN = 3;
-    public static final int MANUFACTURE_COLUMN = 4;
-    private static final int DEFAULT_WIDTH = 100;
+    public static final String ID = "vn.enclave.peyton.fusion.view.deviceTableViewPart";
+    private static final int DEFAULT_WIDTH = 120;
     private static final int DOWN_OFFSET = 1;
     private static final int UP_OFFSET = -1;
-    public static final String ID = "vn.enclave.peyton.fusion.view.deviceTableViewPart";
-    private static final String[] TITLES = {"Name", "App Module", "Device Type", "Physical Location", "Manufacture"};
-    private TableViewer tableViewer;
-    private DeviceTableViewerComparator comparator;
-    private Text filterText, finderText;
-    private Button clear, up, down;
-    private DeviceFilter filter;
+    private static final String[] TITLES = {"Name", "App Module", "Device Type", "Physical Location", "Manufacturer"};
+    private Table deviceTable;
+    private TableViewer deviceTableViewer;
+    private DeviceTableViewerComparator deviceTableComparator = new DeviceTableViewerComparator();
+    private Label filterLbl;
+    private Label finderLbl;
+    private Text filterTxt;
+    private Text finderTxt;
+    private Button clearBtn;
+    private Button upBtn;
+    private Button downBtn;
+    private DeviceFilter deviceFilter = new DeviceFilter();
     private IWorkbenchPage activePage;
-
-    // public TableViewer getViewer() {
-    // return viewer;
-    // }
 
     @Override
     public void createPartControl(Composite parent) {
-        createActivePage();
-
-        GridLayout layout = new GridLayout(9, false);
+        GridLayout layout = new GridLayout(1, false);
+        layout.verticalSpacing = 0;
+        layout.marginHeight = 0;
+        layout.marginRight = -5;
+        layout.marginLeft = -5;
+        layout.horizontalSpacing = 0;
         parent.setLayout(layout);
 
-        // Create filter.
-        createFilter(parent);
+        createActivePage();
 
-        // Create finder.
-        createFinder(parent);
-
-        // Create TableViewer.
-        createViewer(parent);
-
-        // Set the filter for the table.
-        filter = new DeviceFilter();
-        tableViewer.addFilter(filter);
-
-        // Set the sorter for the table.
-        comparator = new DeviceTableViewerComparator();
-        tableViewer.setComparator(comparator);
-
-        // Set selection service
-        createSelectionListener();
+        createToolbarCompositeInside(parent);
+        createFilterAndFinderCompositeInside(parent);
+        createDeviceTableCompositeInside(parent);
     }
 
     private void createActivePage() {
@@ -101,320 +82,361 @@ public class DeviceTableViewPart extends ViewPart implements IDoubleClickListene
         activePage = window.getActivePage();
     }
 
-    @Override
-    public void setFocus() {
-        tableViewer.getControl().setFocus();
+    private void createToolbarCompositeInside(Composite parent) {
+        GridLayout layout = new GridLayout(1, false);
+        layout.marginTop = -5;
+        layout.marginRight = -5;
+        layout.marginBottom = -5;
+        layout.marginLeft = -5;
+        GridData layoutData = new GridData(SWT.FILL, SWT.NONE, true, false);
+        Composite toolbarComposite = new Composite(parent, SWT.NONE);
+        toolbarComposite.setLayout(layout);
+        toolbarComposite.setLayoutData(layoutData);
+
+        createToolbarTo(toolbarComposite);
     }
 
-    private void createFilter(Composite parent) {
-        // Create filter label.
-        Label label = new Label(parent, SWT.NONE);
-        label.setText("Filter:");
+    private void createFilterAndFinderCompositeInside(Composite parent) {
+        GridLayout layout = new GridLayout(2, false);
+        layout.marginTop = -5;
+        layout.marginRight = -5;
+        layout.marginBottom = -5;
+        layout.marginLeft = -5;
+        GridData layoutData = new GridData(SWT.FILL, SWT.NONE, true, false);
+        Composite filterAndFinderComposite = new Composite(parent, SWT.NONE);
+        filterAndFinderComposite.setLayout(layout);
+        filterAndFinderComposite.setLayoutData(layoutData);
 
-        // Create and layout filter text.
-        GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1);
-        filterText = new Text(parent, SWT.BORDER | SWT.SEARCH);
-        filterText.setLayoutData(layoutData);
-        filterText.addModifyListener(new ModifyListener() {
+        createFilterCompositeInside(filterAndFinderComposite);
+        createFinderCompositeInside(filterAndFinderComposite);
+    }
 
+    private void createDeviceTableCompositeInside(Composite parent) {
+        GridLayout layout = new GridLayout(1, false);
+        layout.marginTop = -5;
+        layout.marginRight = -5;
+        layout.marginBottom = -5;
+        layout.marginLeft = -5;
+        GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
+        Composite deviceTableComposite = new Composite(parent, SWT.NONE);
+        deviceTableComposite.setLayout(layout);
+        deviceTableComposite.setLayoutData(layoutData);
+
+        createDeviceTableViewerInside(deviceTableComposite);
+    }
+
+    private void createToolbarTo(Composite toolbarComposite) {
+        GridData layoutData = new GridData(SWT.RIGHT, SWT.NONE, true, false);
+        ToolBar toolBar = new ToolBar(toolbarComposite, SWT.FLAT);
+        toolBar.setLayoutData(layoutData);
+
+        createAllToolItemsTo(toolBar);
+    }
+
+    private void createFilterCompositeInside(Composite filterAndFinderComposite) {
+        GridLayout layout = new GridLayout(3, false);
+        layout.marginRight = 20;
+        GridData layoutData = new GridData(SWT.FILL, SWT.NONE, true, false);
+        Composite filterComposite = new Composite(filterAndFinderComposite, SWT.NONE);
+        filterComposite.setLayout(layout);
+        filterComposite.setLayoutData(layoutData);
+
+        createFilterControlsInside(filterComposite);
+    }
+
+    private void createFinderCompositeInside(Composite filterAndFinderComposite) {
+        GridLayout layout = new GridLayout(4, false);
+        layout.marginLeft = 20;
+        GridData layoutData = new GridData(SWT.FILL, SWT.NONE, true, false);
+        Composite finderComposite = new Composite(filterAndFinderComposite, SWT.NONE);
+        finderComposite.setLayout(layout);
+        finderComposite.setLayoutData(layoutData);
+
+        createFinderControlsInside(finderComposite);
+    }
+
+    private void createDeviceTableViewerInside(Composite deviceTableComposite) {
+        GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
+        int style = SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER;
+        deviceTable = new Table(deviceTableComposite, style);
+        deviceTable.setHeaderVisible(true);
+        deviceTable.setLinesVisible(true);
+        deviceTable.setLayoutData(layoutData);
+
+        deviceTableViewer = new TableViewer(deviceTable);
+        deviceTableViewer.setContentProvider(ArrayContentProvider.getInstance());
+        deviceTableViewer.setLabelProvider(new DeviceTableLabelProvider());
+        deviceTableViewer.setComparator(deviceTableComparator);
+        deviceTableViewer.addFilter(deviceFilter);
+        deviceTableViewer.addDoubleClickListener(this);
+
+        getSite().setSelectionProvider(deviceTableViewer);
+
+        createAllColumnsToDeviceTableViewer();
+    }
+
+    private void createAllToolItemsTo(ToolBar toolBar) {
+        ToolItem refreshToolItem = createToolItemTo(toolBar);
+        refreshToolItem.setImage(Constant.IMAGE_REFRESH);
+
+        createSeparatorTo(toolBar);
+
+        ToolItem addToolItem = createToolItemTo(toolBar);
+        addToolItem.setImage(Constant.IMAGE_ADD);
+
+        ToolItem copyToolItem = createToolItemTo(toolBar);
+        copyToolItem.setImage(Constant.IMAGE_COPY);
+
+        ToolItem deleteToolItem = createToolItemTo(toolBar);
+        deleteToolItem.setImage(Constant.IMAGE_DELETE);
+
+        createSeparatorTo(toolBar);
+
+        ToolItem importDeviceToolItem = createToolItemTo(toolBar);
+        importDeviceToolItem.setImage(Constant.IMAGE_IMPORT_DEVICES);
+
+        ToolItem importZWaveToolItem = createToolItemTo(toolBar);
+        importZWaveToolItem.setImage(Constant.IMAGE_IMPORT_ZWAVE);
+
+        ToolItem templateChildToolItem = createToolItemTo(toolBar);
+        templateChildToolItem.setImage(Constant.IMAGE_TEMPLATE_CHILD);
+
+        ToolItem exportToolItem = createToolItemTo(toolBar);
+        exportToolItem.setImage(Constant.IMAGE_EXPORT);
+
+        createSeparatorTo(toolBar);
+
+        ToolItem systemToolItem = createToolItemTo(toolBar);
+        systemToolItem.setImage(Constant.IMAGE_SYSTEM);
+
+        ToolItem expandToolItem = createToolItemTo(toolBar);
+        expandToolItem.setImage(Constant.IMAGE_EXPAND);
+
+        ToolItem collapseToolItem = createToolItemTo(toolBar);
+        collapseToolItem.setImage(Constant.IMAGE_COLLAPSE);
+
+        createSeparatorTo(toolBar);
+
+        ToolItem deviceChangedToolItem = createToolItemTo(toolBar);
+        deviceChangedToolItem.setImage(Constant.IMAGE_DEVICE_CHANGED);
+
+        ToolItem requestOnlineStatusToolItem = createToolItemTo(toolBar);
+        requestOnlineStatusToolItem.setImage(Constant.IMAGE_REQUEST_ONLINE_STATUS);
+    }
+
+    private void createFilterControlsInside(Composite filterComposite) {
+        filterLbl = new Label(filterComposite, SWT.NONE);
+        filterLbl.setText("Filter:");
+
+        filterTxt = createText(filterComposite);
+        filterTxt.addModifyListener(createModifyListenerToFilterText());
+
+        clearBtn = createButton(filterComposite);
+        clearBtn.setImage(Constant.IMAGE_EDIT);
+        clearBtn.setEnabled(false);
+        clearBtn.addSelectionListener(createSelectionAdapterToClearButton());
+    }
+
+    private void createFinderControlsInside(Composite finderComposite) {
+        finderLbl = new Label(finderComposite, SWT.NONE);
+        finderLbl.setText("Find:");
+
+        finderTxt = createText(finderComposite);
+        finderTxt.addModifyListener(createModifyListenerToFinderText());
+        finderTxt.addKeyListener(createKeyAdapterToFinderText());
+
+        upBtn = createButton(finderComposite);
+        upBtn.setImage(Constant.IMAGE_ARROW_UP);
+        upBtn.addSelectionListener(createSelectionAdapterToUpButton());
+
+        downBtn = createButton(finderComposite);
+        downBtn.setImage(Constant.IMAGE_ARROW_DOWN);
+        downBtn.addSelectionListener(createSelectionAdapterToDownButton());
+    }
+
+    private ToolItem createToolItemTo(ToolBar toolBar) {
+        ToolItem toolItem = new ToolItem(toolBar, SWT.PUSH);
+        return toolItem;
+    }
+
+    private void createSeparatorTo(ToolBar toolBar) {
+        new ToolItem(toolBar, SWT.SEPARATOR);
+    }
+
+    private Text createText(Composite composite) {
+        GridData layoutData = new GridData(SWT.FILL, SWT.NONE, true, false);
+        Text text = new Text(composite, SWT.BORDER);
+        text.setLayoutData(layoutData);
+        return text;
+    }
+
+    private ModifyListener createModifyListenerToFilterText() {
+        return new ModifyListener() {
             private static final long serialVersionUID = 4906617449904102933L;
 
             @Override
             public void modifyText(ModifyEvent event) {
-                filter.setFilterString(filterText.getText());
-                tableViewer.refresh();
-                boolean enabled = filterText.getText() != null & filterText.getText().length() != 0;
-                clear.setEnabled(enabled);
+                deviceFilter.setFilterString(filterTxt.getText());
+                deviceTableViewer.refresh();
+                clearBtn.setEnabled(isEnableClearButton());
             }
-        });
+        };
+    }
 
-        // Create clear button
-        clear = new Button(parent, SWT.NONE);
-        clear.setImage(Constant.IMAGE_EDIT);
-        clear.setEnabled(false);
-        clear.addSelectionListener(new SelectionAdapter() {
+    private boolean isEnableClearButton() {
+        return filterTxt.getText() != null & filterTxt.getText().length() != 0;
+    }
 
+    private Button createButton(Composite composite) {
+        Button button = new Button(composite, SWT.PUSH);
+        return button;
+    }
+
+    private SelectionAdapter createSelectionAdapterToClearButton() {
+        return new SelectionAdapter() {
             private static final long serialVersionUID = 8727982726761507228L;
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                filterText.setText("");
-                clear.setEnabled(false);
+                filterTxt.setText("");
+                clearBtn.setEnabled(false);
             }
-        });
+        };
     }
 
-    private void createFinder(Composite parent) {
-        // Create and layout finder label.
-        GridData layoutData = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
-        Label label = new Label(parent, SWT.NONE);
-        label.setText("Find:");
-        label.setLayoutData(layoutData);
-
-        // Create and layout finder text.
-        layoutData = new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1);
-        finderText = new Text(parent, SWT.BORDER | SWT.SEARCH);
-        finderText.setLayoutData(layoutData);
-        finderText.addModifyListener(new ModifyListener() {
-
+    private ModifyListener createModifyListenerToFinderText() {
+        return new ModifyListener() {
             private static final long serialVersionUID = -1718429326062300859L;
 
             @Override
             public void modifyText(ModifyEvent event) {
-                find(finderText.getText());
+                findDeviceBy(finderTxt.getText());
             }
-        });
-        finderText.addKeyListener(new KeyAdapter() {
+        };
+    }
 
+    private KeyAdapter createKeyAdapterToFinderText() {
+        return new KeyAdapter() {
             private static final long serialVersionUID = -5866801124911784172L;
 
             @Override
             public void keyReleased(KeyEvent e) {
                 if (e.keyCode == SWT.CR) {
-                    find(finderText.getText());
+                    findDeviceBy(finderTxt.getText());
                 }
             }
-        });
+        };
+    }
 
-        // Create up button
-        up = new Button(parent, SWT.NONE);
-        up.setImage(Constant.IMAGE_ARROW_UP);
-        up.addSelectionListener(new SelectionAdapter() {
-
+    private SelectionAdapter createSelectionAdapterToUpButton() {
+        return new SelectionAdapter() {
             private static final long serialVersionUID = -5886805186732591167L;
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                find(finderText.getText(), UP_OFFSET);
+                findDeviceBy(finderTxt.getText(), UP_OFFSET);
             }
-        });
+        };
+    }
 
-        // Create down button
-        down = new Button(parent, SWT.NONE);
-        down.setImage(Constant.IMAGE_ARROW_DOWN);
-        down.addSelectionListener(new SelectionAdapter() {
-
+    private SelectionAdapter createSelectionAdapterToDownButton() {
+        return new SelectionAdapter() {
             private static final long serialVersionUID = -3866766296386752019L;
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                find(finderText.getText(), DOWN_OFFSET);
+                findDeviceBy(finderTxt.getText(), DOWN_OFFSET);
             }
-        });
+        };
     }
 
-    private void find(String findText) {
-        Table table = tableViewer.getTable();
-        TableItem[] rows = table.getItems();
-        int numberOfRow = rows.length;
-        int nubmerOfColumn = table.getColumnCount();
-        int index = -1;
-        if (numberOfRow != 0) {
-            // Get indexes of match rows.
-            for (int i = 0; i < numberOfRow; i++) {
-                for (int j = 0; j < nubmerOfColumn; j++) {
-                    if (rows[i].getText(j).toLowerCase().contains(findText.trim().toLowerCase())) {
-                        index = i;
-                        table.select(index);
-                        break;
-                    }
-                }
+    private void findDeviceBy(String findText) {
+        int matchedRowIndex = findTheFirstMatchedRow(findText);
 
-                if (index != -1) {
-                    break;
-                }
-            }
-
-            // Deselect row when find textbox is empty.
-            if (findText.length() == 0 || findText == null || index == -1) {
-                table.deselectAll();
-            }
+        if (findText.length() == 0 || findText == null || matchedRowIndex == -1) {
+            deviceTable.deselectAll();
         }
     }
 
-    protected void find(String findText, int offset) {
-        Table table = tableViewer.getTable();
-        TableItem[] rows = table.getItems();
+    private int findTheFirstMatchedRow(String findText) {
+        TableItem[] rows = deviceTable.getItems();
         int numberOfRow = rows.length;
-        int nubmerOfColumn = table.getColumnCount();
+        int nubmerOfColumn = deviceTable.getColumnCount();
+        for (int rowIndex = 0; rowIndex < numberOfRow; rowIndex++) {
+            for (int columnIndex = 0; columnIndex < nubmerOfColumn; columnIndex++) {
+                String cellValue = rows[rowIndex].getText(columnIndex);
+                if (isCellValueContainsFindText(cellValue, findText)) {
+                    deviceTable.select(rowIndex);
+                    return rowIndex;
+                }
+            }
+        }
+        return -1;
+    }
+
+    private boolean isCellValueContainsFindText(String cellValue, String findText) {
+        return cellValue.toLowerCase().contains(findText.trim().toLowerCase());
+    }
+
+    //TODO: reorganize
+    private void findDeviceBy(String findText, int offset) {
+        TableItem[] rows = deviceTable.getItems();
+        int numberOfRow = rows.length;
+        int nubmerOfColumn = deviceTable.getColumnCount();
         ArrayList<Integer> focusIndexes = new ArrayList<Integer>();
         if (numberOfRow != 0) {
             // Get indexes of match rows.
-            for (int i = 0; i < numberOfRow; i++) {
-                for (int j = 0; j < nubmerOfColumn; j++) {
-                    if (rows[i].getText(j).toLowerCase().contains(findText.trim().toLowerCase())) {
-                        focusIndexes.add(i);
+            for (int rowIndex = 0; rowIndex < numberOfRow; rowIndex++) {
+                for (int columnIndex = 0; columnIndex < nubmerOfColumn; columnIndex++) {
+                    String cellValue = rows[rowIndex].getText(columnIndex);
+                    if (isCellValueContainsFindText(cellValue, findText)) {
+                        focusIndexes.add(rowIndex);
                         break;
                     }
                 }
             }
-            int selectionIndex = table.getSelectionIndex();
+            int selectionIndex = deviceTable.getSelectionIndex();
             int index = focusIndexes.indexOf(selectionIndex) + offset;
             if (index < 0) {
                 index = focusIndexes.size() - 1;
             } else if (index > focusIndexes.size() - 1) {
                 index = 0;
             }
-            table.select(focusIndexes.get(index));
+            deviceTable.select(focusIndexes.get(index));
         }
     }
 
-    private void createViewer(Composite parent) {
-        // Define the TableViewer.
-        tableViewer = new TableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
-
-        // Layout the viewer
-        GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true, 9, 1);
-        tableViewer.getControl().setLayoutData(gridData);
-
-        // Set the ContentProvider
-        tableViewer.setContentProvider(ArrayContentProvider.getInstance());
-
-        // Make lines and make header visible.
-        Table table = tableViewer.getTable();
-        table.setHeaderVisible(true);
-        table.setLinesVisible(true);
-
-        // Create the columns
-        createColumns(parent);
-
-        // Add DoubleClickListener for the viewer.
-        tableViewer.addDoubleClickListener(this);
-
-        // Make the selection available to other Views.
-        getSite().setSelectionProvider(tableViewer);
+    private void createAllColumnsToDeviceTableViewer() {
+        for (int columnIndex = 0; columnIndex < TITLES.length; columnIndex++) {
+            createColumnHas(columnIndex);
+        }
     }
 
-    private void createColumns(Composite parent) {
-        // First column is for the Name.
-        TableViewerColumn column = createTableViewerColumn(TITLES[NAME_COLUMN], DEFAULT_WIDTH, NAME_COLUMN);
-        column.setLabelProvider(new CellLabelProvider() {
-
-            private static final long serialVersionUID = -8940575743109974080L;
-
-            @Override
-            public void update(ViewerCell cell) {
-                Device device = (Device) cell.getElement();
-
-                // Set text for cell
-                cell.setText(device.getName());
-
-                // Set image for cell
-                cell.setImage(Utils.createImageFromIcon(device.getIcon()));
-            }
-        });
-
-        // Second column is for the App module
-        column = createTableViewerColumn(TITLES[APP_MODULE_COLUMN], DEFAULT_WIDTH, APP_MODULE_COLUMN);
-        column.setLabelProvider(new CellLabelProvider() {
-
-            private static final long serialVersionUID = 406059287858697720L;
-
-            @Override
-            public void update(ViewerCell cell) {
-                Device device = (Device) cell.getElement();
-                cell.setText(device.getAppModule());
-            }
-        });
-
-        // Third column is for the Device type
-        column = createTableViewerColumn(TITLES[DEVICE_TYPE_COLUMN], DEFAULT_WIDTH, DEVICE_TYPE_COLUMN);
-        column.setLabelProvider(new CellLabelProvider() {
-
-            private static final long serialVersionUID = -9169642429241436682L;
-
-            @Override
-            public void update(ViewerCell cell) {
-                Device device = (Device) cell.getElement();
-                cell.setText(device.getDeviceType());
-            }
-        });
-
-        // Fourth column is for the Physical location
-        column = createTableViewerColumn(TITLES[PHYSICAL_LOCATION_COLUMN], DEFAULT_WIDTH, PHYSICAL_LOCATION_COLUMN);
-        column.setLabelProvider(new CellLabelProvider() {
-
-            private static final long serialVersionUID = -8236537062078809905L;
-
-            @Override
-            public void update(ViewerCell cell) {
-                Device device = (Device) cell.getElement();
-                cell.setText(device.getPhysicalLocation());
-            }
-        });
-
-        // Fifth column is for the Manufacture
-        column = createTableViewerColumn(TITLES[MANUFACTURE_COLUMN], DEFAULT_WIDTH, MANUFACTURE_COLUMN);
-        column.setLabelProvider(new CellLabelProvider() {
-
-            private static final long serialVersionUID = 7303645075256781731L;
-
-            @Override
-            public void update(ViewerCell cell) {
-                Device device = (Device) cell.getElement();
-                cell.setText(device.getManufacturer());
-            }
-        });
+    private TableColumn createColumnHas(int columnIndex) {
+        TableColumn tableColumn = new TableColumn(deviceTable, SWT.NONE);
+        tableColumn.setText(TITLES[columnIndex]);
+        tableColumn.setWidth(DEFAULT_WIDTH);
+        tableColumn.setResizable(true);
+        tableColumn.setMoveable(true);
+        tableColumn.addSelectionListener(createSelectionAdapterToColumnHas(columnIndex));
+        return tableColumn;
     }
 
-    private TableViewerColumn createTableViewerColumn(String title, int width, int columnNumber) {
-        TableViewerColumn viewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
-        TableColumn column = viewerColumn.getColumn();
-        column.setText(title);
-        column.setWidth(width);
-        column.setResizable(true);
-        column.setMoveable(true);
-        column.addSelectionListener(getSelectionAdapter(column, columnNumber));
-        return viewerColumn;
-    }
-
-    private SelectionListener getSelectionAdapter(final TableColumn column, final int columnNumber) {
-        SelectionAdapter selectionAdapter = new SelectionAdapter() {
-
+    private SelectionListener createSelectionAdapterToColumnHas(final int columnIndex) {
+        return new SelectionAdapter() {
             private static final long serialVersionUID = 4234122934768663966L;
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                comparator.setColumn(columnNumber);
-                int direction = comparator.getDirection();
-                tableViewer.getTable().setSortDirection(direction);
-                tableViewer.getTable().setSortColumn(column);
-                tableViewer.refresh();
+                TableColumn tableColumn = deviceTable.getColumn(columnIndex);
+                deviceTableComparator.setColumnIndex(columnIndex);
+                int direction = deviceTableComparator.getDirection();
+                deviceTable.setSortDirection(direction);
+                deviceTable.setSortColumn(tableColumn);
+
+                deviceTableViewer.refresh();
             }
         };
-        return selectionAdapter;
-    }
-
-    private void createSelectionListener() {
-        // Get current window.
-        IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-
-        // Get selection service.
-        ISelectionService selectionService = window.getSelectionService();
-
-        // Add selection listener.
-        selectionService.addSelectionListener(NavigationViewPart.ID, new ISelectionListener() {
-
-            @Override
-            public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-                IStructuredSelection sselection = (IStructuredSelection) selection;
-                Object firstElement = sselection.getFirstElement();
-                fillInTable(firstElement);
-            }
-        });
-    }
-
-    private void fillInTable(Object firstElement) {
-        if (firstElement != null && firstElement instanceof Version) {
-            List<Device> devices = ((Version) firstElement).getDevices();
-
-            // Set the content for the Viewer,
-            // setInput will call getElements in the ContentProvider.
-            tableViewer.setInput(devices);
-
-        } else {
-            tableViewer.getTable().removeAll();
-        }
     }
 
     @Override
@@ -449,7 +471,20 @@ public class DeviceTableViewPart extends ViewPart implements IDoubleClickListene
         return activePage.findViewReference(viewId, secondaryId) == null;
     }
 
-    public void refreshTableViewer() {
-        tableViewer.refresh();
+    public void refreshDeviceTableViewer() {
+        deviceTableViewer.refresh();
+    }
+
+    public void populateDeviceTableFrom(Version selectedVersion) {
+        List<Device> devices = ((Version) selectedVersion).getDevices();
+        deviceTableViewer.setInput(devices);
+    }
+
+    public void clearRowsOnDeviceTable() {
+        deviceTableViewer.setInput(null);
+    }
+
+    @Override
+    public void setFocus() {
     }
 }

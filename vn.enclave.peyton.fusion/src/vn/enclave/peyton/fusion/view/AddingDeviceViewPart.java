@@ -117,24 +117,24 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
 
     private void createAllToolItemsTo(ToolBar toolBar) {
         ToolItem saveToolItem = createToolItemInside(toolBar);
-        saveToolItem.setImage(Constant.IMAGE_SAVE);
+        saveToolItem.setImage(Constant.IMAGE_SAVE_AS);
         saveToolItem.addSelectionListener(getSelectionAdapterToSaveToolItem());
 
         ToolItem saveAndCloseToolItem = createToolItemInside(toolBar);
-        saveAndCloseToolItem.setImage(Constant.IMAGE_SAVE_CLOSE);
+        saveAndCloseToolItem.setImage(Constant.IMAGE_SAVE_AND_CLOSE);
 
         createSeparatorInside(toolBar);
 
         ToolItem updateDeviceToolItem = createToolItemInside(toolBar);
-        updateDeviceToolItem.setImage(Constant.IMAGE_UPDATE_DEVICE);
+        updateDeviceToolItem.setImage(Constant.IMAGE_DEVICE_UPDATE);
 
         ToolItem showDeviceToolItem = createToolItemInside(toolBar);
-        showDeviceToolItem.setImage(Constant.IMAGE_SHOW_DEVICE);
+        showDeviceToolItem.setImage(Constant.IMAGE_SHOW_DEVICES);
 
         createSeparatorInside(toolBar);
 
         ToolItem editServiceToolItem = createToolItemInside(toolBar);
-        editServiceToolItem.setImage(Constant.IMAGE_EDIT_SERVICE);
+        editServiceToolItem.setImage(Constant.IMAGE_SERVICE);
     }
 
     private void createDetailsTabItemInside(TabFolder tabFolder) {
@@ -172,7 +172,7 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                saveDevice();
+                saveNewDevice();
             }
         };
     }
@@ -189,16 +189,16 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
         };
     }
 
-    private void saveDevice() {
+    private void saveNewDevice() {
         ISelection selection = activePage.getSelection(NavigationViewPart.ID);
         IStructuredSelection sselection = (IStructuredSelection) selection;
         Object firstElement = sselection.getFirstElement();
         if (firstElement instanceof Version) {
             Version selectedVersion = (Version) firstElement;
 
-            Device newDevice = addDevice2Database(selectedVersion);
+            Device newDevice = addNewDeviceToDatabase(selectedVersion);
 
-            addDevice2Tree(selectedVersion, newDevice);
+            addNewDeviceToDeviceTree(selectedVersion, newDevice);
 
             setDirty(false);
             setCanceled(false);
@@ -208,22 +208,16 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
         }
     }
 
-    private Device addDevice2Database(Version selectedVersion) {
-        /*
-         * Get new device from form, then set the selected version to it.
-         */
+    private Device addNewDeviceToDatabase(Version selectedVersion) {
         Device newDevice = prepareNewDevice();
         newDevice.setVersion(selectedVersion);
 
-        /*
-         * Save device into database.
-         */
         DeviceService deviceService = new DeviceService();
         newDevice = deviceService.insert(newDevice);
         return newDevice;
     }
 
-    private void addDevice2Tree(Version selectedVersion, Device newDevice) {
+    private void addNewDeviceToDeviceTree(Version selectedVersion, Device newDevice) {
         /*
          * Set the selected version to the new device, which returned from
          * addDevice2Database() method.
@@ -233,13 +227,13 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
         /*
          * Add the new device into the list devices of the selected version.
          */
-        selectedVersion.getDevices().add(newDevice);
+        selectedVersion.addDevice(newDevice);
 
         /*
          * Refresh the device table to display the new device.
          */
         IViewPart viewpart = activePage.findView(DeviceTableViewPart.ID);
-        ((DeviceTableViewPart) viewpart).refreshTableViewer();
+        ((DeviceTableViewPart) viewpart).refreshDeviceTableViewer();
     }
 
     private void createWarningMessageDialog() {
@@ -272,7 +266,7 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
 
     @Override
     public void doSave(IProgressMonitor monitor) {
-        saveDevice();
+        saveNewDevice();
         monitor.setCanceled(isCanceled);
     }
 
@@ -303,8 +297,10 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
     }
 
     @Override
-    public void setFocus() {}
+    public void setFocus() {
+    }
 
     @Override
-    public void doSaveAs() {}
+    public void doSaveAs() {
+    }
 }

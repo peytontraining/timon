@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISelectionService;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.dialogs.FilteredTree;
@@ -45,8 +46,7 @@ import vn.enclave.peyton.fusion.view.form.VersionForm;
 
 public class NavigationViewPart extends ViewPart {
 
-    public static final String ID =
-        "vn.enclave.peyton.fusion.view.navigationViewPart";
+    public static final String ID = "vn.enclave.peyton.fusion.view.navigationViewPart";
 
     private static final int TOP_COMPOSITE = 65;
 
@@ -188,8 +188,7 @@ public class NavigationViewPart extends ViewPart {
         PatternFilter filter = new PatternFilter();
 
         // Create and layout the FilteredTree.
-        GridData layoutData =
-            new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+        GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
         int style = SWT.H_SCROLL | SWT.V_SCROLL;
         FilteredTree filteredTree = new PlanFilter(parent, style, filter, true);
         filteredTree.setLayoutData(layoutData);
@@ -203,7 +202,37 @@ public class NavigationViewPart extends ViewPart {
         // Set the LableProvider.
         treeViewer.setLabelProvider(new PlanTreeLableProvider());
 
+        treeViewer.getTree().addSelectionListener(new SelectionAdapter() {
+            private static final long serialVersionUID = 6559095611240490844L;
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                Object selecteNode = getSelectedNodeOnNavigationTreeViewer();
+                if (selecteNode instanceof Version) {
+                    Version selectedVersion = (Version) selecteNode;
+                    populateDeviceTableFrom(selectedVersion);
+                } else {
+                    clearDeviceTable();
+                }
+            }
+        });
         return treeViewer;
+    }
+
+    private Object getSelectedNodeOnNavigationTreeViewer() {
+        ISelection selection = viewer.getSelection();
+        IStructuredSelection sselection = (IStructuredSelection) selection;
+        return sselection.getFirstElement();
+    }
+
+    private void populateDeviceTableFrom(Version selectedVersion) {
+        IViewPart viewPart = getSite().getPage().findView(DeviceTableViewPart.ID);
+        ((DeviceTableViewPart) viewPart).populateDeviceTableFrom(selectedVersion);
+    }
+
+    private void clearDeviceTable() {
+        IViewPart viewPart = getSite().getPage().findView(DeviceTableViewPart.ID);
+        ((DeviceTableViewPart) viewPart).clearRowsOnDeviceTable();
     }
 
     /*
@@ -250,7 +279,7 @@ public class NavigationViewPart extends ViewPart {
     private ToolItem createToolItem(ToolBar parent) {
         // Create a ToolItem.
         ToolItem item = new ToolItem(parent, SWT.PUSH);
-        item.setImage(Constant.IMAGE_SAVE);
+        item.setImage(Constant.IMAGE_SAVE_AS);
         item.setEnabled(false);
         return item;
     }
@@ -265,41 +294,33 @@ public class NavigationViewPart extends ViewPart {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                IStructuredSelection selection =
-                    (IStructuredSelection) viewer.getSelection();
+                IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
                 Object firstElement = selection.getFirstElement();
                 if (firstElement instanceof Version) {
                     String name = versionForm.getVersionText().getText();
                     if (((Version) firstElement).getId() == Constant.DEFAULT_VERSION_ID) {
-                        String targetVersion =
-                            versionForm.getTargetVersionText().getText();
-                        String deploySource =
-                            versionForm.getDeploySourceText().getText();
+                        String targetVersion = versionForm.getTargetVersionText().getText();
+                        String deploySource = versionForm.getDeploySourceText().getText();
                         ((Version) firstElement).setDeploySource(deploySource);
                         ((Version) firstElement).setName(name);
                         ((Version) firstElement).setSaveTime(new Date());
-                        ((Version) firstElement)
-                            .setTargetVersion(targetVersion);
+                        ((Version) firstElement).setTargetVersion(targetVersion);
 
                         // Get the current project.
-                        Project currentProject =
-                            ((Version) firstElement).getProject();
+                        Project currentProject = ((Version) firstElement).getProject();
 
                         /*
                          * After add() method run, the return variable
                          * newVersion has a new Project pointer.
                          */
-                        firstElement =
-                            versionService.add((Version) firstElement);
+                        firstElement = versionService.add((Version) firstElement);
 
                         // Set current Project pointer for the new Version Node.
                         ((Version) firstElement).setProject(currentProject);
 
                         // Remove the temp object in treeview and add the new
                         // object that got from add query.
-                        ((Version) firstElement)
-                            .getProject().getVersions()
-                            .set(0, (Version) firstElement);
+                        ((Version) firstElement).getProject().getVersions().set(0, (Version) firstElement);
                     } else {
                         ((Version) firstElement).setName(name);
 
@@ -330,17 +351,14 @@ public class NavigationViewPart extends ViewPart {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                IStructuredSelection selection =
-                    (IStructuredSelection) viewer.getSelection();
+                IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
                 Object firstElement = selection.getFirstElement();
                 if (firstElement instanceof Project) {
                     String name = projectForm.getNameText().getText();
                     if (((Project) firstElement).getId() == Constant.DEFAULT_PROJECT_ID) {
-                        boolean gateway =
-                            projectForm.getUuidRadio().getSelection();
+                        boolean gateway = projectForm.getUuidRadio().getSelection();
                         String host = projectForm.getHostText().getText();
-                        String license =
-                            projectForm.getLicenseCombo().getText();
+                        String license = projectForm.getLicenseCombo().getText();
                         int port = projectForm.getPortSpinner().getSelection();
                         String uuid = projectForm.getUuidText().getText();
                         ((Project) firstElement).setName(name);
@@ -349,10 +367,8 @@ public class NavigationViewPart extends ViewPart {
                         ((Project) firstElement).setLicense(license);
                         ((Project) firstElement).setPort(port);
                         ((Project) firstElement).setUuid(uuid);
-                        ((Project) firstElement)
-                            .getVersions().get(0).setName("1.0.0");
-                        ((Project) firstElement)
-                            .getVersions().get(0).setSaveTime(new Date());
+                        ((Project) firstElement).getVersions().get(0).setName("1.0.0");
+                        ((Project) firstElement).getVersions().get(0).setSaveTime(new Date());
                         // Get the current plan.
                         Plan currentPlan = ((Project) firstElement).getPlan();
 
@@ -360,17 +376,14 @@ public class NavigationViewPart extends ViewPart {
                          * After add() method run, the return variable new
                          * Project has a new Plan pointer.
                          */
-                        firstElement =
-                            projectService.add((Project) firstElement);
+                        firstElement = projectService.add((Project) firstElement);
 
                         // Set current Plan pointer for the new Project Node.
                         ((Project) firstElement).setPlan(currentPlan);
 
                         // Remove the temp object in treeview and add the new
                         // object that got from add query.
-                        ((Project) firstElement)
-                            .getPlan().getProjects()
-                            .set(0, (Project) firstElement);
+                        ((Project) firstElement).getPlan().getProjects().set(0, (Project) firstElement);
                     } else {
                         ((Project) firstElement).setName(name);
 
@@ -400,10 +413,8 @@ public class NavigationViewPart extends ViewPart {
         service.addSelectionListener(ID, new ISelectionListener() {
 
             @Override
-            public void selectionChanged(
-                IWorkbenchPart part, ISelection selection) {
-                IStructuredSelection sselection =
-                    (IStructuredSelection) selection;
+            public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+                IStructuredSelection sselection = (IStructuredSelection) selection;
                 Object firstObject = sselection.getFirstElement();
                 if (firstObject instanceof Version) {
                     versionForm.setDisplayedData((Version) firstObject);
