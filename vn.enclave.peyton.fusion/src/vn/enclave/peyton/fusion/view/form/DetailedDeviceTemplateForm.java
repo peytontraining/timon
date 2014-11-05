@@ -112,8 +112,7 @@ public class DetailedDeviceTemplateForm {
         return checkBox;
     }
 
-    private
-        Label buildLabel(Composite parent, FormToolkit toolkit, String text) {
+    private Label buildLabel(Composite parent, FormToolkit toolkit, String text) {
         Label label = toolkit.createLabel(parent, text, SWT.WRAP);
         return label;
     }
@@ -129,8 +128,7 @@ public class DetailedDeviceTemplateForm {
         GridLayout layout = new GridLayout(3, false);
         layout.marginHeight = 0;
         layout.marginWidth = 0;
-        GridData layoutData =
-            new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+        GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
         Composite composite = toolkit.createComposite(parent, SWT.NONE);
         composite.setLayout(layout);
         composite.setLayoutData(layoutData);
@@ -141,22 +139,19 @@ public class DetailedDeviceTemplateForm {
         return composite;
     }
 
-    private Button buildButton(
-        FormToolkit toolkit, Composite parent, String text) {
+    private Button buildButton(FormToolkit toolkit, Composite parent, String text) {
         GridData layoutData = new GridData(SWT.NONE, SWT.NONE, false, false);
         Button button = toolkit.createButton(parent, text, SWT.PUSH);
         button.setLayoutData(layoutData);
         return button;
     }
 
-    private
-        Composite buildTypesComposite(Composite parent, FormToolkit toolkit) {
+    private Composite buildTypesComposite(Composite parent, FormToolkit toolkit) {
         GridLayout layout = new GridLayout(2, false);
         layout.marginTop = -3;
         layout.marginRight = -3;
         layout.marginBottom = -3;
-        GridData layoutData =
-            new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+        GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
         Composite composite = toolkit.createComposite(parent, SWT.BORDER);
         composite.setLayout(layout);
         composite.setLayoutData(layoutData);
@@ -167,14 +162,12 @@ public class DetailedDeviceTemplateForm {
         return composite;
     }
 
-    private Composite buildDeviceDriverComposite(
-        Composite parent, FormToolkit toolkit) {
+    private Composite buildDeviceDriverComposite(Composite parent, FormToolkit toolkit) {
         GridLayout layout = new GridLayout(2, false);
         layout.marginTop = -3;
         layout.marginRight = -3;
         layout.marginBottom = -3;
-        GridData layoutData =
-            new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+        GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
         Composite composite = toolkit.createComposite(parent, SWT.BORDER);
         composite.setLayout(layout);
         composite.setLayoutData(layoutData);
@@ -185,8 +178,7 @@ public class DetailedDeviceTemplateForm {
         return composite;
     }
 
-    private Button buildRightButton(
-        FormToolkit toolkit, Composite composite, String text) {
+    private Button buildRightButton(FormToolkit toolkit, Composite composite, String text) {
         GridData layoutData = new GridData(SWT.RIGHT, SWT.NONE, true, true);
         Button button = toolkit.createButton(composite, text, SWT.PUSH);
         button.setLayoutData(layoutData);

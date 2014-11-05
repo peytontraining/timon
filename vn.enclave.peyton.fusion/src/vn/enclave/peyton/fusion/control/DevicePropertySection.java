@@ -21,11 +21,8 @@ import vn.enclave.peyton.fusion.provider.PropertyTreeContentProvider;
 import vn.enclave.peyton.fusion.provider.PropertyTreeTableLabelProvider;
 
 public class DevicePropertySection {
-
     private static final String[] TITLES = {"Name", "Value", "Mandatory", "Description"};
-
     private static final int DEFAULT_WIDTH = 120;
-
     private Section section;
 
     private TreeViewer treeViewer;

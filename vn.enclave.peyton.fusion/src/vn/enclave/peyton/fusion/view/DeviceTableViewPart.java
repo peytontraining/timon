@@ -300,6 +300,7 @@ public class DeviceTableViewPart extends ViewPart implements IDoubleClickListene
             public void widgetSelected(SelectionEvent e) {
                 filterTxt.setText("");
                 clearBtn.setEnabled(false);
+                findDeviceBy(finderTxt.getText());
             }
         };
     }
@@ -351,14 +352,15 @@ public class DeviceTableViewPart extends ViewPart implements IDoubleClickListene
     }
 
     private void findDeviceBy(String findText) {
-        int matchedRowIndex = findTheFirstMatchedRow(findText);
-
-        if (findText.length() == 0 || findText == null || matchedRowIndex == -1) {
+        int matchedRowIndex = findTheFirstMatchedRowBy(findText);
+        if (matchedRowIndex != -1) {
+            deviceTable.select(matchedRowIndex);
+        } else {
             deviceTable.deselectAll();
         }
     }
 
-    private int findTheFirstMatchedRow(String findText) {
+    private int findTheFirstMatchedRowBy(String findText) {
         TableItem[] rows = deviceTable.getItems();
         int numberOfRow = rows.length;
         int nubmerOfColumn = deviceTable.getColumnCount();
@@ -366,7 +368,6 @@ public class DeviceTableViewPart extends ViewPart implements IDoubleClickListene
             for (int columnIndex = 0; columnIndex < nubmerOfColumn; columnIndex++) {
                 String cellValue = rows[rowIndex].getText(columnIndex);
                 if (isCellValueContainsFindText(cellValue, findText)) {
-                    deviceTable.select(rowIndex);
                     return rowIndex;
                 }
             }
@@ -375,35 +376,57 @@ public class DeviceTableViewPart extends ViewPart implements IDoubleClickListene
     }
 
     private boolean isCellValueContainsFindText(String cellValue, String findText) {
-        return cellValue.toLowerCase().contains(findText.trim().toLowerCase());
+        if (findText.isEmpty()) {
+            return false;
+        }
+        return cellValue.toLowerCase().contains(findText.toLowerCase());
     }
 
-    //TODO: reorganize
     private void findDeviceBy(String findText, int offset) {
+        ArrayList<Integer> matchedRowIndexes = getMatchedRowIndexesBy(findText);
+        int selectedRowIndex = deviceTable.getSelectionIndex();
+        int elementIndex = matchedRowIndexes.indexOf(selectedRowIndex);
+        int nextElementIndex = elementIndex + offset;
+
+        if (isNextIndexOutOfTopMatchedRowIndexes(nextElementIndex)) {
+            nextElementIndex = matchedRowIndexes.size() - 1;
+        } else if (isNextIndexOutOfBottomMatchRowIndexes(nextElementIndex, matchedRowIndexes)) {
+            nextElementIndex = 0;
+        }
+
+        if (!matchedRowIndexes.isEmpty()) {
+            int nextRowIndex = matchedRowIndexes.get(nextElementIndex);
+            deviceTable.select(nextRowIndex);
+        }
+    }
+
+    private ArrayList<Integer> getMatchedRowIndexesBy(String findText) {
         TableItem[] rows = deviceTable.getItems();
         int numberOfRow = rows.length;
         int nubmerOfColumn = deviceTable.getColumnCount();
-        ArrayList<Integer> focusIndexes = new ArrayList<Integer>();
-        if (numberOfRow != 0) {
-            // Get indexes of match rows.
-            for (int rowIndex = 0; rowIndex < numberOfRow; rowIndex++) {
-                for (int columnIndex = 0; columnIndex < nubmerOfColumn; columnIndex++) {
-                    String cellValue = rows[rowIndex].getText(columnIndex);
-                    if (isCellValueContainsFindText(cellValue, findText)) {
-                        focusIndexes.add(rowIndex);
-                        break;
-                    }
+        ArrayList<Integer> matchedRowIndexes = new ArrayList<Integer>();
+        for (int rowIndex = 0; rowIndex < numberOfRow; rowIndex++) {
+            for (int columnIndex = 0; columnIndex < nubmerOfColumn; columnIndex++) {
+                if (findText.isEmpty()) {
+                    matchedRowIndexes.add(rowIndex);
+                    break;
+                }
+                String cellValue = rows[rowIndex].getText(columnIndex);
+                if (isCellValueContainsFindText(cellValue, findText)) {
+                    matchedRowIndexes.add(rowIndex);
+                    break;
                 }
             }
-            int selectionIndex = deviceTable.getSelectionIndex();
-            int index = focusIndexes.indexOf(selectionIndex) + offset;
-            if (index < 0) {
-                index = focusIndexes.size() - 1;
-            } else if (index > focusIndexes.size() - 1) {
-                index = 0;
-            }
-            deviceTable.select(focusIndexes.get(index));
         }
+        return matchedRowIndexes;
+    }
+
+    private boolean isNextIndexOutOfTopMatchedRowIndexes(int nextElementIndex) {
+        return nextElementIndex < 0;
+    }
+
+    private boolean isNextIndexOutOfBottomMatchRowIndexes(int nextElementIndex, ArrayList<Integer> matchedRowIndexes) {
+        return nextElementIndex > matchedRowIndexes.size() - 1;
     }
 
     private void createAllColumnsToDeviceTableViewer() {

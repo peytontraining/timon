@@ -22,15 +22,10 @@ import vn.enclave.peyton.fusion.provider.PropertyTemplateTreeContentProvider;
 import vn.enclave.peyton.fusion.provider.PropertyTemplateTreeTableLabelProvider;
 
 public class NewDevicePropertySection {
-
     private static final String[] TITLES = {"Name", "Value", "Mandatory", "Description"};
-
     private static final int DEFAULT_WIDTH = 120;
-
     private FormToolkit toolkit;
-
     private Section propertySection;
-
     private TreeViewer propertyTreeViewer;
 
     public Section getPropertySection() {
