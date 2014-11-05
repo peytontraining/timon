@@ -18,6 +18,7 @@ import vn.enclave.peyton.fusion.entity.Project;
 import vn.enclave.peyton.fusion.entity.Version;
 import vn.enclave.peyton.fusion.view.NavigationViewPart;
 
+//TODO: Reorganize NewProjectHandler
 public class NewProjectHandler extends AbstractHandler implements IHandler {
 
     @Override
@@ -91,17 +92,19 @@ public class NewProjectHandler extends AbstractHandler implements IHandler {
         selectedProject.getPlan().getProjects().add(0, newProject);
 
         // Refresh the tree after adding new project.
-        ((NavigationViewPart) HandlerUtil.getActivePart(event))
-            .getViewer().refresh();
-
+//        ((NavigationViewPart) HandlerUtil.getActivePart(event))
+//            .getViewer().refresh();
+        ((NavigationViewPart) HandlerUtil.getActivePart(event)).refreshPlanTreeViewer();
+        
         // Focus on the new added project.
-        ((NavigationViewPart) HandlerUtil.getActivePart(event))
-            .getViewer()
-            .setSelection(new StructuredSelection(newProject), true);
+//        ((NavigationViewPart) HandlerUtil.getActivePart(event))
+//            .getViewer()
+//            .setSelection(new StructuredSelection(newProject), true);
 
+        ((NavigationViewPart) HandlerUtil.getActivePart(event)).setSelectionToPlanTreeViewerBy(newProject);
         // Add a star on ViewPart title.
-        ((NavigationViewPart) HandlerUtil.getActivePart(event))
-            .setPartName("* Project");
+//        ((NavigationViewPart) HandlerUtil.getActivePart(event))
+//            .setPartName("* Project");
     }
 
     private

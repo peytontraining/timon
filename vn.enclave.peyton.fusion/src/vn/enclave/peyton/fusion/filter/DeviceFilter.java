@@ -9,16 +9,16 @@ public class DeviceFilter extends ViewerFilter {
 
     private static final long serialVersionUID = 5232662280687240217L;
 
-    private String filterString;
+    private String filterText;
 
     public void setFilterString(String filterString) {
-        this.filterString = filterString.toLowerCase();
+        this.filterText = filterString.toLowerCase();
     }
 
     @Override
     public boolean select(Viewer viewer, Object parentElement, Object element) {
 
-        if (filterString == null || filterString.length() == 0) {
+        if (filterText == null || filterText.isEmpty()) {
             return true;
         }
 
@@ -29,24 +29,24 @@ public class DeviceFilter extends ViewerFilter {
         String physicalLocation = device.getPhysicalLocation().toLowerCase();
         String manufacture = device.getManufacturer().toLowerCase();
 
-        if (name != null && name.contains(filterString)) {
+        if (name != null && name.contains(filterText)) {
             return true;
         }
 
-        if (appModule != null && appModule.contains(filterString)) {
+        if (appModule != null && appModule.contains(filterText)) {
             return true;
         }
 
-        if (deviceType != null && deviceType.contains(filterString)) {
+        if (deviceType != null && deviceType.contains(filterText)) {
             return true;
         }
 
         if (physicalLocation != null &&
-            physicalLocation.contains(filterString)) {
+            physicalLocation.contains(filterText)) {
             return true;
         }
 
-        if (manufacture != null && manufacture.contains(filterString)) {
+        if (manufacture != null && manufacture.contains(filterText)) {
             return true;
         }
         return false;

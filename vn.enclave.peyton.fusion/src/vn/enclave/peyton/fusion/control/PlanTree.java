@@ -5,6 +5,7 @@ import java.util.List;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -20,6 +21,7 @@ import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 
 import vn.enclave.peyton.fusion.entity.Plan;
+import vn.enclave.peyton.fusion.entity.Project;
 import vn.enclave.peyton.fusion.entity.Version;
 import vn.enclave.peyton.fusion.provider.PlanTreeContentProvider;
 import vn.enclave.peyton.fusion.provider.PlanTreeLableProvider;
@@ -129,7 +131,15 @@ public class PlanTree {
         planTreeViewer.setInput(plans);
     }
 
+    public void addSelectionAdapterToPlanTree(SelectionAdapter selectionAdapter) {
+        planTree.addSelectionListener(selectionAdapter);
+    }
+
     public void refreshPlanTreeViewer() {
         planTreeViewer.refresh();
+    }
+
+    public void setSelectionToPlanTreeViewerBy(Project newProject) {
+        planTreeViewer.setSelection(new StructuredSelection(newProject), true);
     }
 }
