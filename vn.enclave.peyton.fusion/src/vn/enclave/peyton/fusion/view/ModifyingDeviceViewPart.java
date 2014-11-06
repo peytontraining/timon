@@ -77,29 +77,33 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
         createToolbar(toolbarComposite);
     }
 
-    private void createToolbar(Composite parent) {
+    private void createToolbar(Composite toolbarComposite) {
         GridData layoutData = new GridData(SWT.RIGHT, SWT.NONE, true, false);
-        ToolBar bar = new ToolBar(parent, SWT.FLAT);
-        bar.setLayoutData(layoutData);
+        ToolBar toolBar = new ToolBar(toolbarComposite, SWT.FLAT);
+        toolBar.setLayoutData(layoutData);
 
-        createToolItems(bar);
+        createToolItems(toolBar);
     }
 
-    private void createToolItems(ToolBar parent) {
-        ToolItem save = createToolItem(parent, Constant.IMAGE_SAVE_AS);
+    private void createToolItems(ToolBar toolBar) {
+        ToolItem save = createToolItem(toolBar, Constant.IMAGE_SAVE_AS);
         save.addSelectionListener(saveAdapter);
 
-        ToolItem saveAndClose = createToolItem(parent, Constant.IMAGE_SAVE_AND_CLOSE);
+        ToolItem saveAndClose = createToolItem(toolBar, Constant.IMAGE_SAVE_AND_CLOSE);
 
-        new ToolItem(parent, SWT.SEPARATOR);
+        createSeparatorTo(toolBar);
 
-        ToolItem updateDevcie = createToolItem(parent, Constant.IMAGE_DEVICE_UPDATE);
+        ToolItem updateDevcie = createToolItem(toolBar, Constant.IMAGE_DEVICE_UPDATE);
 
-        ToolItem showDevice = createToolItem(parent, Constant.IMAGE_SHOW_DEVICES);
+        ToolItem showDevice = createToolItem(toolBar, Constant.IMAGE_SHOW_DEVICES);
 
-        new ToolItem(parent, SWT.SEPARATOR);
+        createSeparatorTo(toolBar);
 
-        ToolItem editService = createToolItem(parent, Constant.IMAGE_SERVICE);
+        ToolItem editService = createToolItem(toolBar, Constant.IMAGE_SERVICE);
+    }
+
+    private void createSeparatorTo(ToolBar toolBar) {
+        new ToolItem(toolBar, SWT.SEPARATOR);
     }
 
     private ToolItem createToolItem(ToolBar parent, Image image) {

@@ -3,6 +3,8 @@ package vn.enclave.peyton.fusion.view;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -17,9 +19,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.ISaveablePart;
-import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.ViewPart;
 
+import vn.enclave.peyton.fusion.common.Constant;
 import vn.enclave.peyton.fusion.control.PlanTree;
 import vn.enclave.peyton.fusion.control.ProjectPropertySection;
 import vn.enclave.peyton.fusion.control.VersionPropertySection;
@@ -27,65 +29,32 @@ import vn.enclave.peyton.fusion.entity.Plan;
 import vn.enclave.peyton.fusion.entity.Project;
 import vn.enclave.peyton.fusion.entity.Version;
 import vn.enclave.peyton.fusion.service.impl.PlanService;
-import vn.enclave.peyton.fusion.service.impl.ProjectService;
-import vn.enclave.peyton.fusion.service.impl.VersionService;
-import vn.enclave.peyton.fusion.view.form.ProjectForm;
-import vn.enclave.peyton.fusion.view.form.VersionForm;
 
 public class NavigationViewPart extends ViewPart implements ISaveablePart {
-
     public static final String ID = "vn.enclave.peyton.fusion.view.navigationViewPart";
-
     private static final int PLAN_TREE_COMPOSITE = 65;
-
     private static final int PROPERTY_COMPOSITE = 100 - PLAN_TREE_COMPOSITE;
 
     private TreeViewer viewer;
 
-    private VersionForm versionForm;
-
-    private ProjectForm projectForm;
-
-    private Section versionSection;
-
-    private Section projectSection;
-
-    private ToolBar versionBar;
-
-    private ToolBar projectBar;
-
-    private ToolItem saveVersion;
-
-    private ToolItem saveProject;
-
     private StackLayout propertyCompositeStackLayout;
-
     private PlanService planService = new PlanService();
-
-    private ProjectService projectService = new ProjectService();
-
-    private VersionService versionService = new VersionService();
-
     private PlanTree planTree;
-
-    public ToolItem getSaveVersion() {
-        return saveVersion;
-    }
-
-    public ToolItem getSaveProject() {
-        return saveProject;
-    }
 
     public TreeViewer getViewer() {
         return viewer;
     }
-    
+
     public void refreshPlanTreeViewer() {
         planTree.refreshPlanTreeViewer();
     }
-    
+
     public void setSelectionToPlanTreeViewerBy(Project newProject) {
         planTree.setSelectionToPlanTreeViewerBy(newProject);
+    }
+
+    public void setSelectionToPlanTreeViewerBy(Version newVersion) {
+        planTree.setSelectionToPlanTreeViewerBy(newVersion);
     }
 
     public void setPartName(String partName) {
@@ -125,7 +94,15 @@ public class NavigationViewPart extends ViewPart implements ISaveablePart {
     }
 
     private void createToolbarCompositeInside(Composite parent) {
-        // TODO createToolbarCompositeInside(Composite parent)
+        GridLayout layout = new GridLayout(1, false);
+        layout.marginTop = -5;
+        layout.marginBottom = -5;
+        GridData layoutData = new GridData(SWT.FILL, SWT.NONE, true, false);
+        Composite toolbarComposite = new Composite(parent, SWT.NONE);
+        toolbarComposite.setLayout(layout);
+        toolbarComposite.setLayoutData(layoutData);
+
+        createToolbar(toolbarComposite);
     }
 
     private void createPlanTreeAndPropertyCompositeSashFormInside(Composite parent) {
@@ -146,12 +123,20 @@ public class NavigationViewPart extends ViewPart implements ISaveablePart {
         planTreeAndPropertyCompositeSashForm.setWeights(new int[]{PLAN_TREE_COMPOSITE, PROPERTY_COMPOSITE});
     }
 
+    private void createToolbar(Composite toolbarComposite) {
+        GridData layoutData = new GridData(SWT.RIGHT, SWT.NONE, true, false);
+        ToolBar toolBar = new ToolBar(toolbarComposite, SWT.FLAT);
+        toolBar.setLayoutData(layoutData);
+
+        createToolItems(toolBar);
+    }
+
     private void createPlanTreeCompositeInside(SashForm planTreeAndPropertySectionSashForm) {
         GridLayout layout = new GridLayout(1, false);
         layout.marginTop = -5;
         layout.marginBottom = -5;
         GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
-        Composite planTreeComposite = new Composite(planTreeAndPropertySectionSashForm, SWT.BORDER);
+        Composite planTreeComposite = new Composite(planTreeAndPropertySectionSashForm, SWT.NONE);
         planTreeComposite.setLayout(layout);
         planTreeComposite.setLayoutData(layoutData);
 
@@ -170,6 +155,32 @@ public class NavigationViewPart extends ViewPart implements ISaveablePart {
         createVersionPropertySectionInside(propertyComposite);
     }
 
+    private void createToolItems(ToolBar toolBar) {
+        ToolItem refreshToolItem = createToolItemTo(toolBar);
+        refreshToolItem.setImage(Constant.IMAGE_REFRESH);
+
+        createSeparatorTo(toolBar);
+
+        ToolItem showDeviceToolItem = createToolItemTo(toolBar);
+        showDeviceToolItem.setImage(Constant.IMAGE_SHOW_DEVICES);
+
+        createSeparatorTo(toolBar);
+
+        ToolItem addFolderToolItem = createToolItemTo(toolBar);
+        addFolderToolItem.setImage(Constant.IMAGE_ADD_FOLDER);
+
+        createSeparatorTo(toolBar);
+
+        ToolItem cloneVersionToolItem = createToolItemTo(toolBar);
+        cloneVersionToolItem.setImage(Constant.IMAGE_CLONE_VERSION);
+
+        ToolItem saveAsToolItem = createToolItemTo(toolBar);
+        saveAsToolItem.setImage(Constant.IMAGE_SAVE_AS);
+
+        ToolItem deleteToolItem = createToolItemTo(toolBar);
+        deleteToolItem.setImage(Constant.IMAGE_DELETE);
+    }
+
     private void createPlanTreeTo(Composite planTreeComposite) {
         List<Plan> plans = planService.getAll();
 
@@ -177,15 +188,23 @@ public class NavigationViewPart extends ViewPart implements ISaveablePart {
         planTree.registerPlanTreeContextMenuToWorkbenchPartSite();
         planTree.setSelectionProviderToWorkbenchPartSite();
         planTree.populatePlanTreeViewerFrom(plans);
-        planTree.addSelectionAdapterToPlanTree(createSelectionAdapterToPlanTree());
+        planTree.addSelectionChangedListener(createSelectionChangedListenerToPlanTree());
     }
 
-    private SelectionAdapter createSelectionAdapterToPlanTree() {
-        return new SelectionAdapter() {
-            private static final long serialVersionUID = 6559095611240490844L;
+    private ToolItem createToolItemTo(ToolBar toolBar) {
+        ToolItem toolItem = new ToolItem(toolBar, SWT.PUSH);
+        return toolItem;
+    }
+
+    private void createSeparatorTo(ToolBar toolBar) {
+        new ToolItem(toolBar, SWT.SEPARATOR);
+    }
+
+    private ISelectionChangedListener createSelectionChangedListenerToPlanTree() {
+        return new ISelectionChangedListener() {
 
             @Override
-            public void widgetSelected(SelectionEvent e) {
+            public void selectionChanged(SelectionChangedEvent event) {
                 Object selectedNode = planTree.getSelectedNodeOnNavigationTreeViewer();
                 resetStateOfViewPart();
                 if (selectedNode instanceof Project) {
@@ -193,17 +212,19 @@ public class NavigationViewPart extends ViewPart implements ISaveablePart {
                     populateProjectPropertySectionFrom(selectedProject);
                     displayProjectPropertySection();
                     setSectionReady(true);
+                    projectPropertySection.setEnableSaveToolItem(selectedProject.isNewProject());
                     return;
                 }
                 if (selectedNode instanceof Version) {
+                    Version selectedVersion = (Version) selectedNode;
+                    populateVersionPropertySectionFrom(selectedVersion);
                     displayVersionPropertySection();
                     setSectionReady(true);
+                    versionPropertySection.setEnableSaveToolItem(selectedVersion.isNewVersion());
                     return;
                 }
-
                 hideAllPropertySection();
             }
-
         };
     }
 
@@ -213,7 +234,11 @@ public class NavigationViewPart extends ViewPart implements ISaveablePart {
     }
 
     private void populateProjectPropertySectionFrom(Project selectedProject) {
-        projectPropertySection.populateProjectPropertyScrolledFormFrom(selectedProject);
+        projectPropertySection.populatePropertyScrolledFormFrom(selectedProject);
+    }
+
+    private void populateVersionPropertySectionFrom(Version selectedVersion) {
+        versionPropertySection.populatePropertyScrolledFormFrom(selectedVersion);
     }
 
     private void createPropertyCompositeStackLayout() {
@@ -223,36 +248,69 @@ public class NavigationViewPart extends ViewPart implements ISaveablePart {
     private void createProjectPropertySectionInside(Composite propertyComposite) {
         // TODO createProjectPropertySectionInside(Composite propertyComposite)
         projectPropertySection = new ProjectPropertySection(propertyComposite, getSite());
-        projectPropertySection.addModifyListenerToPropertySection(createModifyListenerToPropertySection());
-        projectPropertySection.addSelectionAdapterToPropertySection(createSelectionAdapterToPropertySection());
+        projectPropertySection.addModifyListenerToPropertySection(createModifyListenerToProjectPropertySection());
+        projectPropertySection.addSelectionAdapterToPropertySection(createSelectionAdapterToProjectPropertySection());
     }
 
     private void createVersionPropertySectionInside(Composite propertyComposite) {
         // TODO createVersionPropertySectionInside(Composite propertyComposite)
-        versionPropertySection = new VersionPropertySection(propertyComposite);
+        versionPropertySection = new VersionPropertySection(propertyComposite, getSite());
+        versionPropertySection.addModifyListenerToPropertySection(createModifyListenerToVersionPropertySection());
+        versionPropertySection.addSelectionAdapterToPropertySection(createSelectionAdapterToVersionPropertySection());
     }
 
-    private ModifyListener createModifyListenerToPropertySection() {
+    private ModifyListener createModifyListenerToProjectPropertySection() {
         return new ModifyListener() {
             private static final long serialVersionUID = -7831361091809878509L;
 
             @Override
             public void modifyText(ModifyEvent event) {
-                setDirty(true && isSectionReady);
-                projectPropertySection.setEnableSaveToolItem(true && isSectionReady);
+                setDirty(isSectionReady);
+                projectPropertySection.setEnableSaveToolItem(isSectionReady);
             }
         };
     }
 
-    private SelectionAdapter createSelectionAdapterToPropertySection() {
+    /*
+     * Trigger saving new project as the save tool item is clicked.
+     */
+    private SelectionAdapter createSelectionAdapterToProjectPropertySection() {
         return new SelectionAdapter() {
             private static final long serialVersionUID = 5010629306840681616L;
-            
+
             @Override
             public void widgetSelected(SelectionEvent e) {
-                projectPropertySection.saveModifiedProject();
+                Project selectedProject = projectPropertySection.saveModifiedProject();
                 projectPropertySection.setEnableSaveToolItem(false);
                 planTree.refreshPlanTreeViewer();
+                planTree.setSelectionToPlanTreeViewerBy(selectedProject);
+                setDirty(false);
+            }
+        };
+    }
+
+    private ModifyListener createModifyListenerToVersionPropertySection() {
+        return new ModifyListener() {
+            private static final long serialVersionUID = -7831361091809878509L;
+
+            @Override
+            public void modifyText(ModifyEvent event) {
+                setDirty(isSectionReady);
+                versionPropertySection.setEnableSaveToolItem(isSectionReady);
+            }
+        };
+    }
+
+    private SelectionAdapter createSelectionAdapterToVersionPropertySection() {
+        return new SelectionAdapter() {
+            private static final long serialVersionUID = 5010629306840681616L;
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                Version selectedVersion = versionPropertySection.saveModifiedVersion();
+                versionPropertySection.setEnableSaveToolItem(false);
+                planTree.refreshPlanTreeViewer();
+                planTree.setSelectionToPlanTreeViewerBy(selectedVersion);
                 setDirty(false);
             }
         };
@@ -277,29 +335,24 @@ public class NavigationViewPart extends ViewPart implements ISaveablePart {
     }
 
     @Override
-    public void setFocus() {}
+    public void setFocus() {
+    }
 
     @Override
     public void doSave(IProgressMonitor monitor) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void doSaveAs() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public boolean isSaveAsAllowed() {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public boolean isSaveOnCloseNeeded() {
-        // TODO Auto-generated method stub
         return false;
     }
 }

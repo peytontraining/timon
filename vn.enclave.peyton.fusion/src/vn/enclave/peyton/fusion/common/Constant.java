@@ -107,6 +107,8 @@ public class Constant {
     public static final Image IMAGE_VERSION = AbstractUIPlugin
         .imageDescriptorFromPlugin(PLUGIN_ID, "icons/version.png").createImage();
 
+    public static final Image IMAGE_CLONE_VERSION = AbstractUIPlugin.imageDescriptorFromPlugin(
+        PLUGIN_ID, "icons/clone_version.png").createImage();
     /*
      * COLUMN INDEX OF DEVICE TABLE.
      */
@@ -115,4 +117,5 @@ public class Constant {
     public static final int COLUMN_DEVICE_TYPE = 2;
     public static final int COLUMN_PHYSICAL_LOCATION = 3;
     public static final int COLUMN_MANUFACTURER = 4;
+
 }

@@ -525,7 +525,7 @@
          </toolbar>
       </menuContribution>
       <menuContribution
-            locationURI="toolbar:vn.enclave.peyton.fusion.view.navigationViewPart">
+            locationURI="toolbar:vn.enclave.peyton.fusion.view.navigationViewPart1">
          <command
                commandId="vn.enclave.peyton.fusion.command.refresh"
                icon="icons/refresh.png"
@@ -864,7 +864,7 @@
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="vn.enclave.peyton.fusion.command.NewProjectHandler"
+            class="vn.enclave.peyton.fusion.command.AddingProjectHandler"
             commandId="project.command.popup.newProjectHandler">
          <enabledWhen>
             <iterate>
@@ -883,7 +883,7 @@
          </enabledWhen>
       </handler>
       <handler
-            class="vn.enclave.peyton.fusion.command.NewVersionHandler"
+            class="vn.enclave.peyton.fusion.command.AddingVersionHandler"
             commandId="project.command.popup.newVersionHandler">
          <enabledWhen>
             <iterate>
@@ -899,7 +899,7 @@
          </enabledWhen>
       </handler>
       <handler
-            class="vn.enclave.peyton.fusion.command.SaveAsHandler"
+            class="vn.enclave.peyton.fusion.command.CloningVersionHandler"
             commandId="project.command.popup.saveAsHandler">
          <enabledWhen>
             <iterate>
@@ -910,7 +910,7 @@
          </enabledWhen>
       </handler>
       <handler
-            class="vn.enclave.peyton.fusion.command.DeleteVersionHandler"
+            class="vn.enclave.peyton.fusion.command.DeletingVersionHandler"
             commandId="project.command.popup.deleteVersionHandler">
          <enabledWhen>
             <iterate>

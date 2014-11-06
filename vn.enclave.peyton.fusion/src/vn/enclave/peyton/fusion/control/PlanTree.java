@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -131,15 +132,19 @@ public class PlanTree {
         planTreeViewer.setInput(plans);
     }
 
-    public void addSelectionAdapterToPlanTree(SelectionAdapter selectionAdapter) {
-        planTree.addSelectionListener(selectionAdapter);
+    public void addSelectionChangedListener(ISelectionChangedListener selectionChangedListener) {
+        planTreeViewer.addSelectionChangedListener(selectionChangedListener);
     }
 
     public void refreshPlanTreeViewer() {
         planTreeViewer.refresh();
     }
 
-    public void setSelectionToPlanTreeViewerBy(Project newProject) {
-        planTreeViewer.setSelection(new StructuredSelection(newProject), true);
+    public void setSelectionToPlanTreeViewerBy(Project selectedProject) {
+        planTreeViewer.setSelection(new StructuredSelection(selectedProject), true);
+    }
+    
+    public void setSelectionToPlanTreeViewerBy(Version selectedVersion) {
+        planTreeViewer.setSelection(new StructuredSelection(selectedVersion), true);
     }
 }

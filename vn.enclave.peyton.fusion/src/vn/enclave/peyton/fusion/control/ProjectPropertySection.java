@@ -1,12 +1,16 @@
 package vn.enclave.peyton.fusion.control;
 
 import java.util.Date;
+import java.util.List;
 
+import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -17,8 +21,11 @@ import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
@@ -30,8 +37,9 @@ import vn.enclave.peyton.fusion.entity.Version;
 import vn.enclave.peyton.fusion.service.impl.ProjectService;
 import vn.enclave.peyton.fusion.view.NavigationViewPart;
 
-//TODO: ProjectPropertySection
 public class ProjectPropertySection {
+    private static final String PROJECT_DULICATE_ERROR = "The project has been already existed.";
+    private static final String PROJECT_EMPTY_ERROR = "Name of project cannot be empty";
     private Label nameLbl;
     private Label gatewayLbl;
     private Label hostLbl;
@@ -48,6 +56,7 @@ public class ProjectPropertySection {
     private Button editNotesBtn;
     private Spinner portSpinner;
     private Combo licenseCombo;
+    private ControlDecoration nameDecoration;
     private Section projectPropertySection;
     private ScrolledForm projectPropertyScrolledForm;
     private FormToolkit toolkit;
@@ -93,7 +102,7 @@ public class ProjectPropertySection {
         ToolBar toolbarPropertySection = new ToolBar(projectPropertySection, style);
         projectPropertySection.setTextClient(toolbarPropertySection);
 
-        createToolItemTo(toolbarPropertySection);
+        createSaveToolItemTo(toolbarPropertySection);
     }
 
     private void createProjectPropertyScrolledFromInside(Section projectPropertySection) {
@@ -108,7 +117,7 @@ public class ProjectPropertySection {
         projectPropertySection.setClient(projectPropertyScrolledForm);
     }
 
-    private void createToolItemTo(ToolBar toolbarPropertySection) {
+    private void createSaveToolItemTo(ToolBar toolbarPropertySection) {
         saveToolItem = new ToolItem(toolbarPropertySection, SWT.PUSH);
         saveToolItem.setImage(Constant.IMAGE_SAVE_AS);
         saveToolItem.setEnabled(false);
@@ -119,6 +128,9 @@ public class ProjectPropertySection {
         nameLbl.setText("Name:");
 
         nameTxt = createTextTo(projectPropertyFormBody);
+
+        nameDecoration = createControlDecorationTo(nameTxt);
+        nameDecoration.hide();
 
         gatewayLbl = createLabelTo(projectPropertyFormBody);
         gatewayLbl.setText("Gateway uses:");
@@ -156,19 +168,6 @@ public class ProjectPropertySection {
         setEnableAllControl(false);
     }
 
-    private void setEnableAllControl(boolean isEnable) {
-        nameTxt.setEnabled(isEnable);
-        hostTxt.setEnabled(isEnable);
-        uuidTxt.setEnabled(isEnable);
-        notesTxt.setEnabled(isEnable);
-        uuidRadioBtn.setEnabled(isEnable);
-        hostPortRadioBtn.setEnabled(isEnable);
-        deploymentLockedChkBox.setEnabled(isEnable);
-        editNotesBtn.setEnabled(isEnable);
-        portSpinner.setEnabled(isEnable);
-        licenseCombo.setEnabled(isEnable);
-    }
-
     private Label createLabelTo(Composite projectPropertyFormBody) {
         GridData layoutData = new GridData(SWT.RIGHT, SWT.CENTER, false, false);
         Label label = toolkit.createLabel(projectPropertyFormBody, "");
@@ -183,6 +182,13 @@ public class ProjectPropertySection {
         return text;
     }
 
+    private ControlDecoration createControlDecorationTo(Text nameTxt) {
+        int position = SWT.TOP | SWT.LEFT;
+        ControlDecoration decoration = new ControlDecoration(nameTxt, position);
+        decoration.setImage(createFieldErrorImageToNameDecoration());
+        return decoration;
+    }
+
     private void createRadioButtonCompositeInside(Composite projectPropertyFormBody) {
         GridLayout layout = new GridLayout(2, false);
         GridData layoutData = new GridData(SWT.FILL, SWT.NONE, true, false);
@@ -190,8 +196,13 @@ public class ProjectPropertySection {
         radioButtonComposite.setLayout(layout);
         radioButtonComposite.setLayoutData(layoutData);
 
-        createUUIDRadioButtonTo(radioButtonComposite);
-        createHostPortRadioButtonTo(radioButtonComposite);
+        uuidRadioBtn = createRadioButtonTo(radioButtonComposite);
+        uuidRadioBtn.setText("UUID");
+        uuidRadioBtn.setEnabled(false);
+
+        hostPortRadioBtn = createRadioButtonTo(radioButtonComposite);
+        hostPortRadioBtn.setText("Host/Port");
+        hostPortRadioBtn.setEnabled(false);
     }
 
     private Spinner createSpinnerTo(Composite projectPropertyFormBody) {
@@ -235,16 +246,23 @@ public class ProjectPropertySection {
         return button;
     }
 
-    private void createUUIDRadioButtonTo(Composite radioButtonComposite) {
-        uuidRadioBtn = createRadioButtonTo(radioButtonComposite);
-        uuidRadioBtn.setText("UUID");
-        uuidRadioBtn.setEnabled(false);
+    private void setEnableAllControl(boolean isEnable) {
+        nameTxt.setEnabled(isEnable);
+        hostTxt.setEnabled(isEnable);
+        uuidTxt.setEnabled(isEnable);
+        notesTxt.setEnabled(isEnable);
+        uuidRadioBtn.setEnabled(isEnable);
+        hostPortRadioBtn.setEnabled(isEnable);
+        deploymentLockedChkBox.setEnabled(isEnable);
+        editNotesBtn.setEnabled(isEnable);
+        portSpinner.setEnabled(isEnable);
+        licenseCombo.setEnabled(isEnable);
     }
 
-    private void createHostPortRadioButtonTo(Composite radioButtonComposite) {
-        hostPortRadioBtn = createRadioButtonTo(radioButtonComposite);
-        hostPortRadioBtn.setText("Host/Port");
-        hostPortRadioBtn.setEnabled(false);
+    private Image createFieldErrorImageToNameDecoration() {
+        IWorkbench workbench = PlatformUI.getWorkbench();
+        ISharedImages sharedImages = workbench.getSharedImages();
+        return sharedImages.getImage(ISharedImages.IMG_DEC_FIELD_ERROR);
     }
 
     private Button createRadioButtonTo(Composite radioButtonComposite) {
@@ -252,6 +270,61 @@ public class ProjectPropertySection {
         Button radioBtn = toolkit.createButton(radioButtonComposite, "", SWT.RADIO);
         radioBtn.setLayoutData(layoutData);
         return radioBtn;
+    }
+
+    public void addModifyListenerToPropertySection(ModifyListener modifyListener) {
+        nameTxt.addModifyListener(modifyListener);
+        nameTxt.addModifyListener(createModifyListenerToNameTxt());
+    }
+
+    /*
+     * Trigger project name validation as name Text is modified.
+     */
+    private ModifyListener createModifyListenerToNameTxt() {
+        return new ModifyListener() {
+            private static final long serialVersionUID = 1782445795664083609L;
+
+            @Override
+            public void modifyText(ModifyEvent event) {
+                validateNameText();
+            }
+        };
+    }
+
+    private void validateNameText() {
+        Project selectedProject = getSelectedProject();
+        String modifiedName = nameTxt.getText();
+        if (modifiedName.isEmpty()) {
+            nameDecoration.setDescriptionText(PROJECT_EMPTY_ERROR);
+            nameDecoration.show();
+            saveToolItem.setEnabled(false);
+            return;
+        }
+        int selectedId = selectedProject.getId();
+        List<Project> projects = selectedProject.getPlan().getProjects();
+        for (Project project : projects) {
+            String currentName = project.getName();
+            int currentId = project.getId();
+            if (isDuplicateProjectName(modifiedName, currentName, selectedId, currentId)) {
+                nameDecoration.setDescriptionText(PROJECT_DULICATE_ERROR);
+                nameDecoration.show();
+                saveToolItem.setEnabled(false);
+                return;
+            }
+        }
+        nameDecoration.hide();
+    }
+
+    private Project getSelectedProject() {
+        ISelection selection = workbenchPage.getSelection(NavigationViewPart.ID);
+        IStructuredSelection sselection = (IStructuredSelection) selection;
+        Object selectedNode = sselection.getFirstElement();
+        Project selectedProject = (Project) selectedNode;
+        return selectedProject;
+    }
+
+    private boolean isDuplicateProjectName(String modifiedName, String currentName, int selectedId, int currentId) {
+        return modifiedName.equals(currentName) && selectedId != currentId;
     }
 
     public void setVisible(boolean isVisible) {
@@ -262,8 +335,8 @@ public class ProjectPropertySection {
         saveToolItem.setEnabled(isEnable);
     }
 
-    public void populateProjectPropertyScrolledFormFrom(Project selectedProject) {
-        if (isNewProject(selectedProject)) {
+    public void populatePropertyScrolledFormFrom(Project selectedProject) {
+        if (selectedProject.isNewProject()) {
             int endIndex = selectedProject.getName().lastIndexOf(" *");
             nameTxt.setText(selectedProject.getName().substring(0, endIndex));
         } else {
@@ -287,18 +360,14 @@ public class ProjectPropertySection {
         setEnableAllControl(selectedProject.isEditable());
     }
 
-    public void addModifyListenerToPropertySection(ModifyListener modifyListener) {
-        nameTxt.addModifyListener(modifyListener);
-    }
-
     public void addSelectionAdapterToPropertySection(SelectionAdapter createSelectionAdapterToPropertySection) {
         saveToolItem.addSelectionListener(createSelectionAdapterToPropertySection);
     }
 
-    public void saveModifiedProject() {
+    public Project saveModifiedProject() {
         Project selectedProject = getSelectedProject();
 
-        if (isNewProject(selectedProject)) {
+        if (selectedProject.isNewProject()) {
             Plan currentPlan = selectedProject.getPlan();
             prepareNewProject(selectedProject);
 
@@ -318,30 +387,20 @@ public class ProjectPropertySection {
             selectedProject.setName(name);
             projectService.update(selectedProject);
         }
+
+        return selectedProject;
     }
 
     private void prepareNewProject(Project selectedProject) {
         selectedProject.setName(nameTxt.getText());
         selectedProject.setGateway(uuidRadioBtn.getSelection());
-        selectedProject.setHost(hostPortRadioBtn.getText());
+        selectedProject.setHost(hostTxt.getText());
         selectedProject.setLicense(licenseCombo.getText());
         selectedProject.setPort(portSpinner.getSelection());
         selectedProject.setUuid(uuidTxt.getText());
         Version newVersion = selectedProject.getVersions().get(0);
         newVersion.setName("1.0.0");
         newVersion.setSaveTime(new Date());
-    }
-
-    private boolean isNewProject(Project selectedProject) {
-        return selectedProject.getId() == Constant.DEFAULT_PROJECT_ID;
-    }
-
-    private Project getSelectedProject() {
-        ISelection selection = workbenchPage.getSelection(NavigationViewPart.ID);
-        IStructuredSelection sselection = (IStructuredSelection) selection;
-        Object selectedNode = sselection.getFirstElement();
-        Project selectedProject = (Project) selectedNode;
-        return selectedProject;
     }
 
 }

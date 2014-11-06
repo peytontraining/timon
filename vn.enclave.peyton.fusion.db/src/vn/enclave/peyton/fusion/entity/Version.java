@@ -15,7 +15,7 @@ import java.util.List;
 @Table(name = "versions")
 @NamedQuery(name = "Version.findAll", query = "SELECT v FROM Version v")
 public class Version implements Serializable {
-
+    public  static final int DEFAULT_VERSION_ID = -1;
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -135,4 +135,7 @@ public class Version implements Serializable {
         this.project = project;
     }
 
+    public boolean isNewVersion() {
+        return this.id == DEFAULT_VERSION_ID;
+    }
 }

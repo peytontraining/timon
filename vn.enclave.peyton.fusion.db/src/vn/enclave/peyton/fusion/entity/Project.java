@@ -14,7 +14,7 @@ import java.util.List;
 @Table(name = "projects")
 @NamedQuery(name = "Project.findAll", query = "SELECT p FROM Project p")
 public class Project implements Serializable {
-
+    public static final int DEFAULT_PROJECT_ID = -1;
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -162,4 +162,7 @@ public class Project implements Serializable {
         return version;
     }
 
+    public boolean isNewProject() {
+        return id == DEFAULT_PROJECT_ID;
+    }
 }

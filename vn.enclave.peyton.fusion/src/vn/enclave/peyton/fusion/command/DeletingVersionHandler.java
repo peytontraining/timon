@@ -6,7 +6,6 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import vn.enclave.peyton.fusion.dialog.DeleteVersionDialog;
@@ -18,38 +17,42 @@ import vn.enclave.peyton.fusion.view.NavigationViewPart;
  * This class is used to handle deleting a version. It is called when delete
  * menu item on context menu of Plan TreeViewer is clicked.
  */
-public class DeleteVersionHandler extends AbstractHandler implements IHandler {
+public class DeletingVersionHandler extends AbstractHandler implements IHandler {
 
     private VersionService versionService = new VersionService();
+    private ExecutionEvent executionEvent;
+
+    private void setExecutionEvent(ExecutionEvent executionEvent) {
+        this.executionEvent = executionEvent;
+    }
 
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
-        // Get the current window.
-        IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindow(event);
+        setExecutionEvent(event);
 
-        // Get selected version node.
-        IStructuredSelection selection =
-            (IStructuredSelection) window.getActivePage().getSelection(
-                NavigationViewPart.ID);
-        Object firstElement = selection.getFirstElement();
+        Object selectedNode = getSelectedNodeOnPlanTree();
 
-        if (firstElement instanceof Version) {
-            DeleteVersionDialog dialog =
-                new DeleteVersionDialog(window.getShell());
+        if (selectedNode instanceof Version) {
+            Version selectedVersion = (Version) selectedNode;
+            DeleteVersionDialog dialog = new DeleteVersionDialog(HandlerUtil.getActiveShell(event));
 
             if (dialog.open() == Window.OK) {
-                // Remove data of seleted version from database.
-                versionService.remove((Version) firstElement);
+                versionService.remove(selectedVersion);
 
                 // Remove data of selected version from tree's data.
-                ((Version) firstElement).getProject().removeVersion(
-                    (Version) firstElement);
+                selectedVersion.getProject().removeVersion(selectedVersion);
+                selectedVersion.setProject(null);
 
                 // Refresh the tree after deleting.
-                ((NavigationViewPart) HandlerUtil.getActivePart(event))
-                    .getViewer().refresh();
+                ((NavigationViewPart) HandlerUtil.getActivePart(event)).refreshPlanTreeViewer();
             }
         }
         return null;
+    }
+
+    private Object getSelectedNodeOnPlanTree() {
+        IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(executionEvent);
+        Object selectedNode = selection.getFirstElement();
+        return selectedNode;
     }
 }
