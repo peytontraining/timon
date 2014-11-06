@@ -37,7 +37,9 @@ public class CloningVersionHandler extends AbstractHandler implements IHandler {
 
         if (selectedNode instanceof Version) {
             Version selectedVersion = (Version) selectedNode;
-
+            if (selectedVersion.isNewVersion()) {
+                return null;
+            }
             Shell shell = HandlerUtil.getActiveShell(event);
 
             SaveAsDialog dialog = new SaveAsDialog(shell, selectedVersion);

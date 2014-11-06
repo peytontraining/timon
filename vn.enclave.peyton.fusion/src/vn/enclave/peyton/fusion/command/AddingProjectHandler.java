@@ -36,12 +36,18 @@ public class AddingProjectHandler extends AbstractHandler implements IHandler {
         }
         if (selectedNode instanceof Project) {
             Project selectedProject = (Project) selectedNode;
+            if (selectedProject.isNewProject()) {
+                return null;
+            }
             Plan parentPlan = selectedProject.getPlan();
             addNewProjectFrom(parentPlan);
             return null;
         }
         if (selectedNode instanceof Version) {
             Version selectedVersion = (Version) selectedNode;
+            if (selectedVersion.isNewVersion()) {
+                return null;
+            }
             Project parentProject = selectedVersion.getProject();
             Plan parentPlan = parentProject.getPlan();
             addNewProjectFrom(parentPlan);
@@ -93,6 +99,7 @@ public class AddingProjectHandler extends AbstractHandler implements IHandler {
 
     private Version createNewVersionHas(String newName) {
         Version newVersion = new Version();
+        newVersion.setId(Version.DEFAULT_VERSION_ID);
         newVersion.setDeploySource("");
         newVersion.setEditable(true);
         newVersion.setName(newName);

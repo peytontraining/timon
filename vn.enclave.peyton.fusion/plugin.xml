@@ -208,56 +208,18 @@
             id="vn.enclave.peyton.fusion.command.helpLinks"
             name="Help Links">
       </command>
-      <command
-            categoryId="vn.enclave.peyton.fusion.category.rightToolbar"
-            id="vn.enclave.peyton.fusion.command.system"
-            name="System">
-      </command>
       <category
             id="left.command.category.toolbar"
             name="Left Toolbar">
-      </category>
-      <category
-            id="vn.enclave.peyton.fusion.category.rightToolbar"
-            name="Right Toolbar">
       </category>
       <command
             id="vn.enclave.peyton.fusion.command.status"
             name="Status">
       </command>
-      <command
-            categoryId="project.command.category.toolbar"
-            id="vn.enclave.peyton.fusion.command.refresh"
-            name="Refresh">
-      </command>
       <category
             id="project.command.category.toolbar"
             name="Project.Toolbar">
       </category>
-      <command
-            id="vn.enclave.peyton.fusion.command.showDevice"
-            name="Show Devices">
-      </command>
-      <command
-            categoryId="project.command.category.toolbar"
-            id="vn.enclave.peyton.fusion.command.addFolder"
-            name="Add Folder">
-      </command>
-      <command
-            categoryId="project.command.category.toolbar"
-            id="vn.enclave.peyton.fusion.command.cloneVersion"
-            name="Clone Version">
-      </command>
-      <command
-            categoryId="project.command.category.toolbar"
-            id="vn.enclave.peyton.fusion.command.saveAs"
-            name="Save As">
-      </command>
-      <command
-            categoryId="project.command.category.toolbar"
-            id="vn.enclave.peyton.fusion.command.delete"
-            name="Delete">
-      </command>
       <category
             id="device.command.category.toolbar"
             name="Device.Toolbar">
@@ -266,46 +228,6 @@
             categoryId="device.command.category.toolbar"
             id="device.command.category.toolbar.add"
             name="Device.Toolbar.Add">
-      </command>
-      <command
-            categoryId="device.command.category.toolbar"
-            id="vn.enclave.peyton.fusion.command.copy"
-            name="Copy">
-      </command>
-      <command
-            categoryId="device.command.category.toolbar"
-            id="vn.enclave.peyton.fusion.command.importDevice"
-            name="Import Devices">
-      </command>
-      <command
-            categoryId="device.command.category.toolbar"
-            id="vn.enclave.peyton.fusion.command.importZWave"
-            name="Import ZWave">
-      </command>
-      <command
-            categoryId="device.command.category.toolbar"
-            id="vn.enclave.peyton.fusion.command.templateChild"
-            name="Template Child">
-      </command>
-      <command
-            categoryId="device.command.category.toolbar"
-            id="vn.enclave.peyton.fusion.command.expand"
-            name="Expand">
-      </command>
-      <command
-            categoryId="device.command.category.toolbar"
-            id="vn.enclave.peyton.fusion.command.collapse"
-            name="Collapse">
-      </command>
-      <command
-            categoryId="device.command.category.toolbar"
-            id="vn.enclave.peyton.fusion.command.deviceChanged"
-            name="Device Changed">
-      </command>
-      <command
-            categoryId="device.command.category.toolbar"
-            id="vn.enclave.peyton.fusion.command.requestOnlineStatus"
-            name="Request Online Status">
       </command>
       <category
             id="project.command.category.popup"
@@ -523,134 +445,6 @@
                   style="push">
             </command>
          </toolbar>
-      </menuContribution>
-      <menuContribution
-            locationURI="toolbar:vn.enclave.peyton.fusion.view.navigationViewPart1">
-         <command
-               commandId="vn.enclave.peyton.fusion.command.refresh"
-               icon="icons/refresh.png"
-               style="push">
-         </command>
-         <separator
-               name="vn.enclave.peyton.fusion.separator1"
-               visible="true">
-         </separator>
-         <command
-               commandId="vn.enclave.peyton.fusion.command.showDevice"
-               icon="icons/show_devices.png"
-               style="push">
-         </command>
-         <separator
-               name="vn.enclave.peyton.fusion.separator2"
-               visible="true">
-         </separator>
-         <command
-               commandId="vn.enclave.peyton.fusion.command.addFolder"
-               icon="icons/add_folder.png"
-               style="push">
-         </command>
-         <separator
-               name="vn.enclave.peyton.fusion.separator3"
-               visible="true">
-         </separator>
-         <command
-               commandId="vn.enclave.peyton.fusion.command.cloneVersion"
-               icon="icons/clone_version.png"
-               style="push">
-         </command>
-         <command
-               commandId="vn.enclave.peyton.fusion.command.saveAs"
-               icon="icons/save_as.png"
-               style="push">
-         </command>
-         <command
-               commandId="vn.enclave.peyton.fusion.command.delete"
-               icon="icons/delete.png"
-               style="push">
-         </command>
-      </menuContribution>
-      <menuContribution
-            locationURI="toolbar:vn.enclave.peyton.fusion.view.deviceTableViewPart1">
-         <command
-               commandId="vn.enclave.peyton.fusion.command.refresh"
-               icon="icons/refresh.png"
-               style="push">
-         </command>
-         <separator
-               name="vn.enclave.peyton.fusion.separator1"
-               visible="true">
-         </separator>
-         <command
-               commandId="device.command.category.toolbar.add"
-               icon="icons/add.png"
-               label="Add Device"
-               style="push">
-         </command>
-         <command
-               commandId="vn.enclave.peyton.fusion.command.copy"
-               icon="icons/copy.png">
-         </command>
-         <command
-               commandId="vn.enclave.peyton.fusion.command.delete"
-               icon="icons/delete.png"
-               style="push">
-         </command>
-         <separator
-               name="vn.enclave.peyton.fusion.separator2"
-               visible="true">
-         </separator>
-         <command
-               commandId="vn.enclave.peyton.fusion.command.importDevice"
-               icon="icons/import-devices.png"
-               style="push">
-         </command>
-         <command
-               commandId="vn.enclave.peyton.fusion.command.importZWave"
-               icon="icons/import_zwave.png"
-               style="push">
-         </command>
-         <command
-               commandId="vn.enclave.peyton.fusion.command.templateChild"
-               icon="icons/template_child.png"
-               style="push">
-         </command>
-         <command
-               commandId="vn.enclave.peyton.fusion.command.export"
-               icon="icons/export.png"
-               style="push">
-         </command>
-         <separator
-               name="vn.enclave.peyton.fusion.separator3"
-               visible="true">
-         </separator>
-         <command
-               commandId="vn.enclave.peyton.fusion.command.system"
-               icon="icons/system.png"
-               style="push">
-         </command>
-         <command
-               commandId="vn.enclave.peyton.fusion.command.expand"
-               icon="icons/expand.png"
-               style="push">
-         </command>
-         <command
-               commandId="vn.enclave.peyton.fusion.command.collapse"
-               icon="icons/collapse.png"
-               style="push">
-         </command>
-         <separator
-               name="vn.enclave.peyton.fusion.separator4"
-               visible="true">
-         </separator>
-         <command
-               commandId="vn.enclave.peyton.fusion.command.deviceChanged"
-               icon="icons/device_changed.png"
-               style="push">
-         </command>
-         <command
-               commandId="vn.enclave.peyton.fusion.command.requestOnlineStatus"
-               icon="icons/request_online_status.png">
-         </command>
       </menuContribution>
       <menuContribution
             allPopups="false"

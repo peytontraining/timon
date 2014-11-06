@@ -34,6 +34,9 @@ public class DeletingVersionHandler extends AbstractHandler implements IHandler 
 
         if (selectedNode instanceof Version) {
             Version selectedVersion = (Version) selectedNode;
+            if (selectedVersion.isNewVersion()) {
+                return null;
+            }
             DeleteVersionDialog dialog = new DeleteVersionDialog(HandlerUtil.getActiveShell(event));
 
             if (dialog.open() == Window.OK) {

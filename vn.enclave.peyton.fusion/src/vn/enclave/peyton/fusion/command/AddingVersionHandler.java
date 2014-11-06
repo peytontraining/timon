@@ -26,11 +26,17 @@ public class AddingVersionHandler extends AbstractHandler implements IHandler {
 
         if (selectedNode instanceof Project) {
             Project selectedProject = (Project) selectedNode;
+            if (selectedProject.isNewProject()) {
+                return null;
+            }
             createNewVersionFrom(selectedProject);
             return null;
         }
         if (selectedNode instanceof Version) {
             Version selectedVersion = (Version) selectedNode;
+            if (selectedVersion.isNewVersion()) {
+                return null;
+            }
             Project parentProject = selectedVersion.getProject();
             createNewVersionFrom(parentProject);
             return null;

@@ -5,7 +5,6 @@ import java.util.List;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StackLayout;
@@ -34,16 +33,13 @@ public class NavigationViewPart extends ViewPart implements ISaveablePart {
     public static final String ID = "vn.enclave.peyton.fusion.view.navigationViewPart";
     private static final int PLAN_TREE_COMPOSITE = 65;
     private static final int PROPERTY_COMPOSITE = 100 - PLAN_TREE_COMPOSITE;
-
-    private TreeViewer viewer;
-
     private StackLayout propertyCompositeStackLayout;
     private PlanService planService = new PlanService();
     private PlanTree planTree;
-
-    public TreeViewer getViewer() {
-        return viewer;
-    }
+    private ProjectPropertySection projectPropertySection;
+    private VersionPropertySection versionPropertySection;
+    private boolean isDirty;
+    private boolean isSectionReady;
 
     public void refreshPlanTreeViewer() {
         planTree.refreshPlanTreeViewer();
@@ -60,11 +56,6 @@ public class NavigationViewPart extends ViewPart implements ISaveablePart {
     public void setPartName(String partName) {
         super.setPartName(partName);
     }
-
-    private ProjectPropertySection projectPropertySection;
-    private VersionPropertySection versionPropertySection;
-    private boolean isDirty;
-    private boolean isSectionReady;
 
     public void setDirty(boolean isDirty) {
         this.isDirty = isDirty;
@@ -335,16 +326,13 @@ public class NavigationViewPart extends ViewPart implements ISaveablePart {
     }
 
     @Override
-    public void setFocus() {
-    }
+    public void setFocus() {}
 
     @Override
-    public void doSave(IProgressMonitor monitor) {
-    }
+    public void doSave(IProgressMonitor monitor) {}
 
     @Override
-    public void doSaveAs() {
-    }
+    public void doSaveAs() {}
 
     @Override
     public boolean isSaveAsAllowed() {
