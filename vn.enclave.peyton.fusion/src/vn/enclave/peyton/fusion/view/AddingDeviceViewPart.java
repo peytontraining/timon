@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -24,6 +25,7 @@ import org.eclipse.ui.ISaveablePart;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.menus.IMenuService;
 import org.eclipse.ui.part.ViewPart;
 
 import vn.enclave.peyton.fusion.common.Constant;
@@ -102,7 +104,13 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
         ToolBar toolBar = new ToolBar(toolbarComposite, SWT.FLAT);
         toolBar.setLayoutData(layoutData);
 
-        createAllToolItemsTo(toolBar);
+        ToolBarManager toolBarManager = new ToolBarManager(toolBar);
+        IMenuService menuService = (IMenuService) getSite().getService(IMenuService.class);
+        menuService.populateContributionManager(toolBarManager, Constant.TOOLBAR_ADDING_DEVICE_VIEW_PART);
+        toolBarManager.update(true);
+
+        //TODO: Delete all redundant method after implement algorithm for saving new device.
+        // createAllToolItemsTo(toolBar);
     }
 
     private void createTabFolderTo(Composite tabFolderComposite) {

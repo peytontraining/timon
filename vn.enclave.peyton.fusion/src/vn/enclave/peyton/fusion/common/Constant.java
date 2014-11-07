@@ -20,6 +20,15 @@ public class Constant {
     public static final Image IMAGE_ADD = AbstractUIPlugin
         .imageDescriptorFromPlugin(PLUGIN_ID, "icons/add.png").createImage();
 
+    public static final Image IMAGE_AREA_TEMPLATE_DELETE = AbstractUIPlugin.imageDescriptorFromPlugin(
+        PLUGIN_ID, "icons/area_template_del.png").createImage();
+
+    public static final Image IMAGE_AREA_TEMPLATE_IMPORT = AbstractUIPlugin.imageDescriptorFromPlugin(
+        PLUGIN_ID, "icons/area_template_import.png").createImage();
+
+    public static final Image IMAGE_AREA_TEMPLATE_NEW = AbstractUIPlugin.imageDescriptorFromPlugin(
+        PLUGIN_ID, "icons/area_template_new.png").createImage();
+
     public static final Image IMAGE_ARROW_DOWN = AbstractUIPlugin.imageDescriptorFromPlugin(
         PLUGIN_ID, "icons/arrow_down.png").createImage();
 
@@ -40,6 +49,9 @@ public class Constant {
 
     public static final Image IMAGE_COPY = AbstractUIPlugin
         .imageDescriptorFromPlugin(PLUGIN_ID, "icons/copy.png").createImage();
+
+    public static final Image IMAGE_CUT = AbstractUIPlugin
+        .imageDescriptorFromPlugin(PLUGIN_ID, "icons/cut.png").createImage();
 
     public static final Image IMAGE_DELETE = AbstractUIPlugin
         .imageDescriptorFromPlugin(PLUGIN_ID, "icons/delete.png").createImage();
@@ -77,6 +89,9 @@ public class Constant {
     public static final Image IMAGE_NODE_DELETE = AbstractUIPlugin.imageDescriptorFromPlugin(
         PLUGIN_ID, "icons/node_delete.png").createImage();
 
+    public static final Image IMAGE_PASTE = AbstractUIPlugin
+        .imageDescriptorFromPlugin(PLUGIN_ID, "icons/paste.png").createImage();
+
     public static final Image IMAGE_PROJECT = AbstractUIPlugin
         .imageDescriptorFromPlugin(PLUGIN_ID, "icons/project.png").createImage();
 
@@ -109,6 +124,10 @@ public class Constant {
 
     public static final Image IMAGE_CLONE_VERSION = AbstractUIPlugin.imageDescriptorFromPlugin(
         PLUGIN_ID, "icons/clone_version.png").createImage();
+
+    public static final Image IMAGE_ZONE_ADD_CHILD = AbstractUIPlugin.imageDescriptorFromPlugin(
+        PLUGIN_ID, "icons/zone_add_child.png").createImage();
+
     /*
      * COLUMN INDEX OF DEVICE TABLE.
      */
@@ -118,4 +137,12 @@ public class Constant {
     public static final int COLUMN_PHYSICAL_LOCATION = 3;
     public static final int COLUMN_MANUFACTURER = 4;
 
+    /*
+     * TOOLBAR ID OF VIEWPART.
+     */
+    public static final String TOOLBAR_DEVICE_TABLE_VIEW_PART = "toolbar:deviceTableViewPart";
+    public static final String TOOLBAR_AREAS_TEMPLATES_VIEW_PART = "toolbar:areasTemplatesViewPart";
+    public static final String TOOLBAR_NAVIGATION_VIEW_PART = "toolbar:navigationViewPart";
+    public static final String TOOLBAR_DEVICE_TEMPLATE_VIEW_PART = "toolbar:deviceTemplatesViewPart";
+    public static final String TOOLBAR_ADDING_DEVICE_VIEW_PART = "toolbar:addingDeviceViewPart";
 }

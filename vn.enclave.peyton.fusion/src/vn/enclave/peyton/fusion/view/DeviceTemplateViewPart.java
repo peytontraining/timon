@@ -1,5 +1,8 @@
 package vn.enclave.peyton.fusion.view;
 
+import java.util.List;
+
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -16,16 +19,19 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.menus.IMenuService;
 import org.eclipse.ui.part.ViewPart;
 
 import vn.enclave.peyton.fusion.common.Constant;
 import vn.enclave.peyton.fusion.entity.DeviceTemplate;
+import vn.enclave.peyton.fusion.entity.Module;
 import vn.enclave.peyton.fusion.filter.TemplateFilter;
 import vn.enclave.peyton.fusion.provider.TemplateTreeContentProvider;
 import vn.enclave.peyton.fusion.provider.TemplateTreeTableLabelProvider;
@@ -35,60 +41,34 @@ public class DeviceTemplateViewPart extends ViewPart implements IDoubleClickList
     public static final String ID = "vn.enclave.peyton.fusion.view.deviceTemplatesViewPart";
     private static final String[] TITLES = {"Name", "Last Modified", "Manufacture", "Model Number", "Version"};
     private static final int DEFAULT_WIDTH = 120;
-    private TreeViewer treeViewer;
-    private Text filterText;
-    private Text finderText;
-    private Button clear;
-    private Button up;
-    private Button down;
-    private TemplateFilter filter;
+    private Tree deviceTemplateTree;
+    private TreeViewer deviceTemplatetreeViewer;
+    private Label filterLbl;
+    private Label finderLbl;
+    private Text filterTxt;
+    @SuppressWarnings("unused")
+    private Text finderTxt;
+    private Button clearBtn;
+    private Button upBtn;
+    private Button downBtn;
+    private TemplateFilter templateFilter = new TemplateFilter();
     private IWorkbenchPage activePage;
 
     @Override
     public void createPartControl(Composite parent) {
         createActivePage();
 
-        // Layout the parent.
-        GridLayout layout = new GridLayout(9, false);
+        GridLayout layout = new GridLayout(1, false);
+        layout.verticalSpacing = 0;
+        layout.marginHeight = 0;
+        layout.marginRight = -5;
+        layout.marginLeft = -5;
+        layout.horizontalSpacing = 0;
         parent.setLayout(layout);
 
-        // Create the filter part.
-        createFilter(parent);
-
-        // Create the finder part.
-        createFinder(parent);
-
-        // Create and layout a Tree.
-        GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true, 9, 1);
-        int style = SWT.MULTI | SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL;
-        Tree tree = new Tree(parent, style);
-        tree.setLayoutData(layoutData);
-
-        // Make the header and line of tree is visible.
-        tree.setHeaderVisible(true);
-        tree.setLinesVisible(true);
-
-        // Create columns for tree.
-        createColumns(tree);
-
-        // Create a TreeViewer.
-        treeViewer = new TreeViewer(tree);
-
-        // Set ContentProvider and LabelProvider for treeViewer.
-        treeViewer.setContentProvider(new TemplateTreeContentProvider());
-        treeViewer.setLabelProvider(new TemplateTreeTableLabelProvider());
-
-        // Set data for treeViewer.
-        ModuleService moduleService = new ModuleService();
-        treeViewer.setInput(moduleService.getAll());
-
-        // Create and set filter for treeViewer.
-        filter = new TemplateFilter();
-        treeViewer.addFilter(filter);
-
-        treeViewer.addDoubleClickListener(this);
-
-        getSite().setSelectionProvider(treeViewer);
+        createToolbarCompositeInside(parent);
+        createFilterAndFinderCompositeInside(parent);
+        createDeviceTemplateTreeViewerCompositeInside(parent);
     }
 
     private void createActivePage() {
@@ -96,80 +76,185 @@ public class DeviceTemplateViewPart extends ViewPart implements IDoubleClickList
         activePage = window.getActivePage();
     }
 
-    @Override
-    public void setFocus() {
-        treeViewer.getTree().setFocus();
+    private void createToolbarCompositeInside(Composite parent) {
+        GridLayout layout = new GridLayout(1, false);
+        layout.marginTop = -5;
+        layout.marginRight = -5;
+        layout.marginBottom = -5;
+        layout.marginLeft = -5;
+        GridData layoutData = new GridData(SWT.FILL, SWT.NONE, true, false);
+        Composite toolbarComposite = new Composite(parent, SWT.NONE);
+        toolbarComposite.setLayout(layout);
+        toolbarComposite.setLayoutData(layoutData);
+
+        createToolbarTo(toolbarComposite);
     }
 
-    private void createFilter(Composite parent) {
-        // Create filter label.
-        Label label = new Label(parent, SWT.NONE);
-        label.setText("Filter:");
+    private void createFilterAndFinderCompositeInside(Composite parent) {
+        GridLayout layout = new GridLayout(2, false);
+        layout.marginTop = -5;
+        layout.marginRight = -5;
+        layout.marginBottom = -5;
+        layout.marginLeft = -5;
+        GridData layoutData = new GridData(SWT.FILL, SWT.NONE, true, false);
+        Composite filterAndFinderComposite = new Composite(parent, SWT.NONE);
+        filterAndFinderComposite.setLayout(layout);
+        filterAndFinderComposite.setLayoutData(layoutData);
 
-        // Create and layout filter text.
-        GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1);
-        int style = SWT.BORDER | SWT.SEARCH;
-        filterText = new Text(parent, style);
-        filterText.setLayoutData(layoutData);
-        filterText.addModifyListener(new ModifyListener() {
+        createFilterCompositeInside(filterAndFinderComposite);
+        createFinderCompositeInside(filterAndFinderComposite);
+    }
 
+    private void createDeviceTemplateTreeViewerCompositeInside(Composite parent) {
+        GridLayout layout = new GridLayout(1, false);
+        layout.marginTop = -5;
+        layout.marginRight = -5;
+        layout.marginBottom = -5;
+        layout.marginLeft = -5;
+        GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
+        Composite deviceTemplateTreeComposite = new Composite(parent, SWT.NONE);
+        deviceTemplateTreeComposite.setLayout(layout);
+        deviceTemplateTreeComposite.setLayoutData(layoutData);
+
+        createDeviceTemplateTreeTo(deviceTemplateTreeComposite);
+    }
+
+    private void createDeviceTemplateTreeTo(Composite deviceTemplateTreeComposite) {
+        GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
+        int style = SWT.MULTI | SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL;
+        deviceTemplateTree = new Tree(deviceTemplateTreeComposite, style);
+        deviceTemplateTree.setHeaderVisible(true);
+        deviceTemplateTree.setLinesVisible(true);
+        deviceTemplateTree.setLayoutData(layoutData);
+
+        deviceTemplatetreeViewer = new TreeViewer(deviceTemplateTree);
+        deviceTemplatetreeViewer.setContentProvider(new TemplateTreeContentProvider());
+        deviceTemplatetreeViewer.setLabelProvider(new TemplateTreeTableLabelProvider());
+        deviceTemplatetreeViewer.addFilter(templateFilter);
+        deviceTemplatetreeViewer.addDoubleClickListener(this);
+
+        getSite().setSelectionProvider(deviceTemplatetreeViewer);
+
+        createAllColumnsToDeviceTemplateTreeViewer();
+
+        populateDeviceTemplateTree();
+
+    }
+
+    private void createToolbarTo(Composite toolbarComposite) {
+        GridData layoutData = new GridData(SWT.RIGHT, SWT.NONE, true, false);
+        ToolBar toolBar = new ToolBar(toolbarComposite, SWT.FLAT);
+        toolBar.setLayoutData(layoutData);
+
+        ToolBarManager toolBarManager = new ToolBarManager(toolBar);
+        IMenuService menuService = (IMenuService) getSite().getService(IMenuService.class);
+        menuService.populateContributionManager(toolBarManager, Constant.TOOLBAR_DEVICE_TEMPLATE_VIEW_PART);
+        toolBarManager.update(true);
+    }
+
+    private void createFilterCompositeInside(Composite filterAndFinderComposite) {
+        GridLayout layout = new GridLayout(3, false);
+        layout.marginRight = 20;
+        GridData layoutData = new GridData(SWT.FILL, SWT.NONE, true, false);
+        Composite filterComposite = new Composite(filterAndFinderComposite, SWT.NONE);
+        filterComposite.setLayout(layout);
+        filterComposite.setLayoutData(layoutData);
+
+        createFilterControlsInside(filterComposite);
+    }
+
+    private void createFinderCompositeInside(Composite filterAndFinderComposite) {
+        GridLayout layout = new GridLayout(4, false);
+        layout.marginLeft = 20;
+        GridData layoutData = new GridData(SWT.FILL, SWT.NONE, true, false);
+        Composite finderComposite = new Composite(filterAndFinderComposite, SWT.NONE);
+        finderComposite.setLayout(layout);
+        finderComposite.setLayoutData(layoutData);
+
+        createFinderControlsInside(finderComposite);
+    }
+
+    private void createFilterControlsInside(Composite filterComposite) {
+        filterLbl = new Label(filterComposite, SWT.NONE);
+        filterLbl.setText("Filter:");
+
+        filterTxt = createText(filterComposite);
+        filterTxt.addModifyListener(createModifyListenerToFilterText());
+
+        clearBtn = createButton(filterComposite);
+        clearBtn.setImage(Constant.IMAGE_EDIT);
+        clearBtn.setEnabled(false);
+        clearBtn.addSelectionListener(createSelectionAdapterToClearButton());
+    }
+
+    private void createFinderControlsInside(Composite finderComposite) {
+        finderLbl = new Label(finderComposite, SWT.NONE);
+        finderLbl.setText("Find:");
+
+        finderTxt = createText(finderComposite);
+
+        upBtn = createButton(finderComposite);
+        upBtn.setImage(Constant.IMAGE_ARROW_UP);
+
+        downBtn = createButton(finderComposite);
+        downBtn.setImage(Constant.IMAGE_ARROW_DOWN);
+    }
+
+    private Text createText(Composite composite) {
+        GridData layoutData = new GridData(SWT.FILL, SWT.NONE, true, false);
+        Text text = new Text(composite, SWT.BORDER);
+        text.setLayoutData(layoutData);
+        return text;
+    }
+
+    private ModifyListener createModifyListenerToFilterText() {
+        return new ModifyListener() {
             private static final long serialVersionUID = 4906617449904102933L;
 
             @Override
             public void modifyText(ModifyEvent event) {
-                filter.setFilterString(filterText.getText());
-                treeViewer.refresh();
-                boolean enabled = filterText.getText() != null && filterText.getText().length() != 0;
-                clear.setEnabled(enabled);
+                templateFilter.setFilterString(filterTxt.getText());
+                deviceTemplatetreeViewer.refresh();
+                clearBtn.setEnabled(isEnableClearButton());
             }
-        });
+        };
+    }
 
-        // Create clear button
-        clear = new Button(parent, SWT.NONE);
-        clear.setImage(Constant.IMAGE_EDIT);
-        clear.setEnabled(false);
-        clear.addSelectionListener(new SelectionAdapter() {
+    private boolean isEnableClearButton() {
+        return filterTxt.getText() != null & filterTxt.getText().length() != 0;
+    }
 
+    private Button createButton(Composite composite) {
+        Button button = new Button(composite, SWT.PUSH);
+        return button;
+    }
+
+    private SelectionAdapter createSelectionAdapterToClearButton() {
+        return new SelectionAdapter() {
             private static final long serialVersionUID = 8727982726761507228L;
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                filterText.setText("");
-                clear.setEnabled(false);
+                filterTxt.setText("");
+                clearBtn.setEnabled(false);
             }
-        });
+        };
     }
 
-    private void createFinder(Composite parent) {
-        // Create filter label.
-        GridData layoutData = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
-        Label label = new Label(parent, SWT.NONE);
-        label.setText("Find:");
-        label.setLayoutData(layoutData);
-
-        // Create and layout filter text.
-        layoutData = new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1);
-        int style = SWT.BORDER | SWT.SEARCH;
-        finderText = new Text(parent, style);
-        finderText.setLayoutData(layoutData);
-
-        // Create up button
-        up = new Button(parent, SWT.NONE);
-        up.setImage(Constant.IMAGE_ARROW_UP);
-
-        // Create down button
-        down = new Button(parent, SWT.NONE);
-        down.setImage(Constant.IMAGE_ARROW_DOWN);
-    }
-
-    private void createColumns(Tree parent) {
+    private void createAllColumnsToDeviceTemplateTreeViewer() {
         for (String title : TITLES) {
-            createTreeColumn(parent, title);
+            createTreeColumnHas(title);
         }
     }
 
-    private void createTreeColumn(Tree parent, String title) {
-        TreeColumn column = new TreeColumn(parent, SWT.NONE);
+    private void populateDeviceTemplateTree() {
+        ModuleService moduleService = new ModuleService();
+        List<Module> modules = moduleService.getAll();
+        deviceTemplatetreeViewer.setInput(modules);
+    }
+
+    private void createTreeColumnHas(String title) {
+        TreeColumn column = new TreeColumn(deviceTemplateTree, SWT.NONE);
         column.setText(title);
         column.setWidth(DEFAULT_WIDTH);
     }
@@ -205,5 +290,9 @@ public class DeviceTemplateViewPart extends ViewPart implements IDoubleClickList
 
     private boolean isViewPartOpened(String viewId, String secondaryId) {
         return activePage.findViewReference(viewId, secondaryId) == null;
+    }
+
+    @Override
+    public void setFocus() {
     }
 }

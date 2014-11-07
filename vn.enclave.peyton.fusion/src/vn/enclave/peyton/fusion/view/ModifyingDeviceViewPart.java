@@ -6,7 +6,6 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -28,10 +27,9 @@ import vn.enclave.peyton.fusion.service.impl.DeviceService;
 import vn.enclave.peyton.fusion.view.form.DetailedDeviceForm;
 
 public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
-
     public static final String ID = "vn.enalve.peyton.fusion.view.modifyingDeviceViewPart";
     private boolean isDirty;
-    private boolean isFilled;
+    private boolean isFormReady;
     private Device selectedDevice;
     private DetailedDeviceForm detailedDeviceForm;
     private DevicePropertySection devicePropertySection;
@@ -42,8 +40,8 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
         firePropertyChange(PROP_DIRTY);
     }
 
-    public void setFilled(boolean isFilled) {
-        this.isFilled = isFilled;
+    public void setFormReady(boolean isFormReady) {
+        this.isFormReady = isFormReady;
     }
 
     @Override
@@ -55,9 +53,8 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
         layout.marginHeight = 0;
         parent.setLayout(layout);
 
-        createToolbarComposite(parent);
-
-        createTabFolderComposite(parent);
+        createToolbarCompositeInside(parent);
+        createTabFolderCompositeInside(parent);
     }
 
     private void createActivePage() {
@@ -65,7 +62,7 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
         activePage = window.getActivePage();
     }
 
-    private void createToolbarComposite(Composite parent) {
+    private void createToolbarCompositeInside(Composite parent) {
         GridLayout layout = new GridLayout(1, false);
         layout.marginTop = -5;
         layout.marginBottom = -5;
@@ -74,45 +71,10 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
         toolbarComposite.setLayout(layout);
         toolbarComposite.setLayoutData(layoutData);
 
-        createToolbar(toolbarComposite);
+        createToolbarTo(toolbarComposite);
     }
 
-    private void createToolbar(Composite toolbarComposite) {
-        GridData layoutData = new GridData(SWT.RIGHT, SWT.NONE, true, false);
-        ToolBar toolBar = new ToolBar(toolbarComposite, SWT.FLAT);
-        toolBar.setLayoutData(layoutData);
-
-        createToolItems(toolBar);
-    }
-
-    private void createToolItems(ToolBar toolBar) {
-        ToolItem save = createToolItem(toolBar, Constant.IMAGE_SAVE_AS);
-        save.addSelectionListener(saveAdapter);
-
-        ToolItem saveAndClose = createToolItem(toolBar, Constant.IMAGE_SAVE_AND_CLOSE);
-
-        createSeparatorTo(toolBar);
-
-        ToolItem updateDevcie = createToolItem(toolBar, Constant.IMAGE_DEVICE_UPDATE);
-
-        ToolItem showDevice = createToolItem(toolBar, Constant.IMAGE_SHOW_DEVICES);
-
-        createSeparatorTo(toolBar);
-
-        ToolItem editService = createToolItem(toolBar, Constant.IMAGE_SERVICE);
-    }
-
-    private void createSeparatorTo(ToolBar toolBar) {
-        new ToolItem(toolBar, SWT.SEPARATOR);
-    }
-
-    private ToolItem createToolItem(ToolBar parent, Image image) {
-        ToolItem toolItem = new ToolItem(parent, SWT.PUSH);
-        toolItem.setImage(image);
-        return toolItem;
-    }
-
-    private void createTabFolderComposite(Composite parent) {
+    private void createTabFolderCompositeInside(Composite parent) {
         GridLayout layout = new GridLayout(1, false);
         layout.marginTop = -10;
         layout.marginWidth = 0;
@@ -121,60 +83,113 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
         tabFolderComposite.setLayout(layout);
         tabFolderComposite.setLayoutData(layoutData);
 
-        createTabFolder(tabFolderComposite);
+        createTabFolderInside(tabFolderComposite);
     }
 
-    private void createTabFolder(Composite parent) {
+    private void createToolbarTo(Composite toolbarComposite) {
+        GridData layoutData = new GridData(SWT.RIGHT, SWT.NONE, true, false);
+        ToolBar toolBar = new ToolBar(toolbarComposite, SWT.FLAT);
+        toolBar.setLayoutData(layoutData);
+
+        createAllToolItemsTo(toolBar);
+    }
+
+    private void createTabFolderInside(Composite tabFolderComposite) {
         GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
-        TabFolder folder = new TabFolder(parent, SWT.NONE);
-        folder.setLayoutData(layoutData);
+        TabFolder tabFolder = new TabFolder(tabFolderComposite, SWT.NONE);
+        tabFolder.setLayoutData(layoutData);
 
-        createDetailsTabItem(folder);
-
-        createConfigureTabItem(folder);
+        createDetailsTabItemTo(tabFolder);
+        createConfigureTabItemTo(tabFolder);
     }
 
-    private void createDetailsTabItem(TabFolder parent) {
-        detailedDeviceForm = new DetailedDeviceForm(parent);
-        detailedDeviceForm.addModifyListener(modifyListener);
+    private void createAllToolItemsTo(ToolBar toolBar) {
+        ToolItem saveToolItem = createToolItemTo(toolBar);
+        saveToolItem.setImage(Constant.IMAGE_SAVE_AS);
+        saveToolItem.addSelectionListener(createSelectionAdapterToSaveToolItem());
 
-        TabItem detailsTabItem = new TabItem(parent, SWT.NONE);
+        ToolItem saveAndCloseToolItem = createToolItemTo(toolBar);
+        saveAndCloseToolItem.setImage(Constant.IMAGE_SAVE_AND_CLOSE);
+
+        createSeparatorTo(toolBar);
+
+        ToolItem updateDevcieToolItem = createToolItemTo(toolBar);
+        updateDevcieToolItem.setImage(Constant.IMAGE_DEVICE_UPDATE);
+
+        ToolItem showDeviceToolItem = createToolItemTo(toolBar);
+        showDeviceToolItem.setImage(Constant.IMAGE_SHOW_DEVICES);
+
+        createSeparatorTo(toolBar);
+
+        ToolItem editServiceToolItem = createToolItemTo(toolBar);
+        editServiceToolItem.setImage(Constant.IMAGE_SERVICE);
+    }
+
+    private void createDetailsTabItemTo(TabFolder tabFolder) {
+        detailedDeviceForm = new DetailedDeviceForm(tabFolder);
+        detailedDeviceForm.addModifyListener(createModifyListenerToDetailedDeviceForm());
+
+        TabItem detailsTabItem = new TabItem(tabFolder, SWT.NONE);
         detailsTabItem.setText("Details");
         detailsTabItem.setControl(detailedDeviceForm.getScrolledForm());
     }
 
-    private void createConfigureTabItem(TabFolder parent) {
-        devicePropertySection = new DevicePropertySection(parent);
+    private void createConfigureTabItemTo(TabFolder tabFolder) {
+        devicePropertySection = new DevicePropertySection(tabFolder);
 
-        TabItem configureTabItem = new TabItem(parent, SWT.NONE);
+        TabItem configureTabItem = new TabItem(tabFolder, SWT.NONE);
         configureTabItem.setText("Configure");
         configureTabItem.setControl(devicePropertySection.getSection());
     }
 
-    @Override
-    public void setFocus() {}
+    private ToolItem createToolItemTo(ToolBar toolBar) {
+        ToolItem toolItem = new ToolItem(toolBar, SWT.PUSH);
+        return toolItem;
+    }
 
-    public void setData(Device device) {
+    private SelectionAdapter createSelectionAdapterToSaveToolItem() {
+        return new SelectionAdapter() {
+
+            private static final long serialVersionUID = -1772039129772087714L;
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                updateDevice();
+                refreshDeviceTable();
+                setPartName(selectedDevice.getName());
+                setDirty(false);
+            }
+        };
+    }
+
+    private void createSeparatorTo(ToolBar toolBar) {
+        new ToolItem(toolBar, SWT.SEPARATOR);
+    }
+
+    private ModifyListener createModifyListenerToDetailedDeviceForm() {
+        return new ModifyListener() {
+
+            private static final long serialVersionUID = 5212741420498281275L;
+
+            @Override
+            public void modifyText(ModifyEvent event) {
+                setDirty(true && isFormReady);
+            }
+        };
+    }
+
+    @Override
+    public void setFocus() {
+    }
+
+    public void populateViewPartFrom(Device device) {
         selectedDevice = device;
         setPartName(device.getName());
         setTitleImage(Utils.createImageFromIcon(device.getIcon()));
         detailedDeviceForm.fillInForm(device);
         devicePropertySection.fillInTree(device.getProperties());
-        setFilled(true);
+        setFormReady(true);
     }
-
-    private SelectionAdapter saveAdapter = new SelectionAdapter() {
-
-        private static final long serialVersionUID = -1772039129772087714L;
-
-        @Override
-        public void widgetSelected(SelectionEvent e) {
-            updateDevice();
-            refreshDeviceTable();
-            setPartName(selectedDevice.getName());
-            setDirty(false);
-        }
-    };
 
     private void updateDevice() {
         selectedDevice = detailedDeviceForm.getModifiedDevice();
@@ -187,23 +202,14 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
         ((DeviceTableViewPart) viewpart).refreshDeviceTableViewer();
     }
 
-    private ModifyListener modifyListener = new ModifyListener() {
-
-        private static final long serialVersionUID = 5212741420498281275L;
-
-        @Override
-        public void modifyText(ModifyEvent event) {
-            setDirty(true && isFilled);
-        }
-    };
-
     @Override
     public void doSave(IProgressMonitor monitor) {
         updateDevice();
     }
 
     @Override
-    public void doSaveAs() {}
+    public void doSaveAs() {
+    }
 
     @Override
     public boolean isDirty() {

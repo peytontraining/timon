@@ -3,6 +3,7 @@ package vn.enclave.peyton.fusion.view;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -27,11 +28,11 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.menus.IMenuService;
 import org.eclipse.ui.part.ViewPart;
 
 import vn.enclave.peyton.fusion.common.Constant;
@@ -130,7 +131,10 @@ public class DeviceTableViewPart extends ViewPart implements IDoubleClickListene
         ToolBar toolBar = new ToolBar(toolbarComposite, SWT.FLAT);
         toolBar.setLayoutData(layoutData);
 
-        createAllToolItemsTo(toolBar);
+        ToolBarManager toolBarManager = new ToolBarManager(toolBar);
+        IMenuService menuService = (IMenuService) getSite().getService(IMenuService.class);
+        menuService.populateContributionManager(toolBarManager, Constant.TOOLBAR_DEVICE_TABLE_VIEW_PART);
+        toolBarManager.update(true);
     }
 
     private void createFilterCompositeInside(Composite filterAndFinderComposite) {
@@ -175,55 +179,6 @@ public class DeviceTableViewPart extends ViewPart implements IDoubleClickListene
         createAllColumnsToDeviceTableViewer();
     }
 
-    private void createAllToolItemsTo(ToolBar toolBar) {
-        ToolItem refreshToolItem = createToolItemTo(toolBar);
-        refreshToolItem.setImage(Constant.IMAGE_REFRESH);
-
-        createSeparatorTo(toolBar);
-
-        ToolItem addToolItem = createToolItemTo(toolBar);
-        addToolItem.setImage(Constant.IMAGE_ADD);
-
-        ToolItem copyToolItem = createToolItemTo(toolBar);
-        copyToolItem.setImage(Constant.IMAGE_COPY);
-
-        ToolItem deleteToolItem = createToolItemTo(toolBar);
-        deleteToolItem.setImage(Constant.IMAGE_DELETE);
-
-        createSeparatorTo(toolBar);
-
-        ToolItem importDeviceToolItem = createToolItemTo(toolBar);
-        importDeviceToolItem.setImage(Constant.IMAGE_IMPORT_DEVICES);
-
-        ToolItem importZWaveToolItem = createToolItemTo(toolBar);
-        importZWaveToolItem.setImage(Constant.IMAGE_IMPORT_ZWAVE);
-
-        ToolItem templateChildToolItem = createToolItemTo(toolBar);
-        templateChildToolItem.setImage(Constant.IMAGE_TEMPLATE_CHILD);
-
-        ToolItem exportToolItem = createToolItemTo(toolBar);
-        exportToolItem.setImage(Constant.IMAGE_EXPORT);
-
-        createSeparatorTo(toolBar);
-
-        ToolItem systemToolItem = createToolItemTo(toolBar);
-        systemToolItem.setImage(Constant.IMAGE_SYSTEM);
-
-        ToolItem expandToolItem = createToolItemTo(toolBar);
-        expandToolItem.setImage(Constant.IMAGE_EXPAND);
-
-        ToolItem collapseToolItem = createToolItemTo(toolBar);
-        collapseToolItem.setImage(Constant.IMAGE_COLLAPSE);
-
-        createSeparatorTo(toolBar);
-
-        ToolItem deviceChangedToolItem = createToolItemTo(toolBar);
-        deviceChangedToolItem.setImage(Constant.IMAGE_DEVICE_CHANGED);
-
-        ToolItem requestOnlineStatusToolItem = createToolItemTo(toolBar);
-        requestOnlineStatusToolItem.setImage(Constant.IMAGE_REQUEST_ONLINE_STATUS);
-    }
-
     private void createFilterControlsInside(Composite filterComposite) {
         filterLbl = new Label(filterComposite, SWT.NONE);
         filterLbl.setText("Filter:");
@@ -252,15 +207,6 @@ public class DeviceTableViewPart extends ViewPart implements IDoubleClickListene
         downBtn = createButton(finderComposite);
         downBtn.setImage(Constant.IMAGE_ARROW_DOWN);
         downBtn.addSelectionListener(createSelectionAdapterToDownButton());
-    }
-
-    private ToolItem createToolItemTo(ToolBar toolBar) {
-        ToolItem toolItem = new ToolItem(toolBar, SWT.PUSH);
-        return toolItem;
-    }
-
-    private void createSeparatorTo(ToolBar toolBar) {
-        new ToolItem(toolBar, SWT.SEPARATOR);
     }
 
     private Text createText(Composite composite) {
@@ -435,14 +381,13 @@ public class DeviceTableViewPart extends ViewPart implements IDoubleClickListene
         }
     }
 
-    private TableColumn createColumnHas(int columnIndex) {
+    private void createColumnHas(int columnIndex) {
         TableColumn tableColumn = new TableColumn(deviceTable, SWT.NONE);
         tableColumn.setText(TITLES[columnIndex]);
         tableColumn.setWidth(DEFAULT_WIDTH);
         tableColumn.setResizable(true);
         tableColumn.setMoveable(true);
         tableColumn.addSelectionListener(createSelectionAdapterToColumnHas(columnIndex));
-        return tableColumn;
     }
 
     private SelectionListener createSelectionAdapterToColumnHas(final int columnIndex) {
@@ -484,7 +429,7 @@ public class DeviceTableViewPart extends ViewPart implements IDoubleClickListene
         IViewPart viewPart = null;
         if (isViewPartOpened(viewId, secondaryId)) {
             viewPart = activePage.showView(viewId, secondaryId, mode);
-            ((ModifyingDeviceViewPart) viewPart).setData(device);
+            ((ModifyingDeviceViewPart) viewPart).populateViewPartFrom(device);
         } else {
             viewPart = activePage.showView(viewId, secondaryId, mode);
         }

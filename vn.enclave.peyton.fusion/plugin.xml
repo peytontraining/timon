@@ -188,6 +188,10 @@
    </extension>
    <extension
          point="org.eclipse.ui.commands">
+      <category
+            id="left.command.category.toolbar"
+            name="Left Toolbar">
+      </category>
       <command
             categoryId="left.command.category.toolbar"
             id="vn.enclave.peyton.fusion.command.export"
@@ -208,26 +212,78 @@
             id="vn.enclave.peyton.fusion.command.helpLinks"
             name="Help Links">
       </command>
-      <category
-            id="left.command.category.toolbar"
-            name="Left Toolbar">
-      </category>
       <command
             id="vn.enclave.peyton.fusion.command.status"
             name="Status">
       </command>
       <category
-            id="project.command.category.toolbar"
-            name="Project.Toolbar">
-      </category>
-      <category
-            id="device.command.category.toolbar"
-            name="Device.Toolbar">
+            id="toolbar.deviceTableViewPart"
+            name="DeviceTableViewPart.Toolbar">
       </category>
       <command
-            categoryId="device.command.category.toolbar"
-            id="device.command.category.toolbar.add"
-            name="Device.Toolbar.Add">
+            categoryId="toolbar.deviceTableViewPart"
+            id="deviceTableViewPart.toolbar.refresh"
+            name="DeviceTableViewPart.Toolbar.Refresh">
+      </command>
+      <command
+            categoryId="toolbar.deviceTableViewPart"
+            id="deviceTableViewPart.toolbar.add"
+            name="DeviceTableViewPart.Toolbar.Add">
+      </command>
+      <command
+            categoryId="toolbar.deviceTableViewPart"
+            id="deviceTableViewPart.toolbar.copy"
+            name="DeviceTableViewPart.Toolbar.Copy">
+      </command>
+      <command
+            categoryId="toolbar.deviceTableViewPart"
+            id="deviceTableViewPart.toolbar.delete"
+            name="DeviceTableViewPart.Toolbar.Delete">
+      </command>
+      <command
+            categoryId="toolbar.deviceTableViewPart"
+            id="deviceTableViewPart.toolbar.importDevice"
+            name="DeviceTableViewPart.Toolbar.ImportDevice">
+      </command>
+      <command
+            categoryId="toolbar.deviceTableViewPart"
+            id="deviceTableViewPart.toolbar.importZWave"
+            name="DeviceTableViewPart.Toolbar.ImportZWave">
+      </command>
+      <command
+            categoryId="toolbar.deviceTableViewPart"
+            id="deviceTableViewPart.toolbar.templateChild"
+            name="DeviceTableViewPart.Toolbar.TemplateChild">
+      </command>
+      <command
+            categoryId="toolbar.deviceTableViewPart"
+            id="deviceTableViewPart.toolbar.export"
+            name="DeviceTableViewPart.Toolbar.Export">
+      </command>
+      <command
+            categoryId="toolbar.deviceTableViewPart"
+            id="deviceTableViewPart.toolbar.system"
+            name="DeviceTableViewPart.Toolbar.System">
+      </command>
+      <command
+            categoryId="toolbar.deviceTableViewPart"
+            id="deviceTableViewPart.toolbar.expand"
+            name="DeviceTableViewPart.Toolbar.Expand">
+      </command>
+      <command
+            categoryId="toolbar.deviceTableViewPart"
+            id="deviceTableViewPart.toolbar.collapse"
+            name="DeviceTableViewPart.Toolbar.Collapse">
+      </command>
+      <command
+            categoryId="toolbar.deviceTableViewPart"
+            id="deviceTableViewPart.toolbar.deviceChanged"
+            name="DeviceTableViewPart.Toolbar.DeviceChanged">
+      </command>
+      <command
+            categoryId="toolbar.deviceTableViewPart"
+            id="deviceTableViewPart.toolbar.requestOnlineStatus"
+            name="DeviceTableViewPart.Toolbar.RequestOnlineStatus">
       </command>
       <category
             id="project.command.category.popup"
@@ -391,6 +447,70 @@
             id="deviceTemplates.command.category.toolbar.validate"
             name="DeviceTemplates.Toolbar.Validate">
       </command>
+      <category
+            id="toolbar.navigationViewPart"
+            name="NavigationViewPart.Toolbar">
+      </category>
+      <command
+            categoryId="toolbar.navigationViewPart"
+            id="navigationViewPart.toolbar.refresh"
+            name="NavigationViewPart.Toolbar.Refresh">
+      </command>
+      <command
+            categoryId="toolbar.navigationViewPart"
+            id="navigationViewPart.toolbar.showDevice"
+            name="NavigationViewPart.Toolbar.ShowDevice">
+      </command>
+      <command
+            categoryId="toolbar.navigationViewPart"
+            id="navigationViewPart.toolbar.add"
+            name="NavigationViewPart.Toolbar.Add">
+      </command>
+      <command
+            categoryId="toolbar.navigationViewPart"
+            id="navigationViewPart.toolbar.cloneVersion"
+            name="NavigationViewPart.Toolbar.CloneVersion">
+      </command>
+      <command
+            categoryId="toolbar.navigationViewPart"
+            id="navigationViewPart.toolbar.save"
+            name="NavigationViewPart.Toolbar.Save">
+      </command>
+      <command
+            categoryId="toolbar.navigationViewPart"
+            id="navigationViewPart.toolbar.delete"
+            name="NavigationViewPart.Toolbar.Delete">
+      </command>
+      <category
+            id="toolbar.addingDeviceViewPart"
+            name="AddingDeviceViewPart.Toolbar">
+      </category>
+      <command
+            categoryId="toolbar.addingDeviceViewPart"
+            id="addingDeviceViewPart.toolbar.save"
+            name="AddingDeviceViewPart.Toolbar.Save">
+      </command>
+      <command
+            categoryId="toolbar.addingDeviceViewPart"
+            id="addingDeviceViewPart.toolbar.saveAndClose"
+            name="AddingDeviceViewPart.Toolbar.SaveAndClose">
+      </command>
+      <command
+            categoryId="toolbar.addingDeviceViewPart"
+            id="addingDeviceViewPart.toolbar.updateDevice"
+            name="AddingDeviceViewPart.Toolbar.UpdateDevice">
+      </command>
+      <command
+            categoryId="toolbar.addingDeviceViewPart"
+            id="addingDeviceViewPart.toolbar.showDevice"
+            name="AddingDeviceViewPart.Toolbar.ShowDevice">
+      </command>
+      <command
+            categoryId="toolbar.addingDeviceViewPart"
+            id="addingDeviceViewPart.toolbar.editService"
+            name="AddingDeviceViewPart.Toolbar.EditService">
+      </command>
+      
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -491,7 +611,155 @@
          </command>
       </menuContribution>
       <menuContribution
-            locationURI="toolbar:vn.enclave.peyton.fusion.view.areasTemplatesViewPart">
+            locationURI="toolbar:navigationViewPart">
+         <command
+               commandId="navigationViewPart.toolbar.refresh"
+               icon="icons/refresh.png"
+               label="Refresh"
+               style="push">
+         </command>
+         <separator
+               name="Separator01"
+               visible="true">
+         </separator>
+         <command
+               commandId="navigationViewPart.toolbar.showDevice"
+               icon="icons/show_devices.png"
+               label="Show Device"
+               style="push">
+         </command>
+         <separator
+               name="Separator02"
+               visible="true">
+         </separator>
+         <command
+               commandId="navigationViewPart.toolbar.add"
+               icon="icons/add_folder.png"
+               style="push">
+         </command>
+         <separator
+               name="Separator03"
+               visible="true">
+         </separator>
+         <command
+               commandId="navigationViewPart.toolbar.cloneVersion"
+               icon="icons/clone_version.png"
+               label="Clone Version"
+               style="push">
+         </command>
+         <command
+               commandId="navigationViewPart.toolbar.save"
+               icon="icons/save_as.png"
+               label="Save"
+               style="push">
+         </command>
+         <command
+               commandId="navigationViewPart.toolbar.delete"
+               icon="icons/delete.png"
+               label="Delete"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:deviceTableViewPart">
+         <command
+               commandId="deviceTableViewPart.toolbar.refresh"
+               icon="icons/refresh.png"
+               label="Refresh"
+               style="push">
+         </command>
+         <separator
+               name="Separator01"
+               visible="true">
+         </separator>
+         <command
+               commandId="deviceTableViewPart.toolbar.add"
+               icon="icons/add.png"
+               label="Add"
+               style="push">
+         </command>
+         <command
+               commandId="deviceTableViewPart.toolbar.copy"
+               icon="icons/copy.png"
+               label="Copy"
+               style="push">
+         </command>
+         <command
+               commandId="deviceTableViewPart.toolbar.delete"
+               icon="icons/delete.png"
+               label="Delete"
+               style="push">
+         </command>
+         <separator
+               name="Separator02"
+               visible="true">
+         </separator>
+         <command
+               commandId="deviceTableViewPart.toolbar.importDevice"
+               icon="icons/import-devices.png"
+               label="Import Device"
+               style="push">
+         </command>
+         <command
+               commandId="deviceTableViewPart.toolbar.importZWave"
+               icon="icons/import_zwave.png"
+               label="Import ZWave"
+               style="push">
+         </command>
+         <command
+               commandId="deviceTableViewPart.toolbar.templateChild"
+               icon="icons/template_child.png"
+               label="Template Child"
+               style="push">
+         </command>
+         <command
+               commandId="deviceTableViewPart.toolbar.export"
+               icon="icons/export.png"
+               label="Export"
+               style="push">
+         </command>
+         <separator
+               name="Separator03"
+               visible="true">
+         </separator>
+         <command
+               commandId="deviceTableViewPart.toolbar.system"
+               icon="icons/system.png"
+               label="System"
+               style="push">
+         </command>
+         <command
+               commandId="deviceTableViewPart.toolbar.expand"
+               icon="icons/expand.png"
+               label="Expand"
+               style="push">
+         </command>
+         <command
+               commandId="deviceTableViewPart.toolbar.collapse"
+               icon="icons/collapse.png"
+               label="Collapse"
+               style="push">
+         </command>
+         <separator
+               name="Separator04"
+               visible="true">
+         </separator>
+         <command
+               commandId="deviceTableViewPart.toolbar.deviceChanged"
+               icon="icons/device_changed.png"
+               label="Device Changed"
+               style="push">
+         </command>
+         <command
+               commandId="deviceTableViewPart.toolbar.requestOnlineStatus"
+               icon="icons/request_online_status.png"
+               label="Request Online Status"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:areasTemplatesViewPart">
          <command
                commandId="areasTemplates.command.toolbar.refresh"
                icon="icons/refresh.png"
@@ -573,7 +841,7 @@
          </command>
       </menuContribution>
       <menuContribution
-            locationURI="toolbar:vn.enclave.peyton.fusion.view.deviceTemplatesViewPart">
+            locationURI="toolbar:deviceTemplatesViewPart">
          <command
                commandId="deviceTemplates.command.category.toolbar.refresh"
                icon="icons/refresh.png"
@@ -654,6 +922,46 @@
                icon="icons/validate.png">
          </command>
       </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:addingDeviceViewPart">
+         <command
+               commandId="addingDeviceViewPart.toolbar.save"
+               icon="icons/save_as.png"
+               label="Save"
+               style="push">
+         </command>
+         <command
+               commandId="addingDeviceViewPart.toolbar.saveAndClose"
+               icon="icons/save_and_close.png"
+               label="Save And Close"
+               style="push">
+         </command>
+         <separator
+               name="Separator01">
+         </separator>
+         <command
+               commandId="addingDeviceViewPart.toolbar.updateDevice"
+               icon="icons/device_update.png"
+               label="Update Device"
+               style="push">
+         </command>
+         <command
+               commandId="addingDeviceViewPart.toolbar.showDevice"
+               icon="icons/show_devices.png"
+               label="Show Device"
+               style="push">
+         </command>
+         <separator
+               name="Separator02">
+         </separator>
+         <command
+               commandId="addingDeviceViewPart.toolbar.editService"
+               icon="icons/service.png"
+               label="Edit Service"
+               style="push">
+         </command>
+      </menuContribution>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -715,8 +1023,12 @@
          </enabledWhen>
       </handler>
       <handler
-            class="vn.enclave.peyton.fusion.command.AddDeviceHandler"
-            commandId="device.command.category.toolbar.add">
+            class="vn.enclave.peyton.fusion.command.AddingDeviceHandler"
+            commandId="deviceTableViewPart.toolbar.add">
+      </handler>
+      <handler
+            class="vn.enclave.peyton.fusion.command.SavingDeviceHandler"
+            commandId="addingDeviceViewPart.toolbar.save">
       </handler>
    </extension>
 </plugin>

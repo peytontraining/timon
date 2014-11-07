@@ -3,6 +3,7 @@ package vn.enclave.peyton.fusion.view;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
@@ -16,8 +17,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.ISaveablePart;
+import org.eclipse.ui.menus.IMenuService;
 import org.eclipse.ui.part.ViewPart;
 
 import vn.enclave.peyton.fusion.common.Constant;
@@ -93,7 +94,7 @@ public class NavigationViewPart extends ViewPart implements ISaveablePart {
         toolbarComposite.setLayout(layout);
         toolbarComposite.setLayoutData(layoutData);
 
-        createToolbar(toolbarComposite);
+        createToolbarInside(toolbarComposite);
     }
 
     private void createPlanTreeAndPropertyCompositeSashFormInside(Composite parent) {
@@ -114,12 +115,15 @@ public class NavigationViewPart extends ViewPart implements ISaveablePart {
         planTreeAndPropertyCompositeSashForm.setWeights(new int[]{PLAN_TREE_COMPOSITE, PROPERTY_COMPOSITE});
     }
 
-    private void createToolbar(Composite toolbarComposite) {
+    private void createToolbarInside(Composite toolbarComposite) {
         GridData layoutData = new GridData(SWT.RIGHT, SWT.NONE, true, false);
         ToolBar toolBar = new ToolBar(toolbarComposite, SWT.FLAT);
         toolBar.setLayoutData(layoutData);
 
-        createToolItems(toolBar);
+        ToolBarManager toolBarManager = new ToolBarManager(toolBar);
+        IMenuService menuService = (IMenuService) getSite().getService(IMenuService.class);
+        menuService.populateContributionManager(toolBarManager, Constant.TOOLBAR_NAVIGATION_VIEW_PART);
+        toolBarManager.update(true);
     }
 
     private void createPlanTreeCompositeInside(SashForm planTreeAndPropertySectionSashForm) {
@@ -146,32 +150,6 @@ public class NavigationViewPart extends ViewPart implements ISaveablePart {
         createVersionPropertySectionInside(propertyComposite);
     }
 
-    private void createToolItems(ToolBar toolBar) {
-        ToolItem refreshToolItem = createToolItemTo(toolBar);
-        refreshToolItem.setImage(Constant.IMAGE_REFRESH);
-
-        createSeparatorTo(toolBar);
-
-        ToolItem showDeviceToolItem = createToolItemTo(toolBar);
-        showDeviceToolItem.setImage(Constant.IMAGE_SHOW_DEVICES);
-
-        createSeparatorTo(toolBar);
-
-        ToolItem addFolderToolItem = createToolItemTo(toolBar);
-        addFolderToolItem.setImage(Constant.IMAGE_ADD_FOLDER);
-
-        createSeparatorTo(toolBar);
-
-        ToolItem cloneVersionToolItem = createToolItemTo(toolBar);
-        cloneVersionToolItem.setImage(Constant.IMAGE_CLONE_VERSION);
-
-        ToolItem saveAsToolItem = createToolItemTo(toolBar);
-        saveAsToolItem.setImage(Constant.IMAGE_SAVE_AS);
-
-        ToolItem deleteToolItem = createToolItemTo(toolBar);
-        deleteToolItem.setImage(Constant.IMAGE_DELETE);
-    }
-
     private void createPlanTreeTo(Composite planTreeComposite) {
         List<Plan> plans = planService.getAll();
 
@@ -180,15 +158,6 @@ public class NavigationViewPart extends ViewPart implements ISaveablePart {
         planTree.setSelectionProviderToWorkbenchPartSite();
         planTree.populatePlanTreeViewerFrom(plans);
         planTree.addSelectionChangedListener(createSelectionChangedListenerToPlanTree());
-    }
-
-    private ToolItem createToolItemTo(ToolBar toolBar) {
-        ToolItem toolItem = new ToolItem(toolBar, SWT.PUSH);
-        return toolItem;
-    }
-
-    private void createSeparatorTo(ToolBar toolBar) {
-        new ToolItem(toolBar, SWT.SEPARATOR);
     }
 
     private ISelectionChangedListener createSelectionChangedListenerToPlanTree() {
@@ -237,14 +206,12 @@ public class NavigationViewPart extends ViewPart implements ISaveablePart {
     }
 
     private void createProjectPropertySectionInside(Composite propertyComposite) {
-        // TODO createProjectPropertySectionInside(Composite propertyComposite)
         projectPropertySection = new ProjectPropertySection(propertyComposite, getSite());
         projectPropertySection.addModifyListenerToPropertySection(createModifyListenerToProjectPropertySection());
         projectPropertySection.addSelectionAdapterToPropertySection(createSelectionAdapterToProjectPropertySection());
     }
 
     private void createVersionPropertySectionInside(Composite propertyComposite) {
-        // TODO createVersionPropertySectionInside(Composite propertyComposite)
         versionPropertySection = new VersionPropertySection(propertyComposite, getSite());
         versionPropertySection.addModifyListenerToPropertySection(createModifyListenerToVersionPropertySection());
         versionPropertySection.addSelectionAdapterToPropertySection(createSelectionAdapterToVersionPropertySection());
@@ -326,13 +293,16 @@ public class NavigationViewPart extends ViewPart implements ISaveablePart {
     }
 
     @Override
-    public void setFocus() {}
+    public void setFocus() {
+    }
 
     @Override
-    public void doSave(IProgressMonitor monitor) {}
+    public void doSave(IProgressMonitor monitor) {
+    }
 
     @Override
-    public void doSaveAs() {}
+    public void doSaveAs() {
+    }
 
     @Override
     public boolean isSaveAsAllowed() {
