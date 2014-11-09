@@ -217,6 +217,64 @@
             name="Status">
       </command>
       <category
+            id="popup.navigationViewPart"
+            name="NavigationViewPart.Popup">
+      </category>
+      <command
+            categoryId="popup.navigationViewPart"
+            id="navigationViewPart.popup.newProjectHandler"
+            name="NavigationViewPart.Popup.New Project">
+      </command>
+      <command
+            categoryId="popup.navigationViewPart"
+            id="navigationViewPart.popup.newVersionHandler"
+            name="NavigationViewPart.Popup.NewVersion">
+      </command>
+      <command
+            categoryId="popup.navigationViewPart"
+            id="navigationViewPart.popup.saveAsHandler"
+            name="NavigationViewPart.Popup.SaveAs">
+      </command>
+      <command
+            categoryId="popup.navigationViewPart"
+            id="navigationViewPart.popup.deleteVersionHandler"
+            name="NavigationViewPart.Popup.DeleteVersion">
+      </command>
+      <category
+            id="toolbar.navigationViewPart"
+            name="NavigationViewPart.Toolbar">
+      </category>
+      <command
+            categoryId="toolbar.navigationViewPart"
+            id="navigationViewPart.toolbar.refresh"
+            name="NavigationViewPart.Toolbar.Refresh">
+      </command>
+      <command
+            categoryId="toolbar.navigationViewPart"
+            id="navigationViewPart.toolbar.showDevice"
+            name="NavigationViewPart.Toolbar.ShowDevice">
+      </command>
+      <command
+            categoryId="toolbar.navigationViewPart"
+            id="navigationViewPart.toolbar.add"
+            name="NavigationViewPart.Toolbar.Add">
+      </command>
+      <command
+            categoryId="toolbar.navigationViewPart"
+            id="navigationViewPart.toolbar.cloneVersion"
+            name="NavigationViewPart.Toolbar.CloneVersion">
+      </command>
+      <command
+            categoryId="toolbar.navigationViewPart"
+            id="navigationViewPart.toolbar.save"
+            name="NavigationViewPart.Toolbar.Save">
+      </command>
+      <command
+            categoryId="toolbar.navigationViewPart"
+            id="navigationViewPart.toolbar.delete"
+            name="NavigationViewPart.Toolbar.Delete">
+      </command>
+      <category
             id="toolbar.deviceTableViewPart"
             name="DeviceTableViewPart.Toolbar">
       </category>
@@ -286,202 +344,6 @@
             name="DeviceTableViewPart.Toolbar.RequestOnlineStatus">
       </command>
       <category
-            id="project.command.category.popup"
-            name="Project.Popup">
-      </category>
-      <command
-            categoryId="project.command.category.popup"
-            id="project.command.popup.newProjectHandler"
-            name="Project.Popup.New Project">
-      </command>
-      <command
-            categoryId="project.command.category.popup"
-            id="project.command.popup.newVersionHandler"
-            name="Project.Popup.NewVersion">
-      </command>
-      <command
-            categoryId="project.command.category.popup"
-            id="project.command.popup.saveAsHandler"
-            name="Project.Popup.SaveAs">
-      </command>
-      <command
-            categoryId="project.command.category.popup"
-            id="project.command.popup.deleteVersionHandler"
-            name="Project.Popup.DeleteVersion">
-      </command>
-      <category
-            id="areasTemplates.command.category.toolbar"
-            name="AreasTemplates.Toolbar">
-      </category>
-      <command
-            categoryId="areasTemplates.command.category.toolbar"
-            id="areasTemplates.command.toolbar.refresh"
-            name="AreasTemplates.Toolbar.Refresh">
-      </command>
-      <command
-            categoryId="areasTemplates.command.category.toolbar"
-            id="areasTemplates.command.toolbar.add"
-            name="AreasTemplates.Toolbar.Add">
-      </command>
-      <command
-            categoryId="areasTemplates.command.category.toolbar"
-            id="areasTemplates.command.toolbar.zoneAddChild"
-            name="AreasTemplates.Toolbar.ZoneAddChild">
-      </command>
-      <command
-            categoryId="areasTemplates.command.category.toolbar"
-            id="areasTemplates.command.toolbar.delete"
-            name="AreasTemplates.Toolbar.Delete">
-      </command>
-      <command
-            categoryId="areasTemplates.command.category.toolbar"
-            id="areasTemplates.command.toolbar.cut"
-            name="AreasTemplates.Toolbar.Cut">
-      </command>
-      <command
-            categoryId="areasTemplates.command.category.toolbar"
-            id="areasTemplates.command.toolbar.copy"
-            name="AreasTemplates.Toolbar.Copy">
-      </command>
-      <command
-            categoryId="areasTemplates.command.category.toolbar"
-            id="areasTemplates.command.toolbar.paste"
-            name="AreasTemplates.Toolbar.Paste">
-      </command>
-      <command
-            categoryId="areasTemplates.command.category.toolbar"
-            id="areasTemplates.command.toolbar.up"
-            name="AreasTemplates.Toolbar.Up">
-      </command>
-      <command
-            categoryId="areasTemplates.command.category.toolbar"
-            id="areasTemplates.command.toolbar.down"
-            name="AreasTemplates.Toolbar.Down">
-      </command>
-      <command
-            categoryId="areasTemplates.command.category.toolbar"
-            id="areasTemplates.command.toolbar.addAreaTemplate"
-            name="AreasTemplates.Toolbar.AddAreaTemplate">
-      </command>
-      <command
-            categoryId="areasTemplates.command.category.toolbar"
-            id="areasTemplates.command.toolbar.deleteAreaTemplate"
-            name="AreasTemplates.Toolbar.DeleteAreaTemplate">
-      </command>
-      <command
-            categoryId="areasTemplates.command.category.toolbar"
-            id="areasTemplates.command.toolbar.save"
-            name="AreasTemplates.Toolbar.Save">
-      </command>
-      <command
-            categoryId="areasTemplates.command.category.toolbar"
-            id="areasTemplates.command.toolbar.importAreaTemplate"
-            name="AreasTemplates.Toolbar.ImportAreaTemplate">
-      </command>
-      <category
-            id="deviceTemplates.command.category.toolbar"
-            name="DeviceTemplates.Toolbar">
-      </category>
-      <command
-            categoryId="deviceTemplates.command.category.toolbar"
-            id="deviceTemplates.command.category.toolbar.refresh"
-            name="DeviceTemplates.Toolbar.Refresh">
-      </command>
-      <command
-            categoryId="deviceTemplates.command.category.toolbar"
-            id="deviceTemplates.command.category.toolbar.templateEmpty"
-            name="DeviceTemplates.Toolbar.TemplateEmpty">
-      </command>
-      <command
-            categoryId="deviceTemplates.command.category.toolbar"
-            id="deviceTemplates.command.category.toolbar.addTemplate"
-            name="DeviceTemplates.Toolbar.AddTemplate">
-      </command>
-      <command
-            categoryId="deviceTemplates.command.category.toolbar"
-            id="deviceTemplates.command.category.toolbar.templateChild"
-            name="DeviceTemplates.Toolbar.TemplateChild">
-      </command>
-      <command
-            categoryId="deviceTemplates.command.category.toolbar"
-            id="deviceTemplates.command.category.toolbar.importIR"
-            name="DeviceTemplates.Toolbar.ImportIR">
-      </command>
-      <command
-            categoryId="deviceTemplates.command.category.toolbar"
-            id="deviceTemplates.command.category.toolbar.import"
-            name="DeviceTemplates.Toolbar.Import">
-      </command>
-      <command
-            categoryId="deviceTemplates.command.category.toolbar"
-            id="deviceTemplates.command.category.toolbar.export"
-            name="DeviceTemplates.Toolbar.Export">
-      </command>
-      <command
-            categoryId="deviceTemplates.command.category.toolbar"
-            id="deviceTemplates.command.category.toolbar.delete"
-            name="DeviceTemplates.Toolbar.Delete">
-      </command>
-      <command
-            categoryId="deviceTemplates.command.category.toolbar"
-            id="deviceTemplates.command.category.toolbar.system"
-            name="DeviceTemplates.Toolbar.System">
-      </command>
-      <command
-            categoryId="deviceTemplates.command.category.toolbar"
-            id="deviceTemplates.command.category.toolbar.expand"
-            name="DeviceTemplates.Toolbar.Expand">
-      </command>
-      <command
-            categoryId="deviceTemplates.command.category.toolbar"
-            id="deviceTemplates.command.category.toolbar.collapse"
-            name="DeviceTemplates.Toolbar.Collapse">
-      </command>
-      <command
-            categoryId="deviceTemplates.command.category.toolbar"
-            id="deviceTemplates.command.category.toolbar.hiddenTemplate"
-            name="DeviceTemplates.Toolbar.HiddenTemplate">
-      </command>
-      <command
-            categoryId="deviceTemplates.command.category.toolbar"
-            id="deviceTemplates.command.category.toolbar.validate"
-            name="DeviceTemplates.Toolbar.Validate">
-      </command>
-      <category
-            id="toolbar.navigationViewPart"
-            name="NavigationViewPart.Toolbar">
-      </category>
-      <command
-            categoryId="toolbar.navigationViewPart"
-            id="navigationViewPart.toolbar.refresh"
-            name="NavigationViewPart.Toolbar.Refresh">
-      </command>
-      <command
-            categoryId="toolbar.navigationViewPart"
-            id="navigationViewPart.toolbar.showDevice"
-            name="NavigationViewPart.Toolbar.ShowDevice">
-      </command>
-      <command
-            categoryId="toolbar.navigationViewPart"
-            id="navigationViewPart.toolbar.add"
-            name="NavigationViewPart.Toolbar.Add">
-      </command>
-      <command
-            categoryId="toolbar.navigationViewPart"
-            id="navigationViewPart.toolbar.cloneVersion"
-            name="NavigationViewPart.Toolbar.CloneVersion">
-      </command>
-      <command
-            categoryId="toolbar.navigationViewPart"
-            id="navigationViewPart.toolbar.save"
-            name="NavigationViewPart.Toolbar.Save">
-      </command>
-      <command
-            categoryId="toolbar.navigationViewPart"
-            id="navigationViewPart.toolbar.delete"
-            name="NavigationViewPart.Toolbar.Delete">
-      </command>
-      <category
             id="toolbar.addingDeviceViewPart"
             name="AddingDeviceViewPart.Toolbar">
       </category>
@@ -509,6 +371,197 @@
             categoryId="toolbar.addingDeviceViewPart"
             id="addingDeviceViewPart.toolbar.editService"
             name="AddingDeviceViewPart.Toolbar.EditService">
+      </command>
+      <category
+            id="toolbar.areasTemplatesViewPart"
+            name="AreasTemplatesViewPart.Toolbar">
+      </category>
+      <command
+            categoryId="toolbar.areasTemplatesViewPart"
+            id="areasTemplatesViewPart.toolbar.refresh"
+            name="AreasTemplatesViewPart.Toolbar.Refresh">
+      </command>
+      <command
+            categoryId="toolbar.areasTemplatesViewPart"
+            id="areasTemplatesViewPart.toolbar.add"
+            name="AreasTemplatesViewPart.Toolbar.Add">
+      </command>
+      <command
+            categoryId="toolbar.areasTemplatesViewPart"
+            id="areasTemplatesViewPart.toolbar.zoneAddChild"
+            name="AreasTemplatesViewPart.Toolbar.ZoneAddChild">
+      </command>
+      <command
+            categoryId="toolbar.areasTemplatesViewPart"
+            id="areasTemplatesViewPart.toolbar.delete"
+            name="AreasTemplatesViewPart.Toolbar.Delete">
+      </command>
+      <command
+            categoryId="toolbar.areasTemplatesViewPart"
+            id="areasTemplatesViewPart.toolbar.cut"
+            name="AreasTemplatesViewPart.Toolbar.Cut">
+      </command>
+      <command
+            categoryId="toolbar.areasTemplatesViewPart"
+            id="areasTemplatesViewPart.toolbar.copy"
+            name="AreasTemplatesViewPart.Toolbar.Copy">
+      </command>
+      <command
+            categoryId="toolbar.areasTemplatesViewPart"
+            id="areasTemplatesViewPart.toolbar.paste"
+            name="AreasTemplatesViewPart.Toolbar.Paste">
+      </command>
+      <command
+            categoryId="toolbar.areasTemplatesViewPart"
+            id="areasTemplatesViewPart.toolbar.up"
+            name="AreasTemplatesViewPart.Toolbar.Up">
+      </command>
+      <command
+            categoryId="toolbar.areasTemplatesViewPart"
+            id="areasTemplatesViewPart.toolbar.down"
+            name="AreasTemplatesViewPart.Toolbar.Down">
+      </command>
+      <command
+            categoryId="toolbar.areasTemplatesViewPart"
+            id="areasTemplatesViewPart.toolbar.addAreaTemplate"
+            name="AreasTemplatesViewPart.Toolbar.AddAreaTemplate">
+      </command>
+      <command
+            categoryId="toolbar.areasTemplatesViewPart"
+            id="areasTemplatesViewPart.toolbar.deleteAreaTemplate"
+            name="AreasTemplatesViewPart.Toolbar.DeleteAreaTemplate">
+      </command>
+      <command
+            categoryId="toolbar.areasTemplatesViewPart"
+            id="areasTemplatesViewPart.toolbar.save"
+            name="AreasTemplatesViewPart.Toolbar.Save">
+      </command>
+      <command
+            categoryId="toolbar.areasTemplatesViewPart"
+            id="areasTemplatesViewPart.toolbar.importAreaTemplate"
+            name="AreasTemplatesViewPart.Toolbar.ImportAreaTemplate">
+      </command>
+      <category
+            id="toolbar.deviceTemplatesViewPart"
+            name="DeviceTemplatesViewPart.Toolbar">
+      </category>
+      <command
+            categoryId="toolbar.deviceTemplatesViewPart"
+            id="deviceTemplatesViewPart.toolbar.refresh"
+            name="DeviceTemplatesViewPart.Toolbar.Refresh">
+      </command>
+      <command
+            categoryId="toolbar.deviceTemplatesViewPart"
+            id="deviceTemplatesViewPart.toolbar.templateEmpty"
+            name="DeviceTemplatesViewPart.Toolbar.TemplateEmpty">
+      </command>
+      <command
+            categoryId="toolbar.deviceTemplatesViewPart"
+            id="deviceTemplatesViewPart.toolbar.addTemplate"
+            name="DeviceTemplatesViewPart.Toolbar.AddTemplate">
+      </command>
+      <command
+            categoryId="toolbar.deviceTemplatesViewPart"
+            id="deviceTemplatesViewPart.toolbar.templateChild"
+            name="DeviceTemplatesViewPart.Toolbar.TemplateChild">
+      </command>
+      <command
+            categoryId="toolbar.deviceTemplatesViewPart"
+            id="deviceTemplatesViewPart.toolbar.importIR"
+            name="DeviceTemplatesViewPart.Toolbar.ImportIR">
+      </command>
+      <command
+            categoryId="toolbar.deviceTemplatesViewPart"
+            id="deviceTemplatesViewPart.toolbar.import"
+            name="DeviceTemplatesViewPart.Toolbar.Import">
+      </command>
+      <command
+            categoryId="toolbar.deviceTemplatesViewPart"
+            id="deviceTemplatesViewPart.toolbar.export"
+            name="DeviceTemplatesViewPart.Toolbar.Export">
+      </command>
+      <command
+            categoryId="toolbar.deviceTemplatesViewPart"
+            id="deviceTemplatesViewPart.toolbar.delete"
+            name="DeviceTemplatesViewPart.Toolbar.Delete">
+      </command>
+      <command
+            categoryId="toolbar.deviceTemplatesViewPart"
+            id="deviceTemplatesViewPart.toolbar.system"
+            name="DeviceTemplatesViewPart.Toolbar.System">
+      </command>
+      <command
+            categoryId="toolbar.deviceTemplatesViewPart"
+            id="deviceTemplatesViewPart.toolbar.expand"
+            name="DeviceTemplatesViewPart.Toolbar.Expand">
+      </command>
+      <command
+            categoryId="toolbar.deviceTemplatesViewPart"
+            id="deviceTemplatesViewPart.toolbar.collapse"
+            name="DeviceTemplatesViewPart.Toolbar.Collapse">
+      </command>
+      <command
+            categoryId="toolbar.deviceTemplatesViewPart"
+            id="deviceTemplatesViewPart.toolbar.hiddenTemplate"
+            name="DeviceTemplatesViewPart.Toolbar.HiddenTemplate">
+      </command>
+      <command
+            categoryId="toolbar.deviceTemplatesViewPart"
+            id="deviceTemplatesViewPart.toolbar.validate"
+            name="DeviceTemplatesViewPart.Toolbar.Validate">
+      </command>
+      <category
+            id="toolbar.detailedDeviceTemplateViewPart"
+            name="DetailedDeviceTemplateViewPart.Toolbar">
+      </category>
+      <command
+            categoryId="toolbar.detailedDeviceTemplateViewPart"
+            id="detailedDeviceTemplateViewPart.toolbar.save"
+            name="DetailedDeviceTemplateViewPart.Toolbar.Save">
+      </command>
+      <command
+            categoryId="toolbar.detailedDeviceTemplateViewPart"
+            id="detailedDeviceTemplateViewPart.toolbar.saveAndClose"
+            name="DetailedDeviceTemplateViewPart.Toolbar.SaveAndClose">
+      </command>
+      <command
+            categoryId="toolbar.detailedDeviceTemplateViewPart"
+            id="detailedDeviceTemplateViewPart.toolbar.newTemplate"
+            name="DetailedDeviceTemplateViewPart.Toolbar.NewTemplate">
+      </command>
+      <command
+            categoryId="toolbar.detailedDeviceTemplateViewPart"
+            id="detailedDeviceTemplateViewPart.toolbar.templateChild"
+            name="DetailedDeviceTemplateViewPart.Toolbar.TemplateChild">
+      </command>
+      <category
+            id="toolbar.modifyingDeviceViewPart"
+            name="ModifyingDeviceViewPart.Toolbar">
+      </category>
+      <command
+            categoryId="toolbar.modifyingDeviceViewPart"
+            id="modifyingDeviceViewPart.toolbar.save"
+            name="ModifyingDeviceViewPart.Toolbar.Save">
+      </command>
+      <command
+            categoryId="toolbar.modifyingDeviceViewPart"
+            id="modifyingDeviceViewPart.toolbar.saveAndClose"
+            name="ModifyingDeviceViewPart.Toolbar.SaveAndClose">
+      </command>
+      <command
+            categoryId="toolbar.modifyingDeviceViewPart"
+            id="modifyingDeviceViewPart.toolbar.updateDevice"
+            name="ModifyingDeviceViewPart.Toolbar.UpdateDevice">
+      </command>
+      <command
+            categoryId="toolbar.modifyingDeviceViewPart"
+            id="modifyingDeviceViewPart.toolbar.showDevice"
+            name="ModifyingDeviceViewPart.Toolbar.ShowDevice">
+      </command>
+      <command
+            categoryId="toolbar.modifyingDeviceViewPart"
+            id="modifyingDeviceViewPart.toolbar.editService"
+            name="ModifyingDeviceViewPart.Toolbar.EditService">
       </command>
       
    </extension>
@@ -570,44 +623,40 @@
             allPopups="false"
             locationURI="popup:vn.enclave.peyton.fusion.view.navigationViewPart?after=additions">
          <command
-               commandId="project.command.popup.newProjectHandler"
+               commandId="navigationViewPart.popup.newProjectHandler"
                icon="icons/add_folder.png"
                label="New Project"
                mode="FORCE_TEXT"
-               style="push"
-               tooltip="New Project">
+               style="push">
          </command>
          <separator
-               name="vn.enclave.peyton.fusion.command.popup.separator01"
+               name="Separator01"
                visible="true">
          </separator>
          <command
-               commandId="project.command.popup.newVersionHandler"
+               commandId="navigationViewPart.popup.newVersionHandler"
                icon="icons/version.png"
                label="New Version"
                mode="FORCE_TEXT"
-               style="push"
-               tooltip="New Version">
+               style="push">
          </command>
          <command
-               commandId="project.command.popup.saveAsHandler"
+               commandId="navigationViewPart.popup.saveAsHandler"
                icon="icons/save_as.png"
                label="Save As"
                mode="FORCE_TEXT"
-               style="push"
-               tooltip="New Project">
+               style="push">
          </command>
          <separator
-               name="vn.enclave.peyton.fusion.command.popup.separator02"
+               name="Separator02"
                visible="true">
          </separator>
          <command
-               commandId="project.command.popup.deleteVersionHandler"
+               commandId="navigationViewPart.popup.deleteVersionHandler"
                icon="icons/delete.png"
                label="Delete"
                mode="FORCE_TEXT"
-               style="push"
-               tooltip="Delete">
+               style="push">
          </command>
       </menuContribution>
       <menuContribution
@@ -759,170 +808,6 @@
          </command>
       </menuContribution>
       <menuContribution
-            locationURI="toolbar:areasTemplatesViewPart">
-         <command
-               commandId="areasTemplates.command.toolbar.refresh"
-               icon="icons/refresh.png"
-               style="push">
-         </command>
-         <separator
-               name="vn.enclave.peyton.fusion.separator1"
-               visible="true">
-         </separator>
-         <command
-               commandId="areasTemplates.command.toolbar.add"
-               icon="icons/add.png"
-               style="push">
-         </command>
-         <command
-               commandId="areasTemplates.command.toolbar.zoneAddChild"
-               icon="icons/zone_add_child.png"
-               style="push">
-         </command>
-         <command
-               commandId="areasTemplates.command.toolbar.delete"
-               icon="icons/delete.png"
-               style="push">
-         </command>
-         <separator
-               name="vn.enclave.peyton.fusion.separator2"
-               visible="true">
-         </separator>
-         <command
-               commandId="areasTemplates.command.toolbar.cut"
-               icon="icons/cut.png"
-               style="push">
-         </command>
-         <command
-               commandId="areasTemplates.command.toolbar.copy"
-               icon="icons/copy.png">
-         </command>
-         <command
-               commandId="areasTemplates.command.toolbar.paste"
-               icon="icons/paste.png"
-               style="push">
-         </command>
-         <separator
-               name="vn.enclave.peyton.fusion.separator3"
-               visible="true">
-         </separator>
-         <command
-               commandId="areasTemplates.command.toolbar.up"
-               icon="icons/arrow_up.png"
-               style="push">
-         </command>
-         <command
-               commandId="areasTemplates.command.toolbar.down"
-               icon="icons/arrow_down.png"
-               style="push">
-         </command>
-         <separator
-               name="vn.enclave.peyton.fusion.separator4"
-               visible="true">
-         </separator>
-         <command
-               commandId="areasTemplates.command.toolbar.addAreaTemplate"
-               icon="icons/area_template_new.png"
-               style="push">
-         </command>
-         <command
-               commandId="areasTemplates.command.toolbar.deleteAreaTemplate"
-               icon="icons/area_template_del.png"
-               style="push">
-         </command>
-         <command
-               commandId="areasTemplates.command.toolbar.save"
-               icon="icons/save_as.png"
-               style="push">
-         </command>
-         <command
-               commandId="areasTemplates.command.toolbar.importAreaTemplate"
-               icon="icons/area_template_import.png">
-         </command>
-      </menuContribution>
-      <menuContribution
-            locationURI="toolbar:deviceTemplatesViewPart">
-         <command
-               commandId="deviceTemplates.command.category.toolbar.refresh"
-               icon="icons/refresh.png"
-               style="push">
-         </command>
-         <command
-               commandId="deviceTemplates.command.category.toolbar.addTemplate"
-               icon="icons/template_empty.png"
-               style="push">
-         </command>
-         <command
-               commandId="deviceTemplates.command.category.toolbar.addTemplate"
-               icon="icons/new_template.png"
-               style="push">
-         </command>
-         <command
-               commandId="deviceTemplates.command.category.toolbar.templateChild"
-               icon="icons/template_child.png"
-               style="push">
-         </command>
-         <separator
-               name="vn.enclave.peyton.fusion.separator1"
-               visible="true">
-         </separator>
-         <command
-               commandId="deviceTemplates.command.category.toolbar.importIR"
-               icon="icons/import_ir.png">
-         </command>
-         <command
-               commandId="areasTemplates.command.toolbar.up"
-               icon="icons/import.png"
-               style="push">
-         </command>
-         <command
-               commandId="deviceTemplates.command.category.toolbar.export"
-               icon="icons/export.png"
-               style="push">
-         </command>
-         <separator
-               name="vn.enclave.peyton.fusion.separator2"
-               visible="true">
-         </separator>
-         <command
-               commandId="areasTemplates.command.toolbar.delete"
-               icon="icons/delete.png"
-               style="push">
-         </command>
-         <separator
-               name="vn.enclave.peyton.fusion.separator3"
-               visible="true">
-         </separator>
-         <command
-               commandId="areasTemplates.command.toolbar.down"
-               icon="icons/system.png"
-               style="push">
-         </command>
-         <separator
-               name="vn.enclave.peyton.fusion.separator4"
-               visible="true">
-         </separator>
-         <command
-               commandId="deviceTemplates.command.category.toolbar.expand"
-               icon="icons/expand.png"
-               style="push">
-         </command>
-         <command
-               commandId="deviceTemplates.command.category.toolbar.collapse"
-               icon="icons/collapse.png"
-               style="push">
-         </command>
-         <command
-               commandId="deviceTemplates.command.category.toolbar.hiddenTemplate"
-               icon="icons/template_hidden.png"
-               style="push">
-         </command>
-         <command
-               commandId="deviceTemplates.command.category.toolbar.validate"
-               icon="icons/validate.png">
-         </command>
-      </menuContribution>
-      <menuContribution
             allPopups="false"
             locationURI="toolbar:addingDeviceViewPart">
          <command
@@ -938,7 +823,8 @@
                style="push">
          </command>
          <separator
-               name="Separator01">
+               name="Separator01"
+               visible="true">
          </separator>
          <command
                commandId="addingDeviceViewPart.toolbar.updateDevice"
@@ -953,11 +839,278 @@
                style="push">
          </command>
          <separator
-               name="Separator02">
+               name="Separator02"
+               visible="true">
          </separator>
          <command
                commandId="addingDeviceViewPart.toolbar.editService"
                icon="icons/service.png"
+               label="Edit Service"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:areasTemplatesViewPart">
+         <command
+               commandId="areasTemplatesViewPart.toolbar.refresh"
+               icon="icons/refresh.png"
+               label="Refresh"
+               style="push">
+         </command>
+         <separator
+               name="Separator01"
+               visible="true">
+         </separator>
+         <command
+               commandId="areasTemplatesViewPart.toolbar.add"
+               icon="icons/add.png"
+               label="Add"
+               style="push">
+         </command>
+         <command
+               commandId="areasTemplatesViewPart.toolbar.zoneAddChild"
+               icon="icons/zone_add_child.png"
+               label="Add Child"
+               style="push">
+         </command>
+         <command
+               commandId="areasTemplatesViewPart.toolbar.delete"
+               icon="icons/delete.png"
+               label="Delete"
+               style="push">
+         </command>
+         <separator
+               name="Separator02"
+               visible="true">
+         </separator>
+         <command
+               commandId="areasTemplatesViewPart.toolbar.cut"
+               icon="icons/cut.png"
+               label="Cut"
+               style="push">
+         </command>
+         <command
+               commandId="areasTemplatesViewPart.toolbar.copy"
+               icon="icons/copy.png"
+               label="Copy">
+         </command>
+         <command
+               commandId="areasTemplatesViewPart.toolbar.paste"
+               icon="icons/paste.png"
+               label="Paste"
+               style="push">
+         </command>
+         <separator
+               name="Separator03"
+               visible="true">
+         </separator>
+         <command
+               commandId="areasTemplatesViewPart.toolbar.up"
+               icon="icons/arrow_up.png"
+               label="Up"
+               style="push">
+         </command>
+         <command
+               commandId="areasTemplatesViewPart.toolbar.down"
+               icon="icons/arrow_down.png"
+               label="Down"
+               style="push">
+         </command>
+         <separator
+               name="Separator04"
+               visible="true">
+         </separator>
+         <command
+               commandId="areasTemplatesViewPart.toolbar.addAreaTemplate"
+               icon="icons/area_template_new.png"
+               label="Add Area Template"
+               style="push">
+         </command>
+         <command
+               commandId="areasTemplatesViewPart.toolbar.deleteAreaTemplate"
+               icon="icons/area_template_del.png"
+               label="Delete Area Template"
+               style="push">
+         </command>
+         <command
+               commandId="areasTemplatesViewPart.toolbar.save"
+               icon="icons/save_as.png"
+               label="Save"
+               style="push">
+         </command>
+         <command
+               commandId="areasTemplatesViewPart.toolbar.importAreaTemplate"
+               icon="icons/area_template_import.png"
+               label="Import Area Template">
+         </command>
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:deviceTemplatesViewPart">
+         <command
+               commandId="deviceTemplatesViewPart.toolbar.refresh"
+               icon="icons/refresh.png"
+               label="Refresh"
+               style="push">
+         </command>
+         <command
+               commandId="deviceTemplatesViewPart.toolbar.templateEmpty"
+               icon="icons/template_empty.png"
+               label="Template Empty"
+               style="push">
+         </command>
+         <command
+               commandId="deviceTemplatesViewPart.toolbar.addTemplate"
+               icon="icons/new_template.png"
+               label="Add Template"
+               style="push">
+         </command>
+         <command
+               commandId="deviceTemplatesViewPart.toolbar.templateChild"
+               icon="icons/template_child.png"
+               label="Template Child"
+               style="push">
+         </command>
+         <separator
+               name="Separator01"
+               visible="true">
+         </separator>
+         <command
+               commandId="deviceTemplatesViewPart.toolbar.importIR"
+               icon="icons/import_ir.png"
+               label="Import IR"
+               style="push">
+         </command>
+         <command
+               commandId="deviceTemplatesViewPart.toolbar.import"
+               icon="icons/import.png"
+               label="Import"
+               style="push">
+         </command>
+         <command
+               commandId="deviceTemplatesViewPart.toolbar.export"
+               icon="icons/export.png"
+               label="Export"
+               style="push">
+         </command>
+         <separator
+               name="Separator02"
+               visible="true">
+         </separator>
+         <command
+               commandId="deviceTemplatesViewPart.toolbar.delete"
+               icon="icons/delete.png"
+               label="Delete"
+               style="push">
+         </command>
+         <separator
+               name="Separator03"
+               visible="true">
+         </separator>
+         <command
+               commandId="deviceTemplatesViewPart.toolbar.system"
+               icon="icons/system.png"
+               label="System"
+               style="push">
+         </command>
+         <separator
+               name="Separator04"
+               visible="true">
+         </separator>
+         <command
+               commandId="deviceTemplatesViewPart.toolbar.expand"
+               icon="icons/expand.png"
+               label="Expand"
+               style="push">
+         </command>
+         <command
+               commandId="deviceTemplatesViewPart.toolbar.collapse"
+               icon="icons/collapse.png"
+               label="Collapse"
+               style="push">
+         </command>
+         <command
+               commandId="deviceTemplatesViewPart.toolbar.hiddenTemplate"
+               icon="icons/template_hidden.png"
+               label="Hidden Template"
+               style="push">
+         </command>
+         <command
+               commandId="deviceTemplatesViewPart.toolbar.validate"
+               icon="icons/validate.png"
+               label="Validate"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:detailedDeviceTemplateViewPart">
+         <command
+               commandId="detailedDeviceTemplateViewPart.toolbar.save"
+               icon="icons/save_as.png"
+               label="Save"
+               style="push">
+         </command>
+         <command
+               commandId="detailedDeviceTemplateViewPart.toolbar.saveAndClose"
+               icon="icons/save_and_close.png"
+               label="Save And Close"
+               style="push">
+         </command>
+         <separator
+               name="Separator01"
+               visible="true">
+         </separator>
+         <command
+               commandId="detailedDeviceTemplateViewPart.toolbar.newTemplate"
+               icon="icons/new_template.png"
+               label="New Template"
+               style="push">
+         </command>
+         <command
+               commandId="detailedDeviceTemplateViewPart.toolbar.templateChild"
+               icon="icons/template_child.png"
+               label="Template Child"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:modifyingDeviceViewPart">
+         <command
+               commandId="modifyingDeviceViewPart.toolbar.save"
+               icon="icons/save_as.png"
+               label="Save"
+               style="push">
+         </command>
+         <command
+               commandId="modifyingDeviceViewPart.toolbar.saveAndClose"
+               icon="icons/save_and_close.png"
+               label="Save And Close"
+               style="push">
+         </command>
+         <separator
+               name="Separator01"
+               visible="true">
+         </separator>
+         <command
+               commandId="modifyingDeviceViewPart.toolbar.updateDevice"
+               icon="icons/device_update.png"
+               label="Update Device"
+               style="push">
+         </command>
+         <command
+               commandId="modifyingDeviceViewPart.toolbar.showDevice"
+               icon="icons/show_devices.png"
+               label="Show Device"
+               style="push">
+         </command>
+         <separator
+               name="Separator02"
+               visible="true">
+         </separator>
+         <command
+               commandId="modifyingDeviceViewPart.toolbar.editService"
+               icon="icons/edit.png"
                label="Edit Service"
                style="push">
          </command>
@@ -967,7 +1120,7 @@
          point="org.eclipse.ui.handlers">
       <handler
             class="vn.enclave.peyton.fusion.command.AddingProjectHandler"
-            commandId="project.command.popup.newProjectHandler">
+            commandId="navigationViewPart.popup.newProjectHandler">
          <enabledWhen>
             <iterate>
                <or>
@@ -986,7 +1139,7 @@
       </handler>
       <handler
             class="vn.enclave.peyton.fusion.command.AddingVersionHandler"
-            commandId="project.command.popup.newVersionHandler">
+            commandId="navigationViewPart.popup.newVersionHandler">
          <enabledWhen>
             <iterate>
                <or>
@@ -1002,7 +1155,7 @@
       </handler>
       <handler
             class="vn.enclave.peyton.fusion.command.CloningVersionHandler"
-            commandId="project.command.popup.saveAsHandler">
+            commandId="navigationViewPart.popup.saveAsHandler">
          <enabledWhen>
             <iterate>
                <adapt
@@ -1013,7 +1166,7 @@
       </handler>
       <handler
             class="vn.enclave.peyton.fusion.command.DeletingVersionHandler"
-            commandId="project.command.popup.deleteVersionHandler">
+            commandId="navigationViewPart.popup.deleteVersionHandler">
          <enabledWhen>
             <iterate>
                <adapt
@@ -1029,6 +1182,10 @@
       <handler
             class="vn.enclave.peyton.fusion.command.SavingDeviceHandler"
             commandId="addingDeviceViewPart.toolbar.save">
+      </handler>
+      <handler
+            class="vn.enclave.peyton.fusion.command.UpdatingDeviceHandler"
+            commandId="modifyingDeviceViewPart.toolbar.save">
       </handler>
    </extension>
 </plugin>

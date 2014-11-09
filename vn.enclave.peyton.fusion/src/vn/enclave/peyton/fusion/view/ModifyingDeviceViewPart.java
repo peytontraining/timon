@@ -1,22 +1,21 @@
 package vn.enclave.peyton.fusion.view;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.ISaveablePart;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.menus.IMenuService;
 import org.eclipse.ui.part.ViewPart;
 
 import vn.enclave.peyton.fusion.common.Constant;
@@ -91,7 +90,10 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
         ToolBar toolBar = new ToolBar(toolbarComposite, SWT.FLAT);
         toolBar.setLayoutData(layoutData);
 
-        createAllToolItemsTo(toolBar);
+        ToolBarManager toolBarManager = new ToolBarManager(toolBar);
+        IMenuService menuService = (IMenuService) getSite().getService(IMenuService.class);
+        menuService.populateContributionManager(toolBarManager, Constant.TOOLBAR_MODIFYING_DEVICE_VIEW_PART);
+        toolBarManager.update(true);
     }
 
     private void createTabFolderInside(Composite tabFolderComposite) {
@@ -101,28 +103,6 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
 
         createDetailsTabItemTo(tabFolder);
         createConfigureTabItemTo(tabFolder);
-    }
-
-    private void createAllToolItemsTo(ToolBar toolBar) {
-        ToolItem saveToolItem = createToolItemTo(toolBar);
-        saveToolItem.setImage(Constant.IMAGE_SAVE_AS);
-        saveToolItem.addSelectionListener(createSelectionAdapterToSaveToolItem());
-
-        ToolItem saveAndCloseToolItem = createToolItemTo(toolBar);
-        saveAndCloseToolItem.setImage(Constant.IMAGE_SAVE_AND_CLOSE);
-
-        createSeparatorTo(toolBar);
-
-        ToolItem updateDevcieToolItem = createToolItemTo(toolBar);
-        updateDevcieToolItem.setImage(Constant.IMAGE_DEVICE_UPDATE);
-
-        ToolItem showDeviceToolItem = createToolItemTo(toolBar);
-        showDeviceToolItem.setImage(Constant.IMAGE_SHOW_DEVICES);
-
-        createSeparatorTo(toolBar);
-
-        ToolItem editServiceToolItem = createToolItemTo(toolBar);
-        editServiceToolItem.setImage(Constant.IMAGE_SERVICE);
     }
 
     private void createDetailsTabItemTo(TabFolder tabFolder) {
@@ -142,30 +122,6 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
         configureTabItem.setControl(devicePropertySection.getSection());
     }
 
-    private ToolItem createToolItemTo(ToolBar toolBar) {
-        ToolItem toolItem = new ToolItem(toolBar, SWT.PUSH);
-        return toolItem;
-    }
-
-    private SelectionAdapter createSelectionAdapterToSaveToolItem() {
-        return new SelectionAdapter() {
-
-            private static final long serialVersionUID = -1772039129772087714L;
-
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                updateDevice();
-                refreshDeviceTable();
-                setPartName(selectedDevice.getName());
-                setDirty(false);
-            }
-        };
-    }
-
-    private void createSeparatorTo(ToolBar toolBar) {
-        new ToolItem(toolBar, SWT.SEPARATOR);
-    }
-
     private ModifyListener createModifyListenerToDetailedDeviceForm() {
         return new ModifyListener() {
 
@@ -179,8 +135,7 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
     }
 
     @Override
-    public void setFocus() {
-    }
+    public void setFocus() {}
 
     public void populateViewPartFrom(Device device) {
         selectedDevice = device;
@@ -197,9 +152,17 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
         deviceService.update(selectedDevice);
     }
 
-    private void refreshDeviceTable() {
+    public void refreshDeviceTable() {
         IViewPart viewpart = activePage.findView(DeviceTableViewPart.ID);
         ((DeviceTableViewPart) viewpart).refreshDeviceTableViewer();
+    }
+
+    public Device getModifiedDevice() {
+        return detailedDeviceForm.getModifiedDevice();
+    }
+
+    public void changeTitleOfViewPart(String title) {
+        setPartName(title);
     }
 
     @Override
@@ -208,8 +171,7 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
     }
 
     @Override
-    public void doSaveAs() {
-    }
+    public void doSaveAs() {}
 
     @Override
     public boolean isDirty() {

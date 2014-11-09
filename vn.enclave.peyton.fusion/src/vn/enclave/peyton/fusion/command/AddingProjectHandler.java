@@ -16,7 +16,6 @@ import vn.enclave.peyton.fusion.entity.Version;
 import vn.enclave.peyton.fusion.view.NavigationViewPart;
 
 public class AddingProjectHandler extends AbstractHandler implements IHandler {
-
     private ExecutionEvent executionEvent;
 
     private void setExecutionEvent(ExecutionEvent executionEvent) {

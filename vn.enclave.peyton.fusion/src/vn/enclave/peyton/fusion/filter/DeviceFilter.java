@@ -4,7 +4,6 @@ import org.eclipse.jface.viewers.*;
 
 import vn.enclave.peyton.fusion.entity.Device;
 
-
 public class DeviceFilter extends ViewerFilter {
 
     private static final long serialVersionUID = 5232662280687240217L;
@@ -12,7 +11,7 @@ public class DeviceFilter extends ViewerFilter {
     private String filterText;
 
     public void setFilterString(String filterString) {
-        this.filterText = filterString.toLowerCase();
+        this.filterText = filterString;
     }
 
     @Override
@@ -23,11 +22,11 @@ public class DeviceFilter extends ViewerFilter {
         }
 
         Device device = (Device) element;
-        String name = device.getName().toLowerCase();
-        String appModule = device.getAppModule().toLowerCase();
-        String deviceType = device.getDeviceType().toLowerCase();
-        String physicalLocation = device.getPhysicalLocation().toLowerCase();
-        String manufacture = device.getManufacturer().toLowerCase();
+        String name = device.getName();
+        String appModule = device.getAppModule();
+        String deviceType = device.getDeviceType();
+        String physicalLocation = device.getPhysicalLocation();
+        String manufacture = device.getManufacturer();
 
         if (name != null && name.contains(filterText)) {
             return true;
@@ -41,8 +40,7 @@ public class DeviceFilter extends ViewerFilter {
             return true;
         }
 
-        if (physicalLocation != null &&
-            physicalLocation.contains(filterText)) {
+        if (physicalLocation != null && physicalLocation.contains(filterText)) {
             return true;
         }
 

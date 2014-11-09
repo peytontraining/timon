@@ -1,5 +1,6 @@
 package vn.enclave.peyton.fusion.view;
 
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -7,7 +8,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
+import org.eclipse.ui.menus.IMenuService;
 import org.eclipse.ui.part.ViewPart;
 
 import vn.enclave.peyton.fusion.common.Constant;
@@ -62,7 +63,11 @@ public class DetailedDeviceTemplateViewPart extends ViewPart {
         ToolBar toolBar = new ToolBar(toolbarComposite, SWT.FLAT);
         toolBar.setLayoutData(layoutData);
 
-        createAllToolItemsTo(toolBar);
+        ToolBarManager toolBarManager = new ToolBarManager(toolBar);
+        IMenuService menuService = (IMenuService) getSite().getService(IMenuService.class);
+        menuService.populateContributionManager(toolBarManager, Constant.TOOLBAR_DETAILED_DEVICE_TEMPLATE_VIEW_PART);
+        toolBarManager.update(true);
+        
     }
 
     private void createTabFolderTo(Composite tabFolderComposite) {
@@ -73,22 +78,6 @@ public class DetailedDeviceTemplateViewPart extends ViewPart {
         createDetailsTabItemInside(tabFolder);
 
         createConfigureTabItemInside(tabFolder);
-    }
-
-    private void createAllToolItemsTo(ToolBar toolBar) {
-        ToolItem saveToolItem = createToolItemTo(toolBar);
-        saveToolItem.setImage(Constant.IMAGE_SAVE_AS);
-
-        ToolItem saveAndCloseToolItem = createToolItemTo(toolBar);
-        saveAndCloseToolItem.setImage(Constant.IMAGE_SAVE_AND_CLOSE);
-
-        createSeparatorTo(toolBar);
-
-        ToolItem newTemplateToolItem = createToolItemTo(toolBar);
-        newTemplateToolItem.setImage(Constant.IMAGE_NEW_TEMPLATE);
-
-        ToolItem templateChildToolItem = createToolItemTo(toolBar);
-        templateChildToolItem.setImage(Constant.IMAGE_TEMPLATE_CHILD);
     }
 
     private void createDetailsTabItemInside(TabFolder tabFolder) {
@@ -107,15 +96,6 @@ public class DetailedDeviceTemplateViewPart extends ViewPart {
         devicePropertyTemplateSection = new DevicePropertyTemplateSection(tabFolder);
 
         configureTabItem.setControl(devicePropertyTemplateSection.getPropertyTemplateSection());
-    }
-
-    private ToolItem createToolItemTo(ToolBar toolBar) {
-        ToolItem toolItem = new ToolItem(toolBar, SWT.PUSH);
-        return toolItem;
-    }
-
-    private void createSeparatorTo(ToolBar toolBar) {
-        new ToolItem(toolBar, SWT.SEPARATOR);
     }
 
     public void populateViewPartFrom(DeviceTemplate deviceTemplate) {

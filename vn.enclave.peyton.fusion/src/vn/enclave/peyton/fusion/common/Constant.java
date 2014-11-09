@@ -140,9 +140,11 @@ public class Constant {
     /*
      * TOOLBAR ID OF VIEWPART.
      */
-    public static final String TOOLBAR_DEVICE_TABLE_VIEW_PART = "toolbar:deviceTableViewPart";
-    public static final String TOOLBAR_AREAS_TEMPLATES_VIEW_PART = "toolbar:areasTemplatesViewPart";
     public static final String TOOLBAR_NAVIGATION_VIEW_PART = "toolbar:navigationViewPart";
-    public static final String TOOLBAR_DEVICE_TEMPLATE_VIEW_PART = "toolbar:deviceTemplatesViewPart";
+    public static final String TOOLBAR_DEVICE_TABLE_VIEW_PART = "toolbar:deviceTableViewPart";
     public static final String TOOLBAR_ADDING_DEVICE_VIEW_PART = "toolbar:addingDeviceViewPart";
+    public static final String TOOLBAR_AREAS_TEMPLATES_VIEW_PART = "toolbar:areasTemplatesViewPart";
+    public static final String TOOLBAR_DEVICE_TEMPLATE_VIEW_PART = "toolbar:deviceTemplatesViewPart";
+    public static final String TOOLBAR_DETAILED_DEVICE_TEMPLATE_VIEW_PART = "toolbar:detailedDeviceTemplateViewPart";
+    public static final String TOOLBAR_MODIFYING_DEVICE_VIEW_PART = "toolbar:modifyingDeviceViewPart";
 }

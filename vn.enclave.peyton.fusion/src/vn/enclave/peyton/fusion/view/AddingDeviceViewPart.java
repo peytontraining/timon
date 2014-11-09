@@ -11,8 +11,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -20,7 +18,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.ISaveablePart;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
@@ -108,9 +105,6 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
         IMenuService menuService = (IMenuService) getSite().getService(IMenuService.class);
         menuService.populateContributionManager(toolBarManager, Constant.TOOLBAR_ADDING_DEVICE_VIEW_PART);
         toolBarManager.update(true);
-
-        //TODO: Delete all redundant method after implement algorithm for saving new device.
-        // createAllToolItemsTo(toolBar);
     }
 
     private void createTabFolderTo(Composite tabFolderComposite) {
@@ -121,28 +115,6 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
         createDetailsTabItemInside(tabFolder);
 
         createConfigureTabItemInside(tabFolder);
-    }
-
-    private void createAllToolItemsTo(ToolBar toolBar) {
-        ToolItem saveToolItem = createToolItemInside(toolBar);
-        saveToolItem.setImage(Constant.IMAGE_SAVE_AS);
-        saveToolItem.addSelectionListener(getSelectionAdapterToSaveToolItem());
-
-        ToolItem saveAndCloseToolItem = createToolItemInside(toolBar);
-        saveAndCloseToolItem.setImage(Constant.IMAGE_SAVE_AND_CLOSE);
-
-        createSeparatorInside(toolBar);
-
-        ToolItem updateDeviceToolItem = createToolItemInside(toolBar);
-        updateDeviceToolItem.setImage(Constant.IMAGE_DEVICE_UPDATE);
-
-        ToolItem showDeviceToolItem = createToolItemInside(toolBar);
-        showDeviceToolItem.setImage(Constant.IMAGE_SHOW_DEVICES);
-
-        createSeparatorInside(toolBar);
-
-        ToolItem editServiceToolItem = createToolItemInside(toolBar);
-        editServiceToolItem.setImage(Constant.IMAGE_SERVICE);
     }
 
     private void createDetailsTabItemInside(TabFolder tabFolder) {
@@ -162,27 +134,6 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
         newDevicePropertySection = new NewDevicePropertySection(tabFolder);
 
         configureTabItem.setControl(newDevicePropertySection.getPropertySection());
-    }
-
-    private ToolItem createToolItemInside(ToolBar toolBar) {
-        ToolItem toolItem = new ToolItem(toolBar, SWT.PUSH);
-        return toolItem;
-    }
-
-    private void createSeparatorInside(ToolBar toolBar) {
-        new ToolItem(toolBar, SWT.SEPARATOR);
-    }
-
-    private SelectionAdapter getSelectionAdapterToSaveToolItem() {
-        return new SelectionAdapter() {
-
-            private static final long serialVersionUID = 8118227841225144756L;
-
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                saveNewDevice();
-            }
-        };
     }
 
     private ModifyListener getModifyListerTo() {
@@ -244,14 +195,14 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
         ((DeviceTableViewPart) viewpart).refreshDeviceTableViewer();
     }
 
-    private void createWarningMessageDialog() {
+    public void createWarningMessageDialog() {
         Shell shell = getSite().getShell();
         String title = "Warning";
         String message = "Please choose a version to add the device!";
         MessageDialog.openWarning(shell, title, message);
     }
 
-    private Device prepareNewDevice() {
+    public Device prepareNewDevice() {
         Device newDevice = newDeviceForm.getDevice();
         addPropertyDeviceTo(newDevice);
         return newDevice;
