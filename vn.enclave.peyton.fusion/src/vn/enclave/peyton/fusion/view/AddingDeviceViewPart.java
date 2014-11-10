@@ -40,6 +40,7 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
     public static final String ID = "vn.enclave.peyton.fusion.view.addingDeviceViewPart";
     private boolean isDirty;
     private boolean isCanceled;
+    private Device selectedDevice;
     private NewDeviceForm newDeviceForm;
     private NewDevicePropertySection newDevicePropertySection;
     private IWorkbenchPage activePage;
@@ -51,6 +52,14 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
 
     public void setCanceled(boolean isCanceled) {
         this.isCanceled = isCanceled;
+    }
+
+    public void setSelectedDevice(Device selectedDevice) {
+        this.selectedDevice = selectedDevice;
+    }
+
+    public boolean canDoSave() {
+        return selectedDevice == null;
     }
 
     @Override
@@ -148,23 +157,42 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
         };
     }
 
-    private void saveNewDevice() {
-        ISelection selection = activePage.getSelection(NavigationViewPart.ID);
-        IStructuredSelection sselection = (IStructuredSelection) selection;
-        Object firstElement = sselection.getFirstElement();
-        if (firstElement instanceof Version) {
-            Version selectedVersion = (Version) firstElement;
+    public void saveNewDevice() {
+        Object selectedNode = getSelectedNodeOnPlanTree();
+        if (selectedNode instanceof Version) {
+            Version selectedVersion = (Version) selectedNode;
 
             Device newDevice = addNewDeviceToDatabase(selectedVersion);
 
-            addNewDeviceToDeviceTree(selectedVersion, newDevice);
+            addNewDeviceToDeviceTable(selectedVersion, newDevice);
+            refreshDeviceTable();
 
+            newDeviceForm.setSelectedDevice(newDevice);
+            setSelectedDevice(newDevice);
+            setPartName(newDevice.getName());
             setDirty(false);
             setCanceled(false);
         } else {
             setCanceled(true);
             createWarningMessageDialog();
         }
+    }
+
+    public void updateDevice() {
+        selectedDevice = newDeviceForm.getModifiedDevice();
+        DeviceService deviceService = new DeviceService();
+        deviceService.update(selectedDevice);
+        setPartName(selectedDevice.getName());
+        setDirty(false);
+        setCanceled(false);
+        refreshDeviceTable();
+    }
+
+    private Object getSelectedNodeOnPlanTree() {
+        ISelection selection = activePage.getSelection(NavigationViewPart.ID);
+        IStructuredSelection sselection = (IStructuredSelection) selection;
+        Object selectedNode = sselection.getFirstElement();
+        return selectedNode;
     }
 
     private Device addNewDeviceToDatabase(Version selectedVersion) {
@@ -176,7 +204,7 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
         return newDevice;
     }
 
-    private void addNewDeviceToDeviceTree(Version selectedVersion, Device newDevice) {
+    private void addNewDeviceToDeviceTable(Version selectedVersion, Device newDevice) {
         /*
          * Set the selected version to the new device, which returned from
          * addDevice2Database() method.
@@ -187,10 +215,9 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
          * Add the new device into the list devices of the selected version.
          */
         selectedVersion.addDevice(newDevice);
+    }
 
-        /*
-         * Refresh the device table to display the new device.
-         */
+    private void refreshDeviceTable() {
         IViewPart viewpart = activePage.findView(DeviceTableViewPart.ID);
         ((DeviceTableViewPart) viewpart).refreshDeviceTableViewer();
     }
@@ -203,7 +230,7 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
     }
 
     public Device prepareNewDevice() {
-        Device newDevice = newDeviceForm.getDevice();
+        Device newDevice = newDeviceForm.getNewDevice();
         addPropertyDeviceTo(newDevice);
         return newDevice;
     }
@@ -225,7 +252,11 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
 
     @Override
     public void doSave(IProgressMonitor monitor) {
-        saveNewDevice();
+        if (canDoSave()) {
+            saveNewDevice();
+        } else {
+            updateDevice();
+        }
         monitor.setCanceled(isCanceled);
     }
 

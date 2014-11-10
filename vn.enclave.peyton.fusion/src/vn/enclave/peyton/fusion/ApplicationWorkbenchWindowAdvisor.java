@@ -1,5 +1,6 @@
 package vn.enclave.peyton.fusion;
 
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.PlatformUI;
@@ -10,8 +11,6 @@ import org.eclipse.ui.application.*;
  */
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
-    private static final String DELIMITER = ",";
-
     public ApplicationWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
         super(configurer);
     }
@@ -21,14 +20,16 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
         getWindowConfigurer().setShellStyle(SWT.NO_TRIM);
         getWindowConfigurer().setShowMenuBar(false);
         getWindowConfigurer().setShowPerspectiveBar(true);
-        PlatformUI.getPreferenceStore().setValue(
-            IWorkbenchPreferenceConstants.PERSPECTIVE_BAR_EXTRAS,
-            ProjectPerspective.ID
-                .concat(DELIMITER).concat(TemplatePerspective.ID).concat(DELIMITER).concat(SystemPerspective.ID)
-                .concat(DELIMITER).concat(UserPerspective.ID).concat(DELIMITER).concat(LogoutPerspective.ID));
-        PlatformUI.getPreferenceStore().setValue(IWorkbenchPreferenceConstants.SHOW_OPEN_ON_PERSPECTIVE_BAR, false);
-        PlatformUI.getPreferenceStore().setValue(IWorkbenchPreferenceConstants.DOCK_PERSPECTIVE_BAR, "topRight");
-        PlatformUI.getPreferenceStore().setValue(IWorkbenchPreferenceConstants.LOCK_TRIM, true);
+        IPreferenceStore preferenceStore = PlatformUI.getPreferenceStore();
+        Object[] templateIds =
+            new Object[]{
+                ProjectPerspective.ID, TemplatePerspective.ID, SystemPerspective.ID, UserPerspective.ID,
+                LogoutPerspective.ID};
+        String value = String.format("%s, %s, %s, %s, %s", templateIds);
+        preferenceStore.setValue(IWorkbenchPreferenceConstants.PERSPECTIVE_BAR_EXTRAS, value);
+        preferenceStore.setValue(IWorkbenchPreferenceConstants.SHOW_OPEN_ON_PERSPECTIVE_BAR, false);
+        preferenceStore.setValue(IWorkbenchPreferenceConstants.DOCK_PERSPECTIVE_BAR, "topRight");
+        preferenceStore.setValue(IWorkbenchPreferenceConstants.LOCK_TRIM, true);
     }
 
     @Override

@@ -7,7 +7,6 @@ import org.eclipse.core.commands.IHandler;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import vn.enclave.peyton.fusion.common.Constant;
 import vn.enclave.peyton.fusion.entity.Project;
 import vn.enclave.peyton.fusion.entity.Version;
 import vn.enclave.peyton.fusion.view.NavigationViewPart;
@@ -65,7 +64,7 @@ public class AddingVersionHandler extends AbstractHandler implements IHandler {
     private Version createNewVersionHasParentIs(Project parentProject) {
         String newName = getNewVersionNameBy(parentProject);
         Version newVersion = new Version();
-        newVersion.setId(Constant.DEFAULT_VERSION_ID);
+        newVersion.setId(Version.DEFAULT_VERSION_ID);
         newVersion.setDeploySource("");
         newVersion.setEditable(true);
         newVersion.setName(newName);

@@ -1,5 +1,7 @@
 package vn.enclave.peyton.fusion.view.form;
 
+import java.util.Date;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
@@ -61,12 +63,18 @@ public class NewDeviceForm {
 
     private DeviceTemplate template;
 
+    private Device selectedDevice;
+
     public ScrolledForm getScrolledForm() {
         return scrolledForm;
     }
 
     public NewDeviceForm(Composite parent) {
         createForm(parent);
+    }
+
+    public void setSelectedDevice(Device selectedDevice) {
+        this.selectedDevice = selectedDevice;
     }
 
     private void createForm(Composite parent) {
@@ -107,8 +115,7 @@ public class NewDeviceForm {
         return form;
     }
 
-    private
-        Label buildLabel(Composite parent, FormToolkit toolkit, String text) {
+    private Label buildLabel(Composite parent, FormToolkit toolkit, String text) {
         Label label = toolkit.createLabel(parent, text);
         return label;
     }
@@ -145,8 +152,7 @@ public class NewDeviceForm {
     }
 
     private void setDefaultText(DeviceTemplate template) {
-        String lastModified =
-            Utils.convertDate2String(template.getLastModified());
+        String lastModified = Utils.convertDate2String(template.getLastModified());
 
         nameTxt.setText(template.getName());
         manufacturerTxt.setText(template.getManufacturer());
@@ -161,7 +167,7 @@ public class NewDeviceForm {
         iconContentLbl.setImage(Utils.createImageFromIcon(icon));
     }
 
-    public Device getDevice() {
+    public Device getNewDevice() {
         Device newDevice = new Device();
         newDevice.setIcon(template.getIcon());
         newDevice.setName(nameTxt.getText());
@@ -170,8 +176,7 @@ public class NewDeviceForm {
         newDevice.setDeviceType(typesTxt.getText());
         newDevice.setNotes(notesTxt.getText());
         newDevice.setVersionDevice(versionTxt.getText());
-        newDevice.setLastModified(Utils.convertString2Date(lastModifiedTxt
-            .getText()));
+        newDevice.setLastModified(Utils.convertString2Date(lastModifiedTxt.getText()));
         newDevice.setAppModule(template.getDeviceType().getModule().getName());
         return newDevice;
     }
@@ -183,5 +188,12 @@ public class NewDeviceForm {
         typesTxt.addModifyListener(modifyListener);
         notesTxt.addModifyListener(modifyListener);
         versionTxt.addModifyListener(modifyListener);
+    }
+
+    public Device getModifiedDevice() {
+        selectedDevice.setName(nameTxt.getText());
+        selectedDevice.setNotes(notesTxt.getText());
+        selectedDevice.setLastModified(new Date());
+        return selectedDevice;
     }
 }

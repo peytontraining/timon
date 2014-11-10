@@ -14,8 +14,7 @@ import vn.enclave.peyton.fusion.view.DeviceTemplateViewPart;
  */
 public class TemplatePerspective implements IPerspectiveFactory {
 
-    public static final String ID =
-        "vn.enclave.peyton.fusion.templatePerspective";
+    public static final String ID = "vn.enclave.peyton.fusion.templatePerspective";
 
     private IFolderLayout left;
 
@@ -26,21 +25,15 @@ public class TemplatePerspective implements IPerspectiveFactory {
     public void createInitialLayout(IPageLayout layout) {
         String editorArea = layout.getEditorArea();
         layout.setEditorAreaVisible(false);
+        layout.setFixed(true);
 
-        left =
-            layout.createFolder(
-                "left", IPageLayout.LEFT, 0.35f, IPageLayout.ID_EDITOR_AREA);
+        left = layout.createFolder("left", IPageLayout.LEFT, 0.35f, IPageLayout.ID_EDITOR_AREA);
         left.addView(AreasTemplatesViewPart.ID);
-        layout.getViewLayout(AreasTemplatesViewPart.ID).setCloseable(false);
 
-        topRight =
-            layout.createFolder("topRight", IPageLayout.TOP, 0.7f, editorArea);
+        topRight = layout.createFolder("topRight", IPageLayout.TOP, 0.7f, editorArea);
         topRight.addView(DeviceTemplateViewPart.ID);
-        layout.getViewLayout(DeviceTemplateViewPart.ID).setCloseable(false);
 
-        bottomRight =
-            layout.createFolder(
-                "bottomRight", IPageLayout.BOTTOM, 0.7f, editorArea);
+        bottomRight = layout.createFolder("bottomRight", IPageLayout.BOTTOM, 0.7f, editorArea);
         bottomRight.addPlaceholder(DetailedDeviceTemplateViewPart.ID + ":*");
     }
 }

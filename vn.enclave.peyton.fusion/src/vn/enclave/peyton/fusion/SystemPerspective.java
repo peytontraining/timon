@@ -8,8 +8,7 @@ import org.eclipse.ui.*;
  */
 public class SystemPerspective implements IPerspectiveFactory {
 
-    public static final String
-        ID = "vn.enclave.peyton.fusion.systemPerspective";
+    public static final String ID = "vn.enclave.peyton.fusion.systemPerspective";
 
     @SuppressWarnings("unused")
     private IFolderLayout topLeft;
@@ -22,15 +21,11 @@ public class SystemPerspective implements IPerspectiveFactory {
         String editorArea = layout.getEditorArea();
         layout.setEditorAreaVisible(false);
 
-        topLeft = layout
-            .createFolder("topLeft", IPageLayout.LEFT,
-                0.35f, IPageLayout.ID_EDITOR_AREA);
+        topLeft = layout.createFolder("topLeft", IPageLayout.LEFT, 0.35f, IPageLayout.ID_EDITOR_AREA);
 
-        bottomRight = layout
-            .createFolder("bottomRight", IPageLayout.BOTTOM, 0.7f, editorArea);
+        bottomRight = layout.createFolder("bottomRight", IPageLayout.BOTTOM, 0.7f, editorArea);
 
-        topRight = layout
-            .createFolder("topRight", IPageLayout.TOP, 0.7f, editorArea);
+        topRight = layout.createFolder("topRight", IPageLayout.TOP, 0.7f, editorArea);
 
     }
 }
