@@ -49,12 +49,6 @@
             id="vn.enclave.peyton.fusion.userPerspective"
             name="Users">
       </perspective>
-      <perspective
-            class="vn.enclave.peyton.fusion.LogoutPerspective"
-            icon="icons/logout.png"
-            id="vn.enclave.peyton.fusion.logoutPerspective"
-            name="Logout">
-      </perspective>
    </extension>
    <extension
          point="org.eclipse.ui.views">
@@ -215,6 +209,16 @@
       <command
             id="vn.enclave.peyton.fusion.command.status"
             name="Status">
+      </command>
+      <category
+            id="toolbar.right"
+            name="Right Toolbar">
+      </category>
+      <command
+            categoryId="toolbar.right"
+            defaultHandler="vn.enclave.peyton.fusion.command.LogoutHandler"
+            id="vn.enclave.peyton.fusion.command.logout"
+            name="Logout">
       </command>
       <category
             id="popup.navigationViewPart"
@@ -1115,6 +1119,24 @@
                style="push">
          </command>
       </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.ui.trim.command2">
+         <toolbar
+               id="vn.enclave.peyton.fusion.toolbarRight">
+            <dynamic
+                  class="vn.enclave.peyton.fusion.PerspectiveSwicherToolbar"
+                  id="perspectiveSwitcherToolbar">
+            </dynamic>
+            <command
+                  commandId="vn.enclave.peyton.fusion.command.logout"
+                  icon="icons/logout.png"
+                  label="Logout"
+                  mode="FORCE_TEXT"
+                  style="push">
+            </command>
+         </toolbar>
+      </menuContribution>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -1186,6 +1208,10 @@
       <handler
             class="vn.enclave.peyton.fusion.command.UpdatingDeviceHandler"
             commandId="modifyingDeviceViewPart.toolbar.save">
+      </handler>
+      <handler
+            class="vn.enclave.peyton.fusion.command.UpdatingDeviceTemplateHandler"
+            commandId="detailedDeviceTemplateViewPart.toolbar.save">
       </handler>
    </extension>
 </plugin>

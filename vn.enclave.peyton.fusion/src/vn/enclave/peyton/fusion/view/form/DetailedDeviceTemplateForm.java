@@ -1,6 +1,7 @@
 package vn.enclave.peyton.fusion.view.form;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -56,6 +57,8 @@ public class DetailedDeviceTemplateForm {
     private Text notesTxt;
 
     private ScrolledForm scrolledForm;
+    
+    private DeviceTemplate selectedDeviceTemplate;
 
     public ScrolledForm getDetailedDeviceTemplateForm() {
         return scrolledForm;
@@ -193,11 +196,12 @@ public class DetailedDeviceTemplateForm {
         return areaText;
     }
 
-    public void populateDeviceTemplateFormFrom(DeviceTemplate template) {
-        setCheckBox(template);
-        setIcon(template);
-        setText(template);
-        setLabel(template);
+    public void populateDeviceTemplateFormFrom(DeviceTemplate deviceTemplate) {
+        selectedDeviceTemplate = deviceTemplate;
+        setCheckBox(deviceTemplate);
+        setIcon(deviceTemplate);
+        setText(deviceTemplate);
+        setLabel(deviceTemplate);
 
         /*
          * Layout all children of form. Fix an issue: icon doesn't show after
@@ -224,5 +228,20 @@ public class DetailedDeviceTemplateForm {
     private void setLabel(DeviceTemplate template) {
         typesContentLbl.setText(template.getDeviceType().getName());
         deviceDriverContentLbl.setText(template.getDeviceDriver());
+    }
+
+    public void addModifyListener(ModifyListener modifyListener) {
+        nameTxt.addModifyListener(modifyListener);
+        manufacturerTxt.addModifyListener(modifyListener);
+        modelNumberTxt.addModifyListener(modifyListener);
+        notesTxt.addModifyListener(modifyListener);
+    }
+
+    public DeviceTemplate getModifiedDeviceTemplate() {
+        selectedDeviceTemplate.setName(nameTxt.getText());
+        selectedDeviceTemplate.setManufacturer(manufacturerTxt.getText());
+        selectedDeviceTemplate.setModelNumber(modelNumberTxt.getText());
+        selectedDeviceTemplate.setNotes(notesTxt.getText());
+        return selectedDeviceTemplate;
     }
 }

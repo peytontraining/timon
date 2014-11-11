@@ -1,29 +1,53 @@
 package vn.enclave.peyton.fusion.view;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.ui.ISaveablePart;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.menus.IMenuService;
 import org.eclipse.ui.part.ViewPart;
 
 import vn.enclave.peyton.fusion.common.Constant;
 import vn.enclave.peyton.fusion.common.Utils;
 import vn.enclave.peyton.fusion.control.DevicePropertyTemplateSection;
+import vn.enclave.peyton.fusion.entity.Device;
 import vn.enclave.peyton.fusion.entity.DeviceTemplate;
+import vn.enclave.peyton.fusion.service.impl.DeviceTemplateService;
 import vn.enclave.peyton.fusion.view.form.DetailedDeviceTemplateForm;
 
-public class DetailedDeviceTemplateViewPart extends ViewPart {
+public class DetailedDeviceTemplateViewPart extends ViewPart implements ISaveablePart {
     public static final String ID = "vn.enclave.peyton.fusion.view.DetailedDeviceTemplateViewPart";
     private DetailedDeviceTemplateForm detailedDeviceTemplateForm;
     private DevicePropertyTemplateSection devicePropertyTemplateSection;
+    private boolean isDirty;
+    private boolean isFormReady;
+    private IWorkbenchPage activePage;
+    private DeviceTemplate selectedDeviceTemplate;
+
+    public void setDirty(boolean isDirty) {
+        this.isDirty = isDirty;
+        firePropertyChange(PROP_DIRTY);
+    }
+
+    public void setFormReady(boolean isFormReady) {
+        this.isFormReady = isFormReady;
+    }
 
     @Override
     public void createPartControl(Composite parent) {
+        createActivePage();
+
         GridLayout layout = new GridLayout(1, false);
         layout.verticalSpacing = 0;
         layout.marginHeight = 0;
@@ -32,6 +56,11 @@ public class DetailedDeviceTemplateViewPart extends ViewPart {
         createToolbarCompositeInside(parent);
 
         createTabFolderCompositeInside(parent);
+    }
+
+    private void createActivePage() {
+        IWorkbenchWindow window = getSite().getWorkbenchWindow();
+        activePage = window.getActivePage();
     }
 
     private void createToolbarCompositeInside(Composite parent) {
@@ -67,7 +96,7 @@ public class DetailedDeviceTemplateViewPart extends ViewPart {
         IMenuService menuService = (IMenuService) getSite().getService(IMenuService.class);
         menuService.populateContributionManager(toolBarManager, Constant.TOOLBAR_DETAILED_DEVICE_TEMPLATE_VIEW_PART);
         toolBarManager.update(true);
-        
+
     }
 
     private void createTabFolderTo(Composite tabFolderComposite) {
@@ -85,6 +114,14 @@ public class DetailedDeviceTemplateViewPart extends ViewPart {
         detailsTabItem.setText("Details");
 
         detailedDeviceTemplateForm = new DetailedDeviceTemplateForm(tabFolder);
+        detailedDeviceTemplateForm.addModifyListener(new ModifyListener() {
+            private static final long serialVersionUID = 3461426635293169609L;
+
+            @Override
+            public void modifyText(ModifyEvent event) {
+                setDirty(true && isFormReady);
+            }
+        });
 
         detailsTabItem.setControl(detailedDeviceTemplateForm.getDetailedDeviceTemplateForm());
     }
@@ -99,9 +136,11 @@ public class DetailedDeviceTemplateViewPart extends ViewPart {
     }
 
     public void populateViewPartFrom(DeviceTemplate deviceTemplate) {
+        selectedDeviceTemplate = deviceTemplate;
         changeNameAndImageViewPartFrom(deviceTemplate);
         detailedDeviceTemplateForm.populateDeviceTemplateFormFrom(deviceTemplate);
         devicePropertyTemplateSection.populatePropertyTreeViewerFrom(deviceTemplate);
+        setFormReady(true);
     }
 
     private void changeNameAndImageViewPartFrom(DeviceTemplate template) {
@@ -110,6 +149,51 @@ public class DetailedDeviceTemplateViewPart extends ViewPart {
     }
 
     @Override
-    public void setFocus() {}
+    public void doSave(IProgressMonitor monitor) {
+        updateDeviceTemplate();
+        refreshDeviceTable();
+    }
+
+    public void updateDeviceTemplate() {
+        selectedDeviceTemplate = getModifiedDeviceTemplate();
+        DeviceTemplateService deviceTemplateService = new DeviceTemplateService();
+        deviceTemplateService.update(selectedDeviceTemplate);
+    }
+
+    public void refreshDeviceTable() {
+        IViewPart viewpart = activePage.findView(DeviceTemplateViewPart.ID);
+        ((DeviceTemplateViewPart) viewpart).refreshDeviceTemplateTree();
+    }
+
+    public DeviceTemplate getModifiedDeviceTemplate() {
+        return detailedDeviceTemplateForm.getModifiedDeviceTemplate();
+    }
+
+    public void changeTitleOfViewPart(String title) {
+        setPartName(title);
+    }
+
+    @Override
+    public void setFocus() {
+    }
+
+    @Override
+    public void doSaveAs() {
+    }
+
+    @Override
+    public boolean isDirty() {
+        return isDirty;
+    }
+
+    @Override
+    public boolean isSaveAsAllowed() {
+        return false;
+    }
+
+    @Override
+    public boolean isSaveOnCloseNeeded() {
+        return true;
+    }
 
 }

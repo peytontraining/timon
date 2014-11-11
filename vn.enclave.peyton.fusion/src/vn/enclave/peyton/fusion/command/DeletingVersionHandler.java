@@ -6,11 +6,15 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import vn.enclave.peyton.fusion.dialog.DeleteVersionDialog;
 import vn.enclave.peyton.fusion.entity.Version;
 import vn.enclave.peyton.fusion.service.impl.VersionService;
+import vn.enclave.peyton.fusion.view.DeviceTableViewPart;
 import vn.enclave.peyton.fusion.view.NavigationViewPart;
 
 /**
@@ -48,6 +52,8 @@ public class DeletingVersionHandler extends AbstractHandler implements IHandler 
 
                 // Refresh the tree after deleting.
                 ((NavigationViewPart) HandlerUtil.getActivePart(event)).refreshPlanTreeViewer();
+
+                clearRowsOnDeviceTable();
             }
         }
         return null;
@@ -57,5 +63,12 @@ public class DeletingVersionHandler extends AbstractHandler implements IHandler 
         IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(executionEvent);
         Object selectedNode = selection.getFirstElement();
         return selectedNode;
+    }
+
+    private void clearRowsOnDeviceTable() {
+        IWorkbenchWindow workbenchWindow = HandlerUtil.getActiveWorkbenchWindow(executionEvent);
+        IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
+        IViewPart viewPart = workbenchPage.findView(DeviceTableViewPart.ID);
+        ((DeviceTableViewPart) viewPart).clearRowsOnDeviceTable();
     }
 }

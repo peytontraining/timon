@@ -147,7 +147,7 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
     }
 
     private void updateDevice() {
-        selectedDevice = detailedDeviceForm.getModifiedDevice();
+        selectedDevice = getModifiedDevice();
         DeviceService deviceService = new DeviceService();
         deviceService.update(selectedDevice);
     }
@@ -168,6 +168,7 @@ public class ModifyingDeviceViewPart extends ViewPart implements ISaveablePart {
     @Override
     public void doSave(IProgressMonitor monitor) {
         updateDevice();
+        refreshDeviceTable();
     }
 
     @Override

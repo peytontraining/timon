@@ -19,16 +19,8 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
     public void preWindowOpen() {
         getWindowConfigurer().setShellStyle(SWT.NO_TRIM);
         getWindowConfigurer().setShowMenuBar(false);
-        getWindowConfigurer().setShowPerspectiveBar(true);
+        getWindowConfigurer().setShowPerspectiveBar(false);
         IPreferenceStore preferenceStore = PlatformUI.getPreferenceStore();
-        Object[] templateIds =
-            new Object[]{
-                ProjectPerspective.ID, TemplatePerspective.ID, SystemPerspective.ID, UserPerspective.ID,
-                LogoutPerspective.ID};
-        String value = String.format("%s, %s, %s, %s, %s", templateIds);
-        preferenceStore.setValue(IWorkbenchPreferenceConstants.PERSPECTIVE_BAR_EXTRAS, value);
-        preferenceStore.setValue(IWorkbenchPreferenceConstants.SHOW_OPEN_ON_PERSPECTIVE_BAR, false);
-        preferenceStore.setValue(IWorkbenchPreferenceConstants.DOCK_PERSPECTIVE_BAR, "topRight");
         preferenceStore.setValue(IWorkbenchPreferenceConstants.LOCK_TRIM, true);
     }
 

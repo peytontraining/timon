@@ -9,6 +9,8 @@ public class Constant {
 
     public static final String PERSISTENCE_UNIT_NAME = "vn.enclave.peyton.fusion";
 
+    public static final String KEY_PERSPECTIVE_DESCRIPTOR = "Perspective Descriptor";
+
     /* Image */
     public static final Image IMAGE_ARROW_DOWN = AbstractUIPlugin.imageDescriptorFromPlugin(
         PLUGIN_ID, "icons/arrow_down.png").createImage();

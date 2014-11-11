@@ -292,6 +292,10 @@ public class DeviceTemplateViewPart extends ViewPart implements IDoubleClickList
         return activePage.findViewReference(viewId, secondaryId) == null;
     }
 
+    public void refreshDeviceTemplateTree() {
+        deviceTemplatetreeViewer.refresh();
+    }
+
     @Override
     public void setFocus() {
     }
