@@ -6,9 +6,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -18,6 +21,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.ISaveablePart;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.menus.IMenuService;
 import org.eclipse.ui.part.ViewPart;
 
@@ -25,10 +30,12 @@ import vn.enclave.peyton.fusion.common.Constant;
 import vn.enclave.peyton.fusion.control.PlanTree;
 import vn.enclave.peyton.fusion.control.ProjectPropertySection;
 import vn.enclave.peyton.fusion.control.VersionPropertySection;
+import vn.enclave.peyton.fusion.dialog.DeleteVersionDialog;
 import vn.enclave.peyton.fusion.entity.Plan;
 import vn.enclave.peyton.fusion.entity.Project;
 import vn.enclave.peyton.fusion.entity.Version;
 import vn.enclave.peyton.fusion.service.impl.PlanService;
+import vn.enclave.peyton.fusion.service.impl.VersionService;
 
 public class NavigationViewPart extends ViewPart implements ISaveablePart {
     public static final String ID = "vn.enclave.peyton.fusion.view.navigationViewPart";
@@ -36,6 +43,7 @@ public class NavigationViewPart extends ViewPart implements ISaveablePart {
     private static final int PROPERTY_COMPOSITE = 100 - PLAN_TREE_COMPOSITE;
     private StackLayout propertyCompositeStackLayout;
     private PlanService planService = new PlanService();
+    private VersionService versionService = new VersionService();
     private PlanTree planTree;
     private ProjectPropertySection projectPropertySection;
     private VersionPropertySection versionPropertySection;
@@ -158,6 +166,7 @@ public class NavigationViewPart extends ViewPart implements ISaveablePart {
         planTree.setSelectionProviderToWorkbenchPartSite();
         planTree.populatePlanTreeViewerFrom(plans);
         planTree.addSelectionChangedListener(createSelectionChangedListenerToPlanTree());
+        planTree.addKeyAdapter(createKeyAdapterToPlanTree());
     }
 
     private ISelectionChangedListener createSelectionChangedListenerToPlanTree() {
@@ -165,7 +174,7 @@ public class NavigationViewPart extends ViewPart implements ISaveablePart {
 
             @Override
             public void selectionChanged(SelectionChangedEvent event) {
-                Object selectedNode = planTree.getSelectedNodeOnNavigationTreeViewer();
+                Object selectedNode = planTree.getSelectedNodeOnPlanTreeViewer();
                 resetStateOfViewPart();
                 if (selectedNode instanceof Project) {
                     Project selectedProject = (Project) selectedNode;
@@ -184,6 +193,19 @@ public class NavigationViewPart extends ViewPart implements ISaveablePart {
                     return;
                 }
                 hideAllPropertySection();
+            }
+        };
+    }
+
+    private KeyAdapter createKeyAdapterToPlanTree() {
+        return new KeyAdapter() {
+            private static final long serialVersionUID = -9190506839482994554L;
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (e.keyCode == SWT.DEL) {
+                    deleteSelectedVersion();
+                }
             }
         };
     }
@@ -215,6 +237,27 @@ public class NavigationViewPart extends ViewPart implements ISaveablePart {
         versionPropertySection = new VersionPropertySection(propertyComposite, getSite());
         versionPropertySection.addModifyListenerToPropertySection(createModifyListenerToVersionPropertySection());
         versionPropertySection.addSelectionAdapterToPropertySection(createSelectionAdapterToVersionPropertySection());
+    }
+
+    private void deleteSelectedVersion() {
+        Object selectedNode = planTree.getSelectedNodeOnPlanTreeViewer();
+        if (selectedNode instanceof Version) {
+            Version selectedVersion = (Version) selectedNode;
+            DeleteVersionDialog dialog = new DeleteVersionDialog(getSite().getShell());
+
+            if (dialog.open() == Window.OK) {
+                versionService.remove(selectedVersion);
+
+                // Remove data of selected version from tree's data.
+                selectedVersion.getProject().removeVersion(selectedVersion);
+                selectedVersion.setProject(null);
+
+                // Refresh the tree after deleting.
+                planTree.refreshPlanTreeViewer();
+
+                clearRowsOnDeviceTable();
+            }
+        }
     }
 
     private ModifyListener createModifyListenerToProjectPropertySection() {
@@ -272,6 +315,12 @@ public class NavigationViewPart extends ViewPart implements ISaveablePart {
                 setDirty(false);
             }
         };
+    }
+
+    private void clearRowsOnDeviceTable() {
+        IWorkbenchPage workbenchPage = getViewSite().getPage();
+        IViewPart viewPart = workbenchPage.findView(DeviceTableViewPart.ID);
+        ((DeviceTableViewPart) viewPart).clearRowsOnDeviceTable();
     }
 
     private void displayProjectPropertySection() {

@@ -21,7 +21,6 @@ import org.eclipse.ui.part.ViewPart;
 import vn.enclave.peyton.fusion.common.Constant;
 import vn.enclave.peyton.fusion.common.Utils;
 import vn.enclave.peyton.fusion.control.DevicePropertyTemplateSection;
-import vn.enclave.peyton.fusion.entity.Device;
 import vn.enclave.peyton.fusion.entity.DeviceTemplate;
 import vn.enclave.peyton.fusion.service.impl.DeviceTemplateService;
 import vn.enclave.peyton.fusion.view.form.DetailedDeviceTemplateForm;
@@ -52,7 +51,6 @@ public class DetailedDeviceTemplateViewPart extends ViewPart implements ISaveabl
         layout.verticalSpacing = 0;
         layout.marginHeight = 0;
         parent.setLayout(layout);
-
         createToolbarCompositeInside(parent);
 
         createTabFolderCompositeInside(parent);

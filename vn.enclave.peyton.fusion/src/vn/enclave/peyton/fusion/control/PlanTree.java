@@ -9,6 +9,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -88,7 +89,7 @@ public class PlanTree {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                Object selecteNode = getSelectedNodeOnNavigationTreeViewer();
+                Object selecteNode = getSelectedNodeOnPlanTreeViewer();
                 if (selecteNode instanceof Version) {
                     Version selectedVersion = (Version) selecteNode;
                     populateDeviceTableFrom(selectedVersion);
@@ -104,7 +105,7 @@ public class PlanTree {
         planTree.setMenu(contextMenu);
     }
 
-    public Object getSelectedNodeOnNavigationTreeViewer() {
+    public Object getSelectedNodeOnPlanTreeViewer() {
         ISelection selection = planTreeViewer.getSelection();
         IStructuredSelection sselection = (IStructuredSelection) selection;
         return sselection.getFirstElement();
@@ -136,6 +137,10 @@ public class PlanTree {
         planTreeViewer.addSelectionChangedListener(selectionChangedListener);
     }
 
+    public void addKeyAdapter(KeyAdapter keyAdapter) {
+        planTree.addKeyListener(keyAdapter);
+    }
+    
     public void refreshPlanTreeViewer() {
         planTreeViewer.refresh();
     }
@@ -143,7 +148,7 @@ public class PlanTree {
     public void setSelectionToPlanTreeViewerBy(Project selectedProject) {
         planTreeViewer.setSelection(new StructuredSelection(selectedProject), true);
     }
-    
+
     public void setSelectionToPlanTreeViewerBy(Version selectedVersion) {
         planTreeViewer.setSelection(new StructuredSelection(selectedVersion), true);
     }

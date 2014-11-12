@@ -41,13 +41,13 @@ public class TemplateFilter extends ViewerFilter {
                     }
                 }
             }
-        } else if (element instanceof DeviceType) {
+        }
+        if (element instanceof DeviceType) {
             name = ((DeviceType) element).getName().toLowerCase();
             if (name != null && name.contains(filterString)) {
                 return true;
             } else {
-                List<DeviceTemplate> templates =
-                    ((DeviceType) element).getDeviceTemplates();
+                List<DeviceTemplate> templates = ((DeviceType) element).getDeviceTemplates();
                 if (templates != null) {
                     for (DeviceTemplate template : templates) {
                         if (select(viewer, element, template)) {
@@ -56,17 +56,13 @@ public class TemplateFilter extends ViewerFilter {
                     }
                 }
             }
-        } else {
+        }
+        if (element instanceof DeviceTemplate) {
             name = ((DeviceTemplate) element).getName().toLowerCase();
-            String lastModified =
-                Utils.convertDate2String(
-                    ((DeviceTemplate) element).getLastModified()).toLowerCase();
-            String manufature =
-                ((DeviceTemplate) element).getManufacturer().toLowerCase();
-            String modelNumber =
-                ((DeviceTemplate) element).getModelNumber().toLowerCase();
-            String version =
-                ((DeviceTemplate) element).getVersion().toLowerCase();
+            String lastModified = Utils.convertDate2String(((DeviceTemplate) element).getLastModified()).toLowerCase();
+            String manufature = ((DeviceTemplate) element).getManufacturer().toLowerCase();
+            String modelNumber = ((DeviceTemplate) element).getModelNumber().toLowerCase();
+            String version = ((DeviceTemplate) element).getVersion().toLowerCase();
             if (name != null && name.contains(filterString)) {
                 return true;
             }
