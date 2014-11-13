@@ -179,7 +179,7 @@ public class AddingDeviceViewPart extends ViewPart implements ISaveablePart {
     }
 
     public void updateDevice() {
-        selectedDevice = newDeviceForm.getModifiedDevice();
+        selectedDevice = newDeviceForm.prepareModifiedDevice();
         DeviceService deviceService = new DeviceService();
         deviceService.update(selectedDevice);
         setPartName(selectedDevice.getName());

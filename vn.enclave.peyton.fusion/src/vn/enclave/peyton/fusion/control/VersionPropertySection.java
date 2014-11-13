@@ -192,6 +192,8 @@ public class VersionPropertySection {
     public void addModifyListenerToPropertySection(ModifyListener modifyListener) {
         versionTxt.addModifyListener(modifyListener);
         versionTxt.addModifyListener(createModifyListenerToVersionTxt());
+        deploySourceTxt.addModifyListener(modifyListener);
+        targetVersionTxt.addModifyListener(modifyListener);
     }
 
     /*
@@ -305,8 +307,7 @@ public class VersionPropertySection {
             // object that got from add query.
             currentProject.getVersions().set(0, selectedVersion);
         } else {
-            String name = versionTxt.getText();
-            selectedVersion.setName(name);
+            prepareModifiedVersion(selectedVersion);
             versionService.update(selectedVersion);
         }
 
@@ -320,4 +321,12 @@ public class VersionPropertySection {
         selectedVersion.setTargetVersion(targetVersionTxt.getText());
 
     }
+
+    private void prepareModifiedVersion(Version selectedVersion) {
+        selectedVersion.setName(versionTxt.getText());
+        selectedVersion.setDeploySource(deploySourceTxt.getText());
+        selectedVersion.setSaveTime(new Date());
+        selectedVersion.setTargetVersion(targetVersionTxt.getText());
+    }
+
 }

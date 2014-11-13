@@ -190,8 +190,10 @@ public class NewDeviceForm {
         versionTxt.addModifyListener(modifyListener);
     }
 
-    public Device getModifiedDevice() {
+    public Device prepareModifiedDevice() {
         selectedDevice.setName(nameTxt.getText());
+        selectedDevice.setManufacturer(manufacturerTxt.getText());
+        selectedDevice.setModelNumber(modelNumberTxt.getText());
         selectedDevice.setNotes(notesTxt.getText());
         selectedDevice.setLastModified(new Date());
         return selectedDevice;

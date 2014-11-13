@@ -6,21 +6,22 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.dialogs.PatternFilter;
 
 public class TemplatePatternFilter extends PatternFilter {
-
+    //TODO: try to expand the match nodes
     private static final long serialVersionUID = 1231583759555166983L;
 
     @Override
     protected boolean isLeafMatch(Viewer viewer, Object element) {
         TreeViewer treeViewer = (TreeViewer) viewer;
         int numberOfColumns = treeViewer.getTree().getColumnCount();
-        ITableLabelProvider labelProvider =
-            (ITableLabelProvider) treeViewer.getLabelProvider();
+        ITableLabelProvider labelProvider = (ITableLabelProvider) treeViewer.getLabelProvider();
         boolean isMatch = false;
         for (int columnIndex = 0; columnIndex < numberOfColumns; columnIndex++) {
-            String labelText =
-                labelProvider.getColumnText(element, columnIndex);
+            String labelText = labelProvider.getColumnText(element, columnIndex);
             isMatch |= wordMatches(labelText);
         }
+//        if (isMatch) {
+//            treeViewer.expandToLevel(element, AbstractTreeViewer.ALL_LEVELS);
+//        }
         return isMatch;
     }
 }

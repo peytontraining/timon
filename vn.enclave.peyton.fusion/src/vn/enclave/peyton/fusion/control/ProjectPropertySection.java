@@ -10,6 +10,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -275,6 +276,10 @@ public class ProjectPropertySection {
     public void addModifyListenerToPropertySection(ModifyListener modifyListener) {
         nameTxt.addModifyListener(modifyListener);
         nameTxt.addModifyListener(createModifyListenerToNameTxt());
+        hostTxt.addModifyListener(modifyListener);
+        uuidTxt.addModifyListener(modifyListener);
+        notesTxt.addModifyListener(modifyListener);
+        portSpinner.addModifyListener(modifyListener);
     }
 
     /*
@@ -383,8 +388,7 @@ public class ProjectPropertySection {
             // object that got from add query.
             currentPlan.getProjects().set(0, selectedProject);
         } else {
-            String name = nameTxt.getText();
-            selectedProject.setName(name);
+            prepareModifiedProject(selectedProject);
             projectService.update(selectedProject);
         }
 
@@ -403,4 +407,11 @@ public class ProjectPropertySection {
         newVersion.setSaveTime(new Date());
     }
 
+    private void prepareModifiedProject(Project selectedProject) {
+        selectedProject.setName(nameTxt.getText());
+        selectedProject.setHost(hostTxt.getText());
+        selectedProject.setUuid(uuidTxt.getText());
+        selectedProject.setNote(notesTxt.getText());
+        selectedProject.setPort(Integer.valueOf(portSpinner.getText()));
+    }
 }

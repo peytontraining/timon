@@ -32,7 +32,7 @@ import org.eclipse.ui.part.ViewPart;
 import vn.enclave.peyton.fusion.common.Constant;
 import vn.enclave.peyton.fusion.entity.DeviceTemplate;
 import vn.enclave.peyton.fusion.entity.Module;
-import vn.enclave.peyton.fusion.filter.TemplateFilter;
+import vn.enclave.peyton.fusion.filter.TemplatePatternFilter;
 import vn.enclave.peyton.fusion.provider.TemplateTreeContentProvider;
 import vn.enclave.peyton.fusion.provider.TemplateTreeTableLabelProvider;
 import vn.enclave.peyton.fusion.service.impl.ModuleService;
@@ -51,7 +51,8 @@ public class DeviceTemplateViewPart extends ViewPart implements IDoubleClickList
     private Button clearBtn;
     private Button upBtn;
     private Button downBtn;
-    private TemplateFilter templateFilter = new TemplateFilter();
+    // TODO private TemplateFilter templateFilter = new TemplateFilter();
+    TemplatePatternFilter patternFilter = new TemplatePatternFilter();
     private IWorkbenchPage activePage;
 
     @Override
@@ -130,7 +131,8 @@ public class DeviceTemplateViewPart extends ViewPart implements IDoubleClickList
         deviceTemplatetreeViewer = new TreeViewer(deviceTemplateTree);
         deviceTemplatetreeViewer.setContentProvider(new TemplateTreeContentProvider());
         deviceTemplatetreeViewer.setLabelProvider(new TemplateTreeTableLabelProvider());
-        deviceTemplatetreeViewer.addFilter(templateFilter);
+        // TODO deviceTemplatetreeViewer.addFilter(templateFilter);
+        deviceTemplatetreeViewer.addFilter(patternFilter);
         deviceTemplatetreeViewer.addDoubleClickListener(this);
 
         getSite().setSelectionProvider(deviceTemplatetreeViewer);
@@ -213,7 +215,8 @@ public class DeviceTemplateViewPart extends ViewPart implements IDoubleClickList
 
             @Override
             public void modifyText(ModifyEvent event) {
-                templateFilter.setFilterString(filterTxt.getText());
+                // templateFilter.setFilterString(filterTxt.getText());
+                patternFilter.setPattern(filterTxt.getText());
                 deviceTemplatetreeViewer.refresh();
                 clearBtn.setEnabled(isEnableClearButton());
             }
